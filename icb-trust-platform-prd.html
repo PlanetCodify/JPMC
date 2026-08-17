@@ -1,53 +1,69 @@
 <title>ICB Trust Platform PRD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=PT+Mono&display=swap" rel="stylesheet">
 <style>
+  /*
+    Palette sourced from JPMorgan Chase's own open-source Salt Design System
+    (github.com/jpmorganchase/salt-ds) — accent blue, neutrals, and semantic
+    colors below are the real --salt-color-* token values, not approximations.
+    Typography: Open Sans (Salt's --salt-typography-fontFamily-openSans) for
+    UI/body; Amplitude is Salt's brand display face but is a licensed
+    commercial font, so headings here use Open Sans at heavier weights
+    instead of an unlicensed substitute. PT Mono for tabular/data text.
+  */
   :root {
-    --paper: #F1F4F7;
+    --paper: #F4F6F7;
     --surface: #FFFFFF;
-    --surface-2: #F7F9FB;
-    --ink: #12161C;
-    --ink-muted: #5B6675;
-    --ink-faint: #8A93A1;
-    --border: #D7DEE6;
-    --border-strong: #C1CAD4;
-    --accent: #0E6B63;
-    --accent-ink: #084A44;
-    --accent-soft: #E4F1EF;
-    --accent-soft-border: #BFE0DB;
-    --good: #2E8B57;
-    --good-soft: #E7F4EC;
-    --warn: #9C6B0B;
-    --warn-soft: #FBF1DD;
-    --crit: #B23A2E;
-    --crit-soft: #FBEAE7;
-    --shadow: 0 1px 2px rgba(18,22,28,0.04), 0 4px 14px rgba(18,22,28,0.06);
-    --radius: 6px;
-    --serif: ui-serif, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
-    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    --mono: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Consolas, monospace;
+    --surface-2: #EDEFF1;
+    --ink: #14181B;
+    --ink-muted: #4C5157;
+    --ink-faint: #72777D;
+    --border: #D3D5D8;
+    --border-strong: #A9ADB1;
+    --accent: #005EA6;
+    --accent-ink: #002D59;
+    --accent-soft: #EAF6FF;
+    --accent-soft-border: #9ABDF5;
+    --bronze: #8F5A39;
+    --bronze-soft: #F5EEE8;
+    --good: #006B48;
+    --good-soft: #EAF5F2;
+    --warn: #9E4200;
+    --warn-soft: #FFECD9;
+    --crit: #BA1729;
+    --crit-soft: #FFECEA;
+    --shadow: 0 1px 2px rgba(20,24,27,0.05), 0 4px 14px rgba(20,24,27,0.06);
+    --radius: 3px;
+    --display: "Open Sans", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --sans: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: "PT Mono", ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --paper: #0A0E13; --surface: #121821; --surface-2: #0E141C;
-      --ink: #E8EDF2; --ink-muted: #98A3B3; --ink-faint: #6B7889;
-      --border: #232C38; --border-strong: #2E3947;
-      --accent: #45C2B4; --accent-ink: #B7ECE3;
-      --accent-soft: #10302C; --accent-soft-border: #1C4941;
-      --good: #4CAF7D; --good-soft: #123322;
-      --warn: #D8A93B; --warn-soft: #362A0E;
-      --crit: #E0776C; --crit-soft: #3A1D19;
-      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 18px rgba(0,0,0,0.35);
+      --paper: #15191C; --surface: #1F2427; --surface-2: #292E33;
+      --ink: #F1F3F4; --ink-muted: #C3C7CA; --ink-faint: #8A8F94;
+      --border: #383D42; --border-strong: #4C5157;
+      --accent: #7FB0EB; --accent-ink: #EAF6FF;
+      --accent-soft: #12283E; --accent-soft-border: #1E4A72;
+      --bronze: #C79A78; --bronze-soft: #2E241D;
+      --good: #4FBE93; --good-soft: #0F2B22;
+      --warn: #E3934C; --warn-soft: #3A250F;
+      --crit: #EF7A83; --crit-soft: #3B171A;
+      --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 4px 18px rgba(0,0,0,0.4);
     }
   }
   :root[data-theme="dark"] {
-    --paper: #0A0E13; --surface: #121821; --surface-2: #0E141C;
-    --ink: #E8EDF2; --ink-muted: #98A3B3; --ink-faint: #6B7889;
-    --border: #232C38; --border-strong: #2E3947;
-    --accent: #45C2B4; --accent-ink: #B7ECE3;
-    --accent-soft: #10302C; --accent-soft-border: #1C4941;
-    --good: #4CAF7D; --good-soft: #123322;
-    --warn: #D8A93B; --warn-soft: #362A0E;
-    --crit: #E0776C; --crit-soft: #3A1D19;
-    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 18px rgba(0,0,0,0.35);
+    --paper: #15191C; --surface: #1F2427; --surface-2: #292E33;
+    --ink: #F1F3F4; --ink-muted: #C3C7CA; --ink-faint: #8A8F94;
+    --border: #383D42; --border-strong: #4C5157;
+    --accent: #7FB0EB; --accent-ink: #EAF6FF;
+    --accent-soft: #12283E; --accent-soft-border: #1E4A72;
+    --bronze: #C79A78; --bronze-soft: #2E241D;
+    --good: #4FBE93; --good-soft: #0F2B22;
+    --warn: #E3934C; --warn-soft: #3A250F;
+    --crit: #EF7A83; --crit-soft: #3B171A;
+    --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 4px 18px rgba(0,0,0,0.4);
   }
 
   * { box-sizing: border-box; }
@@ -59,6 +75,8 @@
   a { color: var(--accent); }
   ::selection { background: var(--accent-soft); }
 
+  .brand-rule { height: 3px; background: linear-gradient(90deg, var(--accent) 0%, var(--accent) 60%, var(--bronze) 100%); }
+
   .shell { display: flex; max-width: 1180px; margin: 0 auto; }
 
   /* ---- Side nav ---- */
@@ -68,7 +86,7 @@
     border-right: 1px solid var(--border);
   }
   .toc-kicker { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-faint); margin-bottom: 10px; }
-  .toc-title { font-family: var(--serif); font-size: 15px; font-weight: 600; margin-bottom: 22px; line-height: 1.35; }
+  .toc-title { font-family: var(--display); font-size: 15px; font-weight: 600; margin-bottom: 22px; line-height: 1.35; }
   .toc a {
     display: block; font-size: 12.8px; color: var(--ink-muted); text-decoration: none;
     padding: 5px 0; border-left: 2px solid transparent; padding-left: 10px; margin-left: -12px;
@@ -76,8 +94,8 @@
   }
   .toc a:hover { color: var(--ink); border-left-color: var(--border-strong); }
   .toc-status { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--border); font-size: 11px; color: var(--ink-faint); line-height: 1.6; }
-  .theme-toggle { display: flex; gap: 4px; margin-top: 16px; padding: 3px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 7px; width: fit-content; }
-  .theme-toggle button { border: none; background: none; padding: 4px 9px; border-radius: 5px; font-size: 10.5px; color: var(--ink-muted); cursor: pointer; }
+  .theme-toggle { display: flex; gap: 4px; margin-top: 16px; padding: 3px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; width: fit-content; }
+  .theme-toggle button { border: none; background: none; padding: 4px 9px; border-radius: 3px; font-size: 10.5px; color: var(--ink-muted); cursor: pointer; }
   .theme-toggle button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
 
   /* ---- Main document ---- */
@@ -85,7 +103,7 @@
 
   .doc-header { margin-bottom: 40px; }
   .doc-kicker { font-size: 12px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--accent); font-weight: 600; margin-bottom: 10px; }
-  h1.doc-title { font-family: var(--serif); font-size: 34px; font-weight: 600; line-height: 1.15; margin: 0 0 14px; text-wrap: balance; letter-spacing: 0.001em; }
+  h1.doc-title { font-family: var(--display); font-size: 34px; font-weight: 800; line-height: 1.15; margin: 0 0 14px; text-wrap: balance; letter-spacing: 0.001em; }
   .meta-row { display: flex; flex-wrap: wrap; gap: 16px 28px; font-size: 12.5px; color: var(--ink-muted); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 14px 0; margin-top: 18px; }
   .meta-row b { color: var(--ink); font-weight: 600; }
 
@@ -97,11 +115,11 @@
 
   section.doc-section { margin: 56px 0; scroll-margin-top: 24px; }
   h2.section-title {
-    font-family: var(--serif); font-size: 24px; font-weight: 600; margin: 0 0 6px;
+    font-family: var(--display); font-size: 24px; font-weight: 800; margin: 0 0 6px;
     padding-bottom: 12px; border-bottom: 2px solid var(--border); text-wrap: balance;
   }
   .section-num { color: var(--accent); font-family: var(--mono); font-size: 15px; margin-right: 8px; }
-  h3.sub-title { font-family: var(--serif); font-size: 17px; font-weight: 600; margin: 30px 0 10px; }
+  h3.sub-title { font-family: var(--display); font-size: 17px; font-weight: 600; margin: 30px 0 10px; }
   h4.micro-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted); margin: 20px 0 8px; }
 
   p { margin: 0 0 14px; color: var(--ink); }
@@ -136,7 +154,7 @@
     background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent);
     border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 20px; margin: 16px 0; box-shadow: var(--shadow);
   }
-  .story p { font-family: var(--serif); font-size: 15px; margin-bottom: 4px; }
+  .story p { font-family: var(--display); font-size: 15px; margin-bottom: 4px; }
   .story .ac-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); margin-top: 12px; }
   .story ul { list-style: none; padding-left: 0; margin-top: 6px; }
   .story li { font-size: 13.5px; color: var(--ink-muted); padding-left: 22px; position: relative; }
@@ -167,6 +185,7 @@
   }
 </style>
 
+<div class="brand-rule"></div>
 <div class="shell">
   <nav class="toc" aria-label="Table of contents">
     <div class="toc-kicker">ICB Trust Platform</div>
@@ -252,7 +271,7 @@
       <h3 class="sub-title">2.1 Customer Problem</h3>
 
       <div class="persona-block">
-        <h4 style="font-family:var(--serif);font-size:15px;margin:0;">Market launch engineer</h4>
+        <h4 style="font-family:var(--display);font-size:15px;margin:0;">Market launch engineer</h4>
         <dl>
           <dt>Who</dt><dd>Product/engineering teams inside ICB market launches, most immediately the Germany team</dd>
           <dt>What</dt><dd>Needs to know what review path a gen-AI feature requires, without inventing the answer themselves</dd>
@@ -264,7 +283,7 @@
       </div>
 
       <div class="persona-block">
-        <h4 style="font-family:var(--serif);font-size:15px;margin:0;">MRGR reviewer</h4>
+        <h4 style="font-family:var(--display);font-size:15px;margin:0;">MRGR reviewer</h4>
         <dl>
           <dt>Who</dt><dd>JPMC's Model Risk Governance &amp; Review function, with a role explicitly scoped to ICB</dd>
           <dt>What</dt><dd>Needs a defensible way to review gen-AI features without inventing new controls case by case</dd>
@@ -274,7 +293,7 @@
       </div>
 
       <div class="persona-block">
-        <h4 style="font-family:var(--serif);font-size:15px;margin:0;">ICB customer</h4>
+        <h4 style="font-family:var(--display);font-size:15px;margin:0;">ICB customer</h4>
         <dl>
           <dt>Who</dt><dd>Digital banking customers in the UK today, prospectively in Germany</dd>
           <dt>What</dt><dd>Wants relevant, personalized service, but doesn't fully trust the data trade-off behind it. 64% want personalization, only 39% think it's worth the privacy cost.</dd>
