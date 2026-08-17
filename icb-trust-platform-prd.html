@@ -1,4 +1,4 @@
-<title>ICB Trust Platform PRD</title>
+<title>JPMC Trust Platform PRD</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=PT+Mono&display=swap" rel="stylesheet">
@@ -188,7 +188,7 @@
 <div class="brand-rule"></div>
 <div class="shell">
   <nav class="toc" aria-label="Table of contents">
-    <div class="toc-kicker">ICB Trust Platform</div>
+    <div class="toc-kicker">JPMC Trust Platform</div>
     <div class="toc-title">Product Requirements Document</div>
     <a href="#exec">1. Executive Summary</a>
     <a href="#problem">2. Problem Definition</a>
@@ -214,7 +214,7 @@
   <main>
     <div class="doc-header">
       <div class="doc-kicker">Product Requirements Document</div>
-      <h1 class="doc-title">ICB Trust Platform</h1>
+      <h1 class="doc-title">JPMC Trust Platform</h1>
       <div class="meta-row">
         <span><b>Date</b> August 17, 2026</span>
         <span><b>Author</b> Product Team</span>
@@ -231,16 +231,17 @@
       <h2 class="section-title"><span class="section-num">01</span>Executive Summary</h2>
 
       <h3 class="sub-title">Problem Statement</h3>
-      <p>International Consumer Bank (ICB) is scaling a branchless, digital-only retail bank across markets, UK live since 2021, Germany publicly targeted for 2026, right as a real regulatory gap opened up. The Federal Reserve's SR 26-2 guidance (April 17, 2026, superseding SR 11-7) explicitly excludes generative and agentic AI from formal model-risk scope for banks over $30 billion in assets. JPMC already runs a dedicated Model Risk Governance &amp; Review (MRGR) function with coverage scoped to ICB, but public evidence, a live MRGR job posting for ICB, suggests that coverage is limited to traditional statistical models, the same boundary SR 26-2 itself draws. Every gen-AI-adjacent feature ICB ships today likely has nowhere clear to go for review.</p>
+      <p>The Federal Reserve's SR 26-2 guidance (April 17, 2026, superseding SR 11-7) explicitly excludes generative and agentic AI from formal model-risk scope for banks over $30 billion in assets &mdash; a firmwide exclusion, not one scoped to any single JPMC line of business. JPMC already runs a dedicated Model Risk Governance &amp; Review (MRGR) function with the standing and expertise to close that gap, evidenced through a live MRGR job posting scoped to International Consumer Bank (ICB), which suggests current coverage is limited to traditional statistical models, the same boundary SR 26-2 itself draws. The gap this platform addresses is firmwide; ICB is simply where the evidence for it, and the pressure to close it, is clearest right now. ICB itself is scaling a branchless, digital-only retail bank across markets, UK live since 2021, Germany publicly targeted for 2026, which makes it the natural first pilot: every gen-AI-adjacent feature it ships today likely has nowhere clear to go for review.</p>
 
       <h3 class="sub-title">Proposed Solution</h3>
-      <p>An automated tiering layer that classifies gen-AI and agentic features by risk (Tier 1 automated, Tier 2 spot-checked, Tier 3 full review) and routes the highest-risk cases into MRGR's existing review workflow. This isn't a new governance function competing with MRGR. It's the technical layer that extends their existing authority into a category their current scope doesn't appear to cover.</p>
+      <p>A firmwide automated tiering layer that classifies gen-AI and agentic features by risk (Tier 1 automated, Tier 2 spot-checked, Tier 3 full review) and routes the highest-risk cases into MRGR's existing review workflow. This isn't a new governance function competing with MRGR. It's the technical layer that extends their existing authority into a category their current scope doesn't appear to cover &mdash; designed and versioned as JPMC-wide infrastructure from day one, with ICB as the Phase 1 pilot line of business, not the platform's boundary.</p>
 
       <h3 class="sub-title">Business Impact</h3>
       <ul>
         <li><strong>Risk reduction:</strong> closes the gap between "SR 26-2 doesn't require formal gen-AI review" and "gen-AI features ship with no review at all," which is the current default state.</li>
-        <li><strong>Competitive positioning:</strong> UK peers (NatWest's Cora, Lloyds' Envoy) are already live with AI-driven customer experiences. A credible, defensible governance story lets ICB ship gen-AI features at a competitive pace without operating in the open gap SR 26-2 left behind.</li>
-        <li><strong>Efficiency for an existing team:</strong> if MRGR is already stretched covering traditional models, an automated filter that only escalates genuinely high-risk cases is a real efficiency gain for a team that already exists, not a new cost center.</li>
+        <li><strong>Competitive positioning:</strong> UK peers (NatWest's Cora, Lloyds' Envoy) are already live with AI-driven customer experiences. A credible, defensible governance story lets ICB, the pilot line of business, ship gen-AI features at a competitive pace without operating in the open gap SR 26-2 left behind.</li>
+        <li><strong>Efficiency for an existing team:</strong> if MRGR is already stretched covering traditional models, an automated filter that only escalates genuinely high-risk cases is a real efficiency gain for a team that already exists, not a new cost center &mdash; and one that compounds as more JPMC lines of business adopt the same tiering layer.</li>
+        <li><strong>Platform leverage:</strong> a versioned, JPMC-wide API contract means the engineering investment isn't ICB-specific. Once proven, other lines of business (CIB, Wealth) can integrate against the same tiering layer without re-architecture.</li>
       </ul>
 
       <h3 class="sub-title">Key Milestones</h3>
@@ -371,7 +372,7 @@
             </pattern>
           </defs>
           <rect x="180" y="18" width="745" height="470" rx="8" fill="none" stroke="var(--border-strong)" stroke-width="1.3" stroke-dasharray="6,4"/>
-          <text x="196" y="36" font-size="10" font-weight="700" letter-spacing="0.06em" fill="var(--ink-faint)">ICB TRUST PLATFORM &#8212; IN SCOPE</text>
+          <text x="196" y="36" font-size="10" font-weight="700" letter-spacing="0.06em" fill="var(--ink-faint)">JPMC TRUST PLATFORM &#8212; IN SCOPE</text>
           <rect x="10" y="115" width="150" height="52" rx="6" fill="var(--surface-2)" stroke="var(--border-strong)"/>
           <text x="85" y="137" text-anchor="middle" font-size="12.5" fill="var(--ink)">Market Engineer</text>
           <text x="85" y="153" text-anchor="middle" font-size="10" fill="var(--ink-muted)">submits feature</text>
@@ -591,8 +592,8 @@
       <h2 class="section-title"><span class="section-num">05</span>Go-to-Market Strategy</h2>
       <h3 class="sub-title">Launch Plan</h3>
       <ul>
-        <li><strong>Beta:</strong> Phase 1 ships to one pilot team, likely the Germany launch team, with MRGR directly involved in validating the escalation routing.</li>
-        <li><strong>Full Launch:</strong> Phase 2 and 3 expand Tier 2/3 governance and open the CDP/CMS question, contingent on Phase 1 proving both speed and MRGR's acceptance.</li>
+        <li><strong>Beta:</strong> Phase 1 ships to one pilot team within ICB, likely the Germany launch team, with MRGR directly involved in validating the escalation routing.</li>
+        <li><strong>Full Launch:</strong> Phase 2 and 3 expand Tier 2/3 governance and open the CDP/CMS question, contingent on Phase 1 proving both speed and MRGR's acceptance. Phase 3+ opens the platform's API to a second JPMC line of business, the first real test that this was built firmwide and not as an ICB-only tool.</li>
         <li><strong>Enablement:</strong> for an internal platform, "marketing" means real docs, a working sandbox, and a direct pitch to MRGR framed as extending their reach, not adding to their workload.</li>
         <li><strong>Support:</strong> self-serve status checking and an error taxonomy clear enough that most issues don't need a ticket.</li>
       </ul>
@@ -623,7 +624,7 @@
           <tr><td>Foundation</td><td class="mono">End of Q1</td><td>Architecture, API contract, audit trail data model defined</td><td>Reviewed with Engineering</td></tr>
           <tr><td>Phase 1 complete</td><td class="mono">End of Q2</td><td>Tier 1 live, docs and sandbox live, MRGR conversation held</td><td>Time-to-first-integration &lt;1 day, real answer from MRGR</td></tr>
           <tr><td>Phase 2 complete</td><td class="mono">End of Q3</td><td>Tier 2/3 routed into MRGR, CDP/CMS decision made, sequencing resolved</td><td>90-day reuse reviewed, Legal sign-off if platform work proceeds</td></tr>
-          <tr><td>Phase 3 complete</td><td class="mono">End of Q4</td><td>Full platform build if justified, trust dashboard, consent UX</td><td>Reuse and governance-acceptance metrics both trending right</td></tr>
+          <tr><td>Phase 3 complete</td><td class="mono">End of Q4</td><td>Full platform build if justified, trust dashboard, consent UX, API opened to a second JPMC line of business</td><td>Reuse and governance-acceptance metrics both trending right</td></tr>
         </tbody>
       </table></div>
     </section>

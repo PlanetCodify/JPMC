@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ICB Trust Platform — Pranav Gupta</title>
-<meta name="description" content="An automated gen-AI governance layer for JPMC's International Consumer Bank, built as a Platform PM application artifact.">
+<title>JPMC Trust Platform — Pranav Gupta</title>
+<meta name="description" content="A firmwide gen-AI governance layer for JPMorgan Chase, piloted in International Consumer Bank, built as a Platform PM application artifact.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400..800;1,400..800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -205,17 +205,17 @@
     <main id="top">
       <a class="back-link" href="#top">&larr; JPMorgan Chase &middot; Platform Product Manager, VP</a>
       <div class="eyebrow">Application Artifact &middot; Aug 2026</div>
-      <h1 class="title">ICB Trust Platform</h1>
+      <h1 class="title">JPMC Trust Platform</h1>
       <p class="subtitle">The bank already has the reviewer. Nobody built the door.</p>
-      <div class="tag-row"><b>Regulatory research &middot; governance design &middot; systems architecture &middot; working prototype</b><br>Internal platform &middot; automated gen-AI risk tiering, not a customer-facing product</div>
+      <div class="tag-row"><b>Regulatory research &middot; governance design &middot; systems architecture &middot; working prototype</b><br>Firmwide internal platform, piloted in International Consumer Bank (ICB) &middot; automated gen-AI risk tiering, not a customer-facing product</div>
 
       <section class="sec" id="summary">
         <h2 class="section-h">Executive Summary</h2>
 
         <div class="kv-list">
-          <div class="kv-item"><div class="kv-key">Problem</div><div class="kv-val">In April 2026 the Federal Reserve excluded generative and agentic AI from formal bank model-risk rules (SR 26-2). JPMC already runs a review function scoped to exactly this bank &mdash; Model Risk Governance &amp; Review, ICB &mdash; but its public scope stops at traditional statistical models. The gap isn't that nobody can govern this. It's that nobody built the way in.</div></div>
-          <div class="kv-item"><div class="kv-key">Proposed solution</div><div class="kv-val">An automated tiering layer that classifies gen-AI and agentic features by risk, clears low-risk ones on its own, and escalates the rest into MRGR's real queue &mdash; with the reasoning and audit trail already attached. Not a new governance function; the missing entry point into one that already exists.</div></div>
-          <div class="kv-item"><div class="kv-key">Business impact</div><div class="kv-val">Closes a live, dated regulatory gap without duplicating MRGR's expertise or regulatory relationships &middot; lets ICB ship gen-AI features at competitive pace against UK peers already live with AI-driven experiences (NatWest's Cora, Lloyds' Envoy) &middot; likely lower build cost than standing up a parallel review function</div></div>
+          <div class="kv-item"><div class="kv-key">Problem</div><div class="kv-val">In April 2026 the Federal Reserve excluded generative and agentic AI from formal bank model-risk rules (SR 26-2) &mdash; firmwide, for JPMC as a whole. JPMC already runs a review function with exactly this kind of authority &mdash; Model Risk Governance &amp; Review (MRGR) &mdash; evidenced through a job posting scoped to International Consumer Bank (ICB), but its public scope stops at traditional statistical models. The gap isn't that nobody can govern this. It's that nobody built the way in, in any line of business.</div></div>
+          <div class="kv-item"><div class="kv-key">Proposed solution</div><div class="kv-val">A firmwide automated tiering layer that classifies gen-AI and agentic features by risk, clears low-risk ones on its own, and escalates the rest into MRGR's real queue &mdash; with the reasoning and audit trail already attached. Not a new governance function; the missing entry point into one that already exists. Piloted in ICB first, where the regulatory pressure and the evidence for MRGR's existing scope both happen to be strongest.</div></div>
+          <div class="kv-item"><div class="kv-key">Business impact</div><div class="kv-val">Closes a live, dated regulatory gap firmwide without duplicating MRGR's expertise or regulatory relationships &middot; lets ICB, the pilot line of business, ship gen-AI features at competitive pace against UK peers already live with AI-driven experiences (NatWest's Cora, Lloyds' Envoy) &middot; likely lower build cost than standing up a parallel review function, and reusable by other JPMC lines of business once proven</div></div>
         </div>
 
         <div class="stat-strip">
@@ -232,13 +232,13 @@
         <div class="proto-card">
           <div class="proto-head">
             <div class="proto-head-text">
-              <div class="eyebrow" style="margin-bottom:4px;">ICB Trust Platform Console</div>
+              <div class="eyebrow" style="margin-bottom:4px;">JPMC Trust Platform Console</div>
               <p>Architecture explorer &middot; RICE roadmap &middot; governance classifier &middot; MRGR queue &middot; metrics</p>
             </div>
             <a class="btn" href="06_prototype.html" target="_blank" rel="noopener">Open in new tab ↗</a>
           </div>
           <div class="proto-url">planetcodify.github.io/JPMC/06_prototype.html</div>
-          <iframe class="proto-frame" src="06_prototype.html" title="ICB Trust Platform Console — live prototype"></iframe>
+          <iframe class="proto-frame" src="06_prototype.html" title="JPMC Trust Platform Console — live prototype"></iframe>
           <div class="proto-foot">Concept-stage prototype &mdash; illustrative data throughout, built to demonstrate the product thinking, not a real JPMC system.</div>
         </div>
       </section>
@@ -259,7 +259,7 @@
 
       <section class="sec" id="solution">
         <h2 class="section-h">Solution Overview</h2>
-        <p><strong>What we're building</strong> &mdash; a tiering layer that classifies a gen-AI or agentic feature request into one of three risk tiers and returns the required review path. Tier 1 clears an automated policy check. Tier 2 gets an automated check plus a logged human spot-check. Tier 3 routes into MRGR's existing review workflow, with the classifier's full reasoning and an audit trail attached.</p>
+        <p><strong>What we're building</strong> &mdash; a tiering layer that classifies a gen-AI or agentic feature request into one of three risk tiers and returns the required review path. Tier 1 clears an automated policy check. Tier 2 gets an automated check plus a logged human spot-check. Tier 3 routes into MRGR's existing review workflow, with the classifier's full reasoning and an audit trail attached. Built as firmwide infrastructure from the start &mdash; versioned API, no ICB-specific assumptions baked into the contract &mdash; but launched with one pilot line of business so the riskiest assumption (will MRGR actually use this) gets tested before any other JPMC line of business adopts it.</p>
 
         <div class="tbl-wrap">
           <table>
@@ -325,7 +325,7 @@
             </defs>
 
             <rect x="180" y="18" width="745" height="410" rx="10" fill="none" stroke="#CFC9BB" stroke-width="1.3" stroke-dasharray="6,4"/>
-            <text x="196" y="36" font-size="10" font-weight="700" letter-spacing="0.06em" fill="#918C80" font-family="JetBrains Mono, monospace">ICB TRUST PLATFORM &#8212; IN SCOPE</text>
+            <text x="196" y="36" font-size="10" font-weight="700" letter-spacing="0.06em" fill="#918C80" font-family="JetBrains Mono, monospace">JPMC TRUST PLATFORM &#8212; IN SCOPE</text>
 
             <rect x="10" y="115" width="150" height="52" rx="8" fill="#F3F1EC" stroke="#CFC9BB"/>
             <text x="85" y="137" text-anchor="middle" font-size="12" fill="#13110F" font-family="Inter Tight, sans-serif">Market Engineer</text>
@@ -451,7 +451,7 @@
             <tbody>
               <tr><td class="mono">Phase 1</td><td class="wrap">Tiering layer, Tier 1 automated checks, integrator docs + sandbox, validated directly with MRGR</td><td class="wrap">Time-to-first-integration &lt;1 day, real answer from MRGR on accepting escalations</td></tr>
               <tr><td class="mono">Phase 2</td><td class="wrap">Tier 2/3 routed into MRGR's real workflow; CDP/CMS integration decision made; UK-vs-Germany sequencing forced to a decision</td><td class="wrap">90-day reuse data reviewed; Legal sign-off on cross-border data handling if platform build proceeds</td></tr>
-              <tr><td class="mono">Phase 3</td><td class="wrap">Full platform build if justified by Phase 1&ndash;2 data; customer-trust dashboard; dedicated consent UX</td><td class="wrap">Reuse and MRGR-acceptance metrics both trending in the right direction</td></tr>
+              <tr><td class="mono">Phase 3</td><td class="wrap">Full platform build if justified by Phase 1&ndash;2 data; customer-trust dashboard; dedicated consent UX; open the API to a second JPMC line of business (CIB or Wealth) as the first proof this was built firmwide, not ICB-only</td><td class="wrap">Reuse and MRGR-acceptance metrics both trending in the right direction</td></tr>
             </tbody>
           </table>
         </div>
