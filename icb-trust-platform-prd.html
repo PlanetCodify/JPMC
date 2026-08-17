@@ -261,7 +261,11 @@
         <tbody>
           <tr><td>Time from first integration attempt to a working classification call</td><td>Unmeasured</td><td>Under 1 business day</td></tr>
           <tr><td>90-day sustained use rate</td><td>Unmeasured</td><td>Tracked from day one; required check-in before Phase 2 spend</td></tr>
+          <tr><td>Task completion without intervention (no tier reassignment or override)</td><td>Unmeasured</td><td>Watched trend &mdash; catches classifier drift even when nobody manually escalates it</td></tr>
           <tr><td>% of Tier 3 escalations MRGR accepts through this routing</td><td class="mono">0%</td><td>High enough to prove the thesis is real</td></tr>
+          <tr><td>Escalation signal-to-noise (% of Tier 3s confirmed correctly tiered, not downgraded)</td><td>Unmeasured</td><td>Above 70% &mdash; below that, MRGR sees more noise than signal and disengages</td></tr>
+          <tr><td>Classifier response latency (P50 / P95)</td><td>Unmeasured</td><td>P50 under 2 seconds, P95 under 10 seconds (per Section&nbsp;4.3)</td></tr>
+          <tr><td>HHH spot-check score (Honesty / Harmlessness / Helpfulness, 1&ndash;5)</td><td>Unmeasured</td><td>Harmlessness is a hard floor at 4.5, triggers immediate re-review below it; Honesty and Helpfulness are watched trends</td></tr>
         </tbody>
       </table></div>
     </section>
@@ -574,6 +578,7 @@
           <tr><td class="mono">FR5</td><td>Provide integrator docs, sandbox, self-serve status</td><td><span class="badge p0">P0</span></td><td>Addresses adoption-bypass risk</td></tr>
           <tr><td class="mono">FR6</td><td>Log Tier 2 decisions for periodic human spot-check</td><td><span class="badge p1">P1</span></td><td>Not full review, but not unreviewed</td></tr>
           <tr><td class="mono">FR7</td><td>Track 90-day sustained use per integrating team</td><td><span class="badge p0">P0</span></td><td>Prevents speed masking low reuse</td></tr>
+          <tr><td class="mono">FR8</td><td>Score every Tier 2/3 sampled review against Honesty, Harmlessness, and Helpfulness (1&ndash;5)</td><td><span class="badge p1">P1</span></td><td>Rides on the FR6 spot-check, not a new pipeline; Harmlessness &lt;4.5 triggers automatic re-review</td></tr>
         </tbody>
       </table></div>
 

@@ -514,7 +514,11 @@
             <tbody>
               <tr><td class="mono">Time-to-first-integration</td><td>Primary</td><td>Whether the platform is fast enough that engineers don't route around it</td></tr>
               <tr><td class="mono">90-day sustained use</td><td>Co-primary</td><td>A fast first integration that never gets used again &mdash; can't be gamed by one shallow test call</td></tr>
+              <tr><td class="mono">Task completion without intervention</td><td>Primary</td><td>Classifier drift &mdash; catches misclassification even when no one manually escalates it</td></tr>
               <tr><td class="mono">MRGR escalation acceptance</td><td>Guardrail</td><td>Whether MRGR actually uses the routing, or quietly works around it</td></tr>
+              <tr><td class="mono">Escalation signal-to-noise</td><td>Guardrail</td><td>Escalation precision, not just engagement &mdash; too many over-triggered Tier 3s cause alert fatigue at MRGR</td></tr>
+              <tr><td class="mono">Classifier response latency (P50/P95)</td><td>Guardrail</td><td>The synchronous classify call staying inside its stated SLA (P50&lt;2s, P95&lt;10s) as volume grows</td></tr>
+              <tr><td class="mono">HHH spot-check (Honesty / Harmlessness / Helpfulness)</td><td>Guardrail &middot; kill-switch on Harmlessness</td><td>Output quality on sampled Tier 2/3 decisions, not just the tier assigned to them &mdash; scored on the review that already exists, not a new pipeline</td></tr>
               <tr><td class="mono">Tier 1 review cycle time</td><td>Guardrail</td><td>Automated review staying genuinely fast as volume grows</td></tr>
               <tr><td class="mono">Tier 3 audit completeness</td><td>Kill-switch</td><td>Any incomplete record triggers immediate rollback, no exceptions</td></tr>
             </tbody>

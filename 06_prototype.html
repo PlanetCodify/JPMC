@@ -464,9 +464,10 @@
   .queue-row-detail { display: none; }
   .queue-row-detail.open { display: table-row; }
   .queue-detail-pad { padding: 16px 20px; background: var(--surface-2); }
-  .queue-detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
-  .qd-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); font-weight: 700; margin-bottom: 4px; }
-  .qd-val { font-size: 12.8px; color: var(--ink); line-height: 1.5; }
+  .queue-detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px 20px; white-space: normal; }
+  .queue-detail-grid > div { min-width: 0; }
+  .qd-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); font-weight: 700; margin-bottom: 4px; white-space: normal; }
+  .qd-val { font-size: 12.8px; color: var(--ink); line-height: 1.5; white-space: normal; word-break: break-word; }
   .sla-bar { width: 74px; height: 6px; border-radius: 100px; background: var(--surface-2); overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 8px; }
   .sla-bar-fill { height: 100%; border-radius: 100px; }
 
@@ -1117,6 +1118,32 @@
       <div class="kpi-grid" id="metricsGrid"></div>
 
       <section class="block" style="margin-top:28px;">
+        <h2 class="section-title">AI quality &mdash; HHH spot-check</h2>
+        <p class="section-dek">Not a new review process &mdash; an added scoring dimension on the Tier 2 sample review and Tier 3 MRGR review that already exist. Reviewers score each sampled output against a lightweight rubric (1&ndash;5) for Honesty, Harmlessness, and Helpfulness, the same three dimensions used industry-wide for LLM-as-judge and human eval.</p>
+        <div class="kpi-grid">
+          <div class="card kpi">
+            <div class="kpi-label">Honesty</div>
+            <div class="kpi-value">4.6<span style="font-size:12px;color:var(--ink-faint);font-weight:400;">/5</span></div>
+            <div class="kpi-delta">Output doesn't overstate certainty or fabricate reasoning</div>
+          </div>
+          <div class="card kpi">
+            <div class="kpi-label">Harmlessness</div>
+            <div class="kpi-value">4.9<span style="font-size:12px;color:var(--ink-faint);font-weight:400;">/5</span></div>
+            <div class="kpi-delta">Guardrail floor: below 4.5 triggers immediate re-review</div>
+          </div>
+          <div class="card kpi">
+            <div class="kpi-label">Helpfulness</div>
+            <div class="kpi-value">4.3<span style="font-size:12px;color:var(--ink-faint);font-weight:400;">/5</span></div>
+            <div class="kpi-delta">Lowest of the three &mdash; reasoning sometimes too terse for a reviewer to act on without follow-up</div>
+          </div>
+        </div>
+        <div class="explain" style="margin-top:14px;">
+          <span class="explain-label">Sampling method</span>
+          n=40/week across Tier 2 spot-checks and all Tier 3 escalations, scored by the same reviewer already doing the policy check &mdash; no separate eval pipeline. Harmlessness is a hard floor with an automatic re-review trigger; Honesty and Helpfulness are watched trends, not kill-switches.
+        </div>
+      </section>
+
+      <section class="block">
         <h2 class="section-title">What each metric actually guards against</h2>
         <div class="table-wrap">
           <table>
@@ -1124,7 +1151,11 @@
             <tbody>
               <tr><td class="wrap"><b>Time-to-first-integration</b></td><td><span class="badge rice-high">Primary</span></td><td class="wrap">Whether the platform is fast enough that engineers don't route around it</td></tr>
               <tr><td class="wrap"><b>90-day sustained use</b></td><td><span class="badge rice-mid">Co-primary</span></td><td class="wrap">A fast first integration that never gets used again &mdash; the metric that can't be gamed by a shallow test call</td></tr>
+              <tr><td class="wrap"><b>Task completion without intervention</b></td><td><span class="badge rice-high">Primary</span></td><td class="wrap">Classifier drift &mdash; catches misclassification even when no one manually escalates it</td></tr>
               <tr><td class="wrap"><b>MRGR escalation acceptance</b></td><td><span class="badge rice-mid">Guardrail</span></td><td class="wrap">Whether MRGR actually uses this routing, or quietly works around it</td></tr>
+              <tr><td class="wrap"><b>Escalation signal-to-noise</b></td><td><span class="badge rice-mid">Guardrail</span></td><td class="wrap">Escalation precision, not just engagement &mdash; too many over-triggered Tier 3s cause alert fatigue at MRGR</td></tr>
+              <tr><td class="wrap"><b>Classifier response latency (P50/P95)</b></td><td><span class="badge rice-high">Guardrail</span></td><td class="wrap">The synchronous classify call staying inside its stated SLA as volume grows</td></tr>
+              <tr><td class="wrap"><b>HHH spot-check (Honesty/Harmlessness/Helpfulness)</b></td><td><span class="badge rice-low">Guardrail &middot; kill-switch on Harmlessness</span></td><td class="wrap">Output quality on the sampled decisions, not just the tier assigned to them</td></tr>
               <tr><td class="wrap"><b>Tier 1 review cycle time</b></td><td><span class="badge rice-high">Guardrail</span></td><td class="wrap">Automated review staying genuinely fast as volume grows</td></tr>
               <tr><td class="wrap"><b>Tier 3 audit completeness</b></td><td><span class="badge rice-low">Kill-switch</span></td><td class="wrap">Any incomplete audit record triggers an immediate rollback, no exceptions</td></tr>
             </tbody>
@@ -1746,21 +1777,29 @@
     all: [
       { label: 'Time to first integration', value: '18.4 hrs', delta: 'Target: under 24 hrs', note: 'Primary metric — measures whether engineers hit a fast path or a slow one.', spark: [96, 72, 48, 30, 24, 20, 18.4] },
       { label: '90-day sustained use', value: '61%', delta: 'Tracked from day one', note: 'Co-primary — catches a platform that’s fast but goes unused.', spark: [0, 18, 32, 44, 52, 57, 61] },
+      { label: 'Task completion without intervention', value: '94.6%', delta: 'Watched trend, no regression threshold', note: 'Primary — % of classifications that resolve without a tier reassignment or reviewer override. Catches classifier drift even when nobody manually escalates it.', spark: [91.2, 92.4, 93.1, 93.8, 94.0, 94.3, 94.6] },
       { label: 'MRGR escalation acceptance', value: '88%', delta: 'Tests the core thesis directly', note: 'Guardrail — % of Tier 3 escalations MRGR actually reviews through this routing.', spark: [60, 68, 74, 79, 83, 86, 88] },
+      { label: 'Escalation signal-to-noise', value: '76%', delta: 'Guardrail: below 70% flags alert fatigue', note: '% of Tier 3 escalations MRGR confirms were correctly tiered, not downgraded on review. Distinct from acceptance above — this measures precision, not just engagement.', spark: [58, 63, 67, 70, 72, 74, 76] },
+      { label: 'Classifier response latency (P50 / P95)', value: '1.4s / 7.8s', delta: 'Budget: P50<2s, P95<10s', note: 'Guardrail — the synchronous classify call staying inside its stated SLA as volume grows.', spark: [3.1, 2.4, 2.0, 1.8, 1.6, 1.5, 1.4] },
       { label: 'Tier 1 review cycle time', value: '6.2 hrs', delta: 'Guardrail: under 8 hrs', note: '', spark: [22, 16, 11, 8.5, 7.2, 6.6, 6.2] },
-      { label: 'Tier 3 audit completeness', value: '100%', delta: 'Kill-switch metric, no exceptions', note: 'Any incomplete record triggers immediate rollback.', spark: [] },
-      { label: 'Consent/data-input logging latency', value: '1.8 sec', delta: 'Sub-metric, not headline', note: '', spark: [12, 8, 5, 3.5, 2.4, 2.0, 1.8] }
+      { label: 'Tier 3 audit completeness', value: '100%', delta: 'Kill-switch metric, no exceptions', note: 'Any incomplete record triggers immediate rollback.', spark: [] }
     ],
     uk: [
       { label: 'Time to first integration', value: '—', delta: 'Live since 2021, pre-dates platform', note: '', spark: [] },
       { label: '90-day sustained use', value: '81%', delta: 'Mature market', note: '', spark: [55, 62, 68, 73, 76, 79, 81] },
+      { label: 'Task completion without intervention', value: '96.1%', delta: 'Highest of any market', note: '', spark: [93.5, 94.2, 94.9, 95.3, 95.7, 95.9, 96.1] },
       { label: 'MRGR escalation acceptance', value: '91%', delta: 'Highest of any market', note: '', spark: [70, 76, 82, 85, 88, 90, 91] },
+      { label: 'Escalation signal-to-noise', value: '82%', delta: 'Highest of any market', note: '', spark: [64, 69, 73, 76, 79, 81, 82] },
+      { label: 'Classifier response latency (P50 / P95)', value: '1.1s / 6.4s', delta: 'Fastest of any market', note: '', spark: [2.6, 2.0, 1.6, 1.4, 1.3, 1.2, 1.1] },
       { label: 'Tier 1 review cycle time', value: '5.1 hrs', delta: 'Fastest of any market', note: '', spark: [18, 13, 9, 7, 6, 5.4, 5.1] }
     ],
     de: [
       { label: 'Time to first integration', value: '18.4 hrs', delta: 'Projected, integration underway', note: '', spark: [96, 72, 48, 30, 24, 20, 18.4] },
       { label: '90-day sustained use', value: '—', delta: 'Not yet at 90 days', note: '', spark: [] },
+      { label: 'Task completion without intervention', value: '89.3%', delta: 'Below UK — smaller sample, still stabilizing', note: '', spark: [82.0, 84.5, 86.1, 87.4, 88.2, 88.8, 89.3] },
       { label: 'MRGR escalation acceptance', value: '—', delta: 'Validation pending', note: '', spark: [] },
+      { label: 'Escalation signal-to-noise', value: '—', delta: 'Validation pending', note: '', spark: [] },
+      { label: 'Classifier response latency (P50 / P95)', value: '1.7s / 9.1s', delta: 'Inside budget, closer to P95 ceiling', note: '', spark: [3.4, 2.8, 2.3, 2.0, 1.9, 1.8, 1.7] },
       { label: 'Launch readiness', value: 'Stage 2 / 4', delta: 'Governance layer integration underway', note: '', spark: [] }
     ]
   };
