@@ -14,6 +14,7 @@
     --paper: #F4F6F7;
     --surface: #FFFFFF;
     --surface-2: #EDEFF1;
+    --surface-3: #E4E7E9;
     --ink: #14181B;
     --ink-muted: #4C5157;
     --ink-faint: #72777D;
@@ -33,17 +34,22 @@
     --warn-soft: #FFECD9;
     --crit: #BA1729;
     --crit-soft: #FFECEA;
-    --shadow: 0 1px 2px rgba(20,24,27,0.05), 0 4px 14px rgba(20,24,27,0.06);
-    --radius: 3px;
+    --shadow-xs: 0 1px 2px rgba(20,24,27,0.06);
+    --shadow-sm: 0 1px 2px rgba(20,24,27,0.05), 0 4px 14px rgba(20,24,27,0.06);
+    --shadow-md: 0 2px 6px rgba(20,24,27,0.07), 0 10px 28px rgba(20,24,27,0.09);
+    --shadow-lg: 0 8px 20px rgba(20,24,27,0.10), 0 24px 56px rgba(20,24,27,0.14);
+    --shadow: var(--shadow-sm);
+    --radius: 6px;
+    --radius-sm: 4px;
     --display: "Open Sans", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --sans: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --mono: "PT Mono", ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --paper: #15191C; --surface: #1F2427; --surface-2: #292E33;
+      --paper: #101316; --surface: #191D20; --surface-2: #21262A; --surface-3: #2A3034;
       --ink: #F1F3F4; --ink-muted: #C3C7CA; --ink-faint: #8A8F94;
-      --border: #383D42; --border-strong: #4C5157;
+      --border: #33393E; --border-strong: #454C52;
       --accent: #7FB0EB; --accent-ink: #EAF6FF;
       --accent-soft: #12283E; --accent-soft-border: #1E4A72;
       --bronze: #C79A78; --bronze-soft: #2E241D;
@@ -51,13 +57,17 @@
       --good: #4FBE93; --good-soft: #0F2B22;
       --warn: #E3934C; --warn-soft: #3A250F;
       --crit: #EF7A83; --crit-soft: #3B171A;
-      --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 4px 18px rgba(0,0,0,0.4);
+      --shadow-xs: 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.35), 0 4px 18px rgba(0,0,0,0.4);
+      --shadow-md: 0 2px 8px rgba(0,0,0,0.4), 0 12px 32px rgba(0,0,0,0.45);
+      --shadow-lg: 0 10px 24px rgba(0,0,0,0.45), 0 28px 64px rgba(0,0,0,0.5);
+      --shadow: var(--shadow-sm);
     }
   }
   :root[data-theme="dark"] {
-    --paper: #15191C; --surface: #1F2427; --surface-2: #292E33;
+    --paper: #101316; --surface: #191D20; --surface-2: #21262A; --surface-3: #2A3034;
     --ink: #F1F3F4; --ink-muted: #C3C7CA; --ink-faint: #8A8F94;
-    --border: #383D42; --border-strong: #4C5157;
+    --border: #33393E; --border-strong: #454C52;
     --accent: #7FB0EB; --accent-ink: #EAF6FF;
     --accent-soft: #12283E; --accent-soft-border: #1E4A72;
     --bronze: #C79A78; --bronze-soft: #2E241D;
@@ -65,13 +75,18 @@
     --good: #4FBE93; --good-soft: #0F2B22;
     --warn: #E3934C; --warn-soft: #3A250F;
     --crit: #EF7A83; --crit-soft: #3B171A;
-    --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 4px 18px rgba(0,0,0,0.4);
+    --shadow-xs: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.35), 0 4px 18px rgba(0,0,0,0.4);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.4), 0 12px 32px rgba(0,0,0,0.45);
+    --shadow-lg: 0 10px 24px rgba(0,0,0,0.45), 0 28px 64px rgba(0,0,0,0.5);
+    --shadow: var(--shadow-sm);
   }
 
   * { box-sizing: border-box; }
+  html, body { height: 100%; }
   body {
     margin: 0; background: var(--paper); color: var(--ink);
-    font-family: var(--sans); font-size: 15px; line-height: 1.6;
+    font-family: var(--sans); font-size: 14px; line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
   @media (prefers-reduced-motion: reduce) {
@@ -79,99 +94,209 @@
   }
   a { color: var(--accent); }
   button { font-family: inherit; }
+  input, select, textarea { font-family: inherit; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  ::selection { background: var(--accent-soft); }
 
-  .brand-rule { height: 3px; background: linear-gradient(90deg, var(--accent) 0%, var(--accent) 60%, var(--bronze) 100%); }
+  .icon, .icon * { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .icon { width: 17px; height: 17px; flex-shrink: 0; display: block; }
+  .icon.sm { width: 14px; height: 14px; }
+  .icon.lg { width: 20px; height: 20px; }
 
-  .app { display: flex; min-height: 100vh; }
+  .brand-rule { height: 3px; background: linear-gradient(90deg, var(--accent) 0%, var(--accent) 55%, var(--bronze) 100%); }
 
-  /* ---- Sidebar ---- */
-  .sidebar {
-    width: 252px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border);
-    padding: 20px 14px; display: flex; flex-direction: column; gap: 20px;
-    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  /* =========================================================
+     MASTHEAD
+     ========================================================= */
+  .masthead {
+    height: 56px; display: flex; align-items: center; gap: 18px; padding: 0 18px 0 16px;
+    background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50;
   }
-  .brand { display: flex; flex-direction: column; gap: 3px; padding: 0 6px; }
-  .brand-mark {
-    width: 32px; height: 32px; border-radius: 4px; background: var(--accent-ink);
+  .mh-brand { display: flex; align-items: center; gap: 10px; flex-shrink: 0; padding-right: 16px; border-right: 1px solid var(--border); height: 32px; }
+  .mh-mark {
+    width: 28px; height: 28px; border-radius: 6px; flex-shrink: 0;
     background: linear-gradient(155deg, var(--accent), var(--accent-ink));
     display: flex; align-items: center; justify-content: center; color: #fff;
-    font-family: var(--display); font-weight: 800; font-size: 15px; margin-bottom: 8px;
+    font-family: var(--display); font-weight: 800; font-size: 13px;
   }
-  .brand-name { font-family: var(--display); font-size: 16px; font-weight: 800; letter-spacing: 0.005em; }
-  .brand-sub { font-size: 11px; color: var(--ink-muted); letter-spacing: 0.03em; text-transform: uppercase; margin-top: 1px; }
-  .env-badge {
-    display: inline-flex; align-items: center; gap: 5px; margin-top: 10px; padding: 3px 8px;
-    background: var(--warn-soft); color: var(--warn); border-radius: 100px; font-size: 10px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.04em; width: fit-content;
-  }
-  .env-badge .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+  .mh-brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+  .mh-brand-name { font-family: var(--display); font-size: 13.5px; font-weight: 800; letter-spacing: 0.002em; }
+  .mh-brand-sub { font-size: 10px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 1px; }
 
-  .nav { display: flex; flex-direction: column; gap: 2px; }
-  .nav-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-faint); padding: 12px 10px 4px; }
+  .mh-search { flex: 1; max-width: 420px; position: relative; }
+  .mh-search input {
+    width: 100%; background: var(--surface-2); border: 1px solid var(--border); border-radius: 100px;
+    padding: 7px 38px 7px 34px; font-size: 12.8px; color: var(--ink); transition: background 0.12s ease, border-color 0.12s ease;
+  }
+  .mh-search input::placeholder { color: var(--ink-faint); }
+  .mh-search input:focus { background: var(--surface); border-color: var(--accent); outline: none; }
+  .mh-search .icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--ink-faint); pointer-events: none; }
+  .mh-search-kbd {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-family: var(--mono); font-size: 10px;
+    color: var(--ink-faint); background: var(--surface); border: 1px solid var(--border-strong); border-radius: 4px; padding: 1.5px 5px; pointer-events: none;
+  }
+  .mh-search-results {
+    position: absolute; top: calc(100% + 6px); left: 0; right: 0; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow-lg); overflow: hidden; z-index: 60; display: none;
+  }
+  .mh-search-results.open { display: block; }
+  .mh-search-results button {
+    display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 9px 14px; border: none;
+    background: none; cursor: pointer; font-size: 12.8px; color: var(--ink); border-bottom: 1px solid var(--border);
+  }
+  .mh-search-results button:last-child { border-bottom: none; }
+  .mh-search-results button:hover, .mh-search-results button.hi { background: var(--surface-2); }
+  .mh-search-results .sr-tag { margin-left: auto; font-size: 10.5px; color: var(--ink-faint); font-family: var(--mono); }
+  .mh-search-empty { padding: 14px; font-size: 12px; color: var(--ink-faint); }
+
+  .mh-spacer { flex: 1; }
+  .mh-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+  .env-pill-wrap { position: relative; }
+  .env-pill {
+    display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px 5px 9px; border-radius: 100px; cursor: pointer;
+    background: var(--warn-soft); color: var(--warn); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+    border: 1px solid transparent;
+  }
+  .env-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .env-menu {
+    position: absolute; top: calc(100% + 8px); right: 0; width: 250px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 6px; display: none; z-index: 60;
+  }
+  .env-menu.open { display: block; }
+  .env-opt { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: var(--radius-sm); cursor: pointer; }
+  .env-opt.active { background: var(--good-soft); }
+  .env-opt.locked { cursor: not-allowed; opacity: 0.55; }
+  .env-opt .dot2 { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .env-opt-text { display: flex; flex-direction: column; gap: 2px; }
+  .env-opt-title { font-size: 12.5px; font-weight: 700; }
+  .env-opt-desc { font-size: 11px; color: var(--ink-faint); line-height: 1.4; }
+
+  .icon-btn {
+    position: relative; width: 32px; height: 32px; border-radius: var(--radius-sm); border: none; background: none;
+    display: flex; align-items: center; justify-content: center; color: var(--ink-muted); cursor: pointer; transition: background 0.12s ease, color 0.12s ease;
+  }
+  .icon-btn:hover { background: var(--surface-2); color: var(--ink); }
+  .icon-btn .nbadge {
+    position: absolute; top: 3px; right: 3px; width: 15px; height: 15px; border-radius: 50%; background: var(--crit); color: #fff;
+    font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; font-family: var(--mono); border: 1.5px solid var(--surface);
+  }
+  .dropdown-wrap { position: relative; }
+  .dropdown-panel {
+    position: absolute; top: calc(100% + 8px); right: 0; width: 320px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow-lg); display: none; z-index: 60; overflow: hidden;
+  }
+  .dropdown-panel.open { display: block; }
+  .dd-head { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 12.5px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
+  .dd-head span.muted { font-weight: 400; color: var(--ink-faint); font-size: 11px; }
+  .notif-item { display: flex; gap: 10px; padding: 11px 16px; border-bottom: 1px solid var(--border); }
+  .notif-item:last-child { border-bottom: none; }
+  .notif-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .notif-text { font-size: 12.3px; color: var(--ink); line-height: 1.5; }
+  .notif-time { font-size: 10.5px; color: var(--ink-faint); margin-top: 2px; font-family: var(--mono); }
+  .dd-foot { padding: 9px 16px; text-align: center; font-size: 11.5px; border-top: 1px solid var(--border); }
+
+  .mh-user { display: flex; align-items: center; gap: 8px; padding: 4px 8px 4px 4px; border-radius: 100px; cursor: pointer; border: 1px solid transparent; }
+  .mh-user:hover { background: var(--surface-2); }
+  .mh-avatar {
+    width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(155deg, var(--violet), #7A5FC0);
+    color: #fff; font-size: 10.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; font-family: var(--display); flex-shrink: 0;
+  }
+  .mh-user-text { display: flex; flex-direction: column; line-height: 1.2; }
+  .mh-user-name { font-size: 12px; font-weight: 700; }
+  .mh-user-role { font-size: 10px; color: var(--ink-faint); }
+  .user-menu { width: 240px; }
+  .user-menu-head { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; gap: 10px; align-items: center; }
+  .user-menu-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 16px; font-size: 12.5px; color: var(--ink); cursor: pointer; border: none;
+    background: none; width: 100%; text-align: left;
+  }
+  .user-menu-item:hover { background: var(--surface-2); }
+  .user-menu-item .icon { color: var(--ink-faint); }
+  .user-menu-sep { height: 1px; background: var(--border); margin: 4px 0; }
+
+  /* =========================================================
+     APP SHELL
+     ========================================================= */
+  .app { display: flex; min-height: calc(100vh - 59px); }
+
+  .sidebar {
+    width: 236px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border);
+    padding: 16px 12px; display: flex; flex-direction: column; gap: 4px;
+    position: sticky; top: 59px; height: calc(100vh - 59px); overflow-y: auto;
+  }
+  .nav { display: flex; flex-direction: column; gap: 1px; }
+  .nav-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-faint); padding: 14px 10px 6px; }
+  .nav-label:first-child { padding-top: 4px; }
   .nav-item {
-    display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: var(--radius);
+    display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-sm);
     background: none; border: none; border-left: 2px solid transparent; text-align: left;
-    color: var(--ink-muted); font-size: 13.5px; cursor: pointer; transition: background 0.12s ease, color 0.12s ease;
+    color: var(--ink-muted); font-size: 13px; cursor: pointer; transition: background 0.12s ease, color 0.12s ease;
   }
   .nav-item:hover { background: var(--surface-2); color: var(--ink); }
   .nav-item[aria-selected="true"] { background: var(--accent-soft); color: var(--accent-ink); font-weight: 700; border-left-color: var(--accent); }
-  .nav-item .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.5; flex-shrink: 0; }
+  .nav-item .icon { color: inherit; opacity: 0.8; }
   .nav-item .nb {
     margin-left: auto; font-family: var(--mono); font-size: 10px; padding: 1px 6px; border-radius: 100px;
     background: var(--crit-soft); color: var(--crit); font-weight: 700;
   }
 
-  .sidebar-foot { margin-top: auto; padding: 12px 10px 0; border-top: 1px solid var(--border); font-size: 11px; color: var(--ink-faint); line-height: 1.55; }
-  .theme-toggle { display: flex; gap: 4px; padding: 3px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; }
+  .sidebar-foot { margin-top: auto; padding: 12px 10px 0; border-top: 1px solid var(--border); font-size: 10.5px; color: var(--ink-faint); line-height: 1.55; }
+  .theme-toggle { display: flex; gap: 4px; padding: 3px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 10px; }
   .theme-toggle button { flex: 1; border: none; background: none; padding: 5px 0; border-radius: 3px; font-size: 11px; color: var(--ink-muted); cursor: pointer; }
-  .theme-toggle button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+  .theme-toggle button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-xs); }
 
   /* ---- Main ---- */
   .main { flex: 1; min-width: 0; }
-  .topbar {
-    position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 32px; background: var(--paper); border-bottom: 1px solid var(--border);
+  .crumbbar {
+    display: flex; align-items: center; gap: 8px; padding: 12px 32px 0; font-size: 11.5px; color: var(--ink-faint); font-family: var(--mono);
   }
-  .crumb { font-size: 12.5px; color: var(--ink-muted); font-family: var(--mono); }
-  .crumb b { color: var(--ink); font-weight: 700; font-family: var(--sans); }
-  .topbar-right { display: flex; align-items: center; gap: 10px; }
-  .status-pill {
-    display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; padding: 4px 10px; border-radius: 100px;
-    background: var(--good-soft); color: var(--good); border: 1px solid var(--good-soft); font-weight: 700;
-  }
-  .status-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .crumbbar .sep { opacity: 0.5; }
+  .crumbbar b { color: var(--ink-muted); font-weight: 700; font-family: var(--sans); }
 
-  .panel { padding: 28px 32px 70px; max-width: 1040px; }
+  .page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding: 10px 32px 22px; flex-wrap: wrap; }
+  .page-header-text { min-width: 0; flex: 1; }
+  .page-header-actions { display: flex; gap: 8px; flex-shrink: 0; padding-top: 2px; flex-wrap: wrap; }
+  h1.page-title { font-family: var(--display); font-size: 22px; font-weight: 800; margin: 0 0 6px; letter-spacing: 0; text-wrap: balance; display: flex; align-items: center; gap: 10px; }
+  .page-dek { color: var(--ink-muted); font-size: 13.5px; margin: 0; max-width: 68ch; line-height: 1.6; }
+
+  .panel { padding: 0 32px 70px; max-width: 1120px; }
   .panel[hidden] { display: none; }
 
-  h1.page-title { font-family: var(--display); font-size: 25px; font-weight: 800; margin: 0 0 6px; letter-spacing: 0; text-wrap: balance; }
-  .page-dek { color: var(--ink-muted); font-size: 14px; margin: 0 0 26px; max-width: 68ch; }
+  h2.section-title { font-family: var(--display); font-size: 15.5px; font-weight: 800; margin: 0 0 4px; }
+  .section-dek { color: var(--ink-muted); font-size: 12.3px; margin: 0 0 14px; max-width: 68ch; line-height: 1.55; }
+  section.block { margin-bottom: 30px; }
 
-  h2.section-title { font-family: var(--display); font-size: 16px; font-weight: 800; margin: 0 0 4px; }
-  .section-dek { color: var(--ink-muted); font-size: 12.5px; margin: 0 0 14px; max-width: 68ch; line-height: 1.55; }
-  section.block { margin-bottom: 32px; }
-
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-xs); }
   .card-pad { padding: 18px 20px; }
+  .card.clickable { cursor: pointer; transition: box-shadow 0.15s ease, border-color 0.15s ease, transform 0.15s ease; }
+  .card.clickable:hover { box-shadow: var(--shadow-md); border-color: var(--border-strong); transform: translateY(-1px); }
 
   .explain {
     background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 14px 18px; margin: 12px 0 20px; font-size: 12.8px; color: var(--ink-muted); line-height: 1.65;
+    padding: 14px 18px; margin: 12px 0 20px; font-size: 12.5px; color: var(--ink-muted); line-height: 1.65;
   }
   .explain b { color: var(--ink); }
   .explain-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); margin-bottom: 6px; display: block; }
 
   .thesis {
     border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 var(--radius) var(--radius) 0;
-    padding: 16px 20px; font-family: var(--display); font-weight: 600; font-size: 15px; color: var(--accent-ink); line-height: 1.55;
+    padding: 16px 20px; font-family: var(--display); font-weight: 600; font-size: 14.5px; color: var(--accent-ink); line-height: 1.55;
   }
 
-  .disclaimer {
-    font-size: 11.5px; color: var(--ink-faint); border: 1px dashed var(--border-strong);
-    border-radius: var(--radius); padding: 10px 14px; margin-top: 30px; line-height: 1.6;
+  .disclaimer { font-size: 11.3px; color: var(--ink-faint); border: 1px dashed var(--border-strong);
+    border-radius: var(--radius); padding: 10px 14px; margin-top: 30px; line-height: 1.6; display: flex; gap: 8px; align-items: flex-start;
   }
+  .disclaimer .icon { flex-shrink: 0; margin-top: 1px; color: var(--ink-faint); }
 
+  /* ---- Quick actions ---- */
+  .qa-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+  .qa-card { padding: 15px 16px; display: flex; gap: 12px; align-items: flex-start; }
+  .qa-icon { width: 34px; height: 34px; border-radius: var(--radius-sm); background: var(--accent-soft); color: var(--accent-ink); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .qa-title { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+  .qa-desc { font-size: 11.5px; color: var(--ink-faint); line-height: 1.5; }
+
+  /* ---- KPI ---- */
   .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
   .kpi { padding: 15px 17px; }
   .kpi-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); margin-bottom: 6px; font-weight: 700; }
@@ -180,11 +305,28 @@
   .kpi-note { font-size: 10.5px; color: var(--ink-faint); margin-top: 6px; line-height: 1.4; }
   .kpi-spark { margin-top: 8px; }
 
+  /* ---- Tables ---- */
+  .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .toolbar-search { position: relative; flex: 1; min-width: 180px; max-width: 280px; }
+  .toolbar-search input {
+    width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 7px 10px 7px 30px; font-size: 12.3px; color: var(--ink);
+  }
+  .toolbar-search input:focus { border-color: var(--accent); outline: none; }
+  .toolbar-search .icon { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); color: var(--ink-faint); }
+  .filter-chip {
+    border: 1px solid var(--border); background: var(--surface); padding: 6px 12px; border-radius: 100px;
+    font-size: 12px; cursor: pointer; color: var(--ink-muted);
+  }
+  .filter-chip[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-ink); background: var(--accent-soft); font-weight: 700; }
+  .toolbar-spacer { flex: 1; }
+  .toolbar-count { font-size: 11.5px; color: var(--ink-faint); font-family: var(--mono); }
+
   .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface); }
+  table { width: 100%; border-collapse: collapse; font-size: 12.6px; background: var(--surface); }
   th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
   thead th {
-    background: var(--surface-2); color: var(--ink-muted); font-weight: 700; font-size: 10.5px;
+    background: var(--surface-2); color: var(--ink-muted); font-weight: 700; font-size: 10.3px;
     text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; user-select: none; position: sticky; top: 0;
   }
   thead th:hover { color: var(--ink); }
@@ -194,16 +336,18 @@
   td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
   td.wrap { white-space: normal; min-width: 220px; color: var(--ink-muted); }
   tbody tr.clickable { cursor: pointer; }
+  .row-empty { padding: 30px; text-align: center; color: var(--ink-faint); font-size: 12.5px; }
 
   .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 100px; white-space: nowrap; }
   .badge.rice-high { background: var(--good-soft); color: var(--good); }
   .badge.rice-mid { background: var(--warn-soft); color: var(--warn); }
   .badge.rice-low { background: var(--crit-soft); color: var(--crit); }
   .badge.ext { background: var(--surface-2); color: var(--ink-muted); border: 1px dashed var(--border-strong); }
+  .badge.neutral { background: var(--surface-3); color: var(--ink-muted); }
 
   .callout {
     margin-top: 14px; padding: 13px 16px; border-radius: var(--radius);
-    background: var(--warn-soft); border: 1px solid var(--warn-soft); font-size: 13px; color: var(--ink);
+    background: var(--warn-soft); border: 1px solid var(--warn-soft); font-size: 12.7px; color: var(--ink);
   }
   .callout b { color: var(--warn); }
   .callout.info { background: var(--accent-soft); border-color: var(--accent-soft); }
@@ -230,9 +374,18 @@
   .decision-title { font-family: var(--display); font-weight: 700; font-size: 14px; margin: 4px 0 6px; }
   .decision-body { font-size: 12.8px; color: var(--ink-muted); line-height: 1.55; }
 
+  .api-ref { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .api-ref-row { background: var(--surface); padding: 13px 16px; display: flex; align-items: center; gap: 12px; }
+  .api-method { font-family: var(--mono); font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 4px; flex-shrink: 0; width: 48px; text-align: center; }
+  .api-method.get { background: var(--good-soft); color: var(--good); }
+  .api-method.post { background: var(--accent-soft); color: var(--accent-ink); }
+  .api-path { font-family: var(--mono); font-size: 12.5px; color: var(--ink); flex-shrink: 0; }
+  .api-desc { font-size: 12px; color: var(--ink-faint); flex: 1; }
+  .api-latency { font-family: var(--mono); font-size: 10.5px; color: var(--ink-faint); flex-shrink: 0; }
+
   /* governance simulator */
   .sim-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 18px; align-items: start; }
-  @media (max-width: 800px) { .sim-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 860px) { .sim-grid { grid-template-columns: 1fr; } }
   .chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0 14px; }
   .chip {
     border: 1px solid var(--border); background: var(--surface-2); color: var(--ink-muted);
@@ -240,33 +393,50 @@
   }
   .chip:hover { border-color: var(--accent); color: var(--accent-ink); }
   textarea#simInput {
-    width: 100%; min-height: 92px; resize: vertical; background: var(--surface); color: var(--ink);
-    border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 11px 13px;
+    width: 100%; min-height: 88px; resize: vertical; background: var(--surface); color: var(--ink);
+    border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 11px 13px;
     font-family: var(--sans); font-size: 13.5px; line-height: 1.5;
   }
   .btn-primary {
-    background: var(--accent); color: #fff; border: none; border-radius: var(--radius);
-    padding: 10px 18px; font-size: 13.5px; font-weight: 700; cursor: pointer; margin-top: 12px; transition: filter 0.12s ease;
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--accent); color: #fff; border: none; border-radius: var(--radius-sm);
+    padding: 9px 16px; font-size: 12.8px; font-weight: 700; cursor: pointer; margin-top: 12px; transition: filter 0.12s ease;
   }
   .btn-primary:hover { filter: brightness(1.1); }
-  .sim-result { min-height: 260px; }
-  .tier-badge { display: inline-flex; align-items: center; gap: 8px; font-family: var(--display); font-size: 18px; font-weight: 800; padding: 9px 16px; border-radius: var(--radius); }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--surface); color: var(--ink); border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+    padding: 9px 16px; font-size: 12.8px; font-weight: 700; cursor: pointer;
+  }
+  .btn-secondary:hover { background: var(--surface-2); }
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 6px; background: none; border: none; color: var(--accent);
+    font-size: 12px; font-weight: 700; cursor: pointer; padding: 4px 2px;
+  }
+  .sim-result { min-height: 250px; }
+  .tier-badge { display: inline-flex; align-items: center; gap: 8px; font-family: var(--display); font-size: 17px; font-weight: 800; padding: 8px 15px; border-radius: var(--radius); }
   .tier-badge.t1 { background: var(--good-soft); color: var(--good); }
   .tier-badge.t2 { background: var(--warn-soft); color: var(--warn); }
   .tier-badge.t3 { background: var(--crit-soft); color: var(--crit); }
   .sim-empty { color: var(--ink-faint); font-size: 13px; padding: 40px 10px; text-align: center; }
-  .sim-reason { margin-top: 12px; font-size: 13.5px; color: var(--ink-muted); line-height: 1.6; }
+  .sim-reason { margin-top: 12px; font-size: 13px; color: var(--ink-muted); line-height: 1.6; }
   .sim-path { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
   .sim-path-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); margin-bottom: 6px; }
   .sim-steps { display: flex; flex-direction: column; gap: 6px; }
-  .sim-step { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-muted); }
+  .sim-step { display: flex; align-items: center; gap: 8px; font-size: 12.3px; color: var(--ink-muted); }
   .sim-step .num { width: 17px; height: 17px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; font-size: 10px; font-family: var(--mono); flex-shrink: 0; }
-  .sim-dest { margin-top: 10px; padding: 9px 12px; border-radius: var(--radius); background: var(--surface-2); font-size: 11.5px; color: var(--ink-muted); }
+  .sim-dest { margin-top: 10px; padding: 9px 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 11.5px; color: var(--ink-muted); }
+  .sim-history { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .sim-history-item { display: flex; align-items: center; gap: 8px; padding: 7px 0; font-size: 12px; color: var(--ink-muted); border-bottom: 1px dashed var(--border); }
+  .sim-history-item:last-child { border-bottom: none; }
+  .sim-history-item .badge { flex-shrink: 0; }
+  .sim-history-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sim-history-time { font-family: var(--mono); font-size: 10px; color: var(--ink-faint); flex-shrink: 0; }
 
   /* market status */
   .market-toggle { display: flex; gap: 8px; margin-bottom: 18px; }
   .market-toggle button {
-    border: 1px solid var(--border); background: var(--surface); padding: 8px 16px; border-radius: var(--radius);
+    border: 1px solid var(--border); background: var(--surface); padding: 8px 16px; border-radius: var(--radius-sm);
     font-size: 13px; cursor: pointer; color: var(--ink-muted);
   }
   .market-toggle button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-ink); background: var(--accent-soft); font-weight: 700; }
@@ -288,10 +458,26 @@
   .queue-detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
   .qd-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); font-weight: 700; margin-bottom: 4px; }
   .qd-val { font-size: 12.8px; color: var(--ink); line-height: 1.5; }
-  .sla-bar { width: 80px; height: 6px; border-radius: 100px; background: var(--surface-2); overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 8px; }
+  .sla-bar { width: 74px; height: 6px; border-radius: 100px; background: var(--surface-2); overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 8px; }
   .sla-bar-fill { height: 100%; border-radius: 100px; }
 
-  .foot-links { display: flex; gap: 16px; margin-top: 34px; font-size: 12.5px; }
+  /* ---- Settings ---- */
+  .settings-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+  .settings-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .settings-row:last-child { border-bottom: none; }
+  .settings-row-text { min-width: 0; flex: 1 1 220px; }
+  .settings-row-title { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+  .settings-row-desc { font-size: 11.8px; color: var(--ink-faint); line-height: 1.5; max-width: 52ch; }
+  .key-field {
+    display: flex; align-items: center; gap: 6px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 8px 10px; font-family: var(--mono); font-size: 12px; color: var(--ink-muted); flex-shrink: 0;
+  }
+  .switch { position: relative; width: 38px; height: 22px; flex-shrink: 0; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .switch-track { position: absolute; inset: 0; background: var(--border-strong); border-radius: 100px; cursor: pointer; transition: background 0.15s ease; }
+  .switch-track::before { content: ""; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform 0.15s ease; box-shadow: var(--shadow-xs); }
+  .switch input:checked + .switch-track { background: var(--good); }
+  .switch input:checked + .switch-track::before { transform: translateX(16px); }
 
   code.inline { font-family: var(--mono); background: var(--surface-2); padding: 1px 6px; border-radius: 3px; font-size: 0.92em; }
   pre.code-block {
@@ -301,30 +487,155 @@
   pre.code-block .k { color: var(--accent); }
   pre.code-block .s { color: var(--good); }
   pre.code-block .c { color: var(--ink-faint); }
+
+  /* ---- Toasts ---- */
+  .toast-stack { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 8px; z-index: 200; width: 320px; }
+  .toast {
+    background: var(--ink); color: var(--paper); border-radius: var(--radius); padding: 12px 14px; box-shadow: var(--shadow-lg);
+    display: flex; gap: 10px; align-items: flex-start; font-size: 12.5px; line-height: 1.5;
+    animation: toast-in 0.18s ease;
+  }
+  :root[data-theme="dark"] .toast, @media (prefers-color-scheme: dark) { }
+  .toast .icon { color: var(--good); flex-shrink: 0; margin-top: 1px; }
+  @keyframes toast-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .toast.leaving { animation: toast-out 0.15s ease forwards; }
+  @keyframes toast-out { to { opacity: 0; transform: translateY(-4px); } }
+
+  .foot-links { display: flex; gap: 16px; margin-top: 34px; font-size: 12.5px; }
+
+  @media (max-width: 980px) {
+    .mh-search { display: none; }
+    .mh-user-text { display: none; }
+  }
+  @media (max-width: 860px) {
+    .page-header { flex-direction: column; }
+    .page-header-actions { width: 100%; }
+  }
+  @media (max-width: 760px) {
+    .sidebar { display: none; }
+    .panel, .page-header, .crumbbar { padding-left: 18px; padding-right: 18px; }
+  }
 </style>
 
+<div class="masthead">
+  <div class="mh-brand">
+    <div class="mh-mark">JT</div>
+    <div class="mh-brand-text">
+      <div class="mh-brand-name">Trust Platform</div>
+      <div class="mh-brand-sub">JPMorgan Chase</div>
+    </div>
+  </div>
+
+  <div class="mh-search">
+    <svg class="icon" viewBox="0 0 18 18"><circle cx="8" cy="8" r="5.5"/><line x1="12.2" y1="12.2" x2="16.5" y2="16.5"/></svg>
+    <input type="text" id="globalSearch" placeholder="Search features, escalations, docs, settings…" autocomplete="off">
+    <span class="mh-search-kbd">/</span>
+    <div class="mh-search-results" id="searchResults"></div>
+  </div>
+
+  <div class="mh-spacer"></div>
+
+  <div class="mh-right">
+    <div class="env-pill-wrap">
+      <div class="env-pill" id="envPillBtn"><span class="dot"></span>Staging<svg class="icon sm" viewBox="0 0 18 18"><polyline points="4,7 9,12 14,7"/></svg></div>
+      <div class="env-menu" id="envMenu">
+        <div class="env-opt active">
+          <span class="dot2" style="background:var(--warn);"></span>
+          <div class="env-opt-text"><div class="env-opt-title">Staging</div><div class="env-opt-desc">Illustrative data only. This console's current environment.</div></div>
+        </div>
+        <div class="env-opt locked" title="Requires MRGR-approved GA sign-off">
+          <span class="dot2" style="background:var(--ink-faint);"></span>
+          <div class="env-opt-text"><div class="env-opt-title">Production</div><div class="env-opt-desc">Locked &mdash; requires MRGR-approved GA sign-off (Phase 1 gate, see Roadmap).</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dropdown-wrap">
+      <button class="icon-btn" id="notifBtn" aria-label="Notifications">
+        <svg class="icon" viewBox="0 0 18 18"><path d="M9 2.5 C6.5 2.5 5 4.5 5 7 V10 L3 13 H15 L13 10 V7 C13 4.5 11.5 2.5 9 2.5 Z"/><path d="M7 13.5 C7 14.6 7.9 15.5 9 15.5 C10.1 15.5 11 14.6 11 13.5"/></svg>
+        <span class="nbadge">3</span>
+      </button>
+      <div class="dropdown-panel" id="notifPanel">
+        <div class="dd-head">Notifications <span class="muted">3 new</span></div>
+        <div class="notif-item">
+          <span class="notif-dot" style="background:var(--good);"></span>
+          <div><div class="notif-text"><b>MRGR accepted ESC-2081</b> &mdash; adverse-action explanation drafting, approved after full review.</div><div class="notif-time">2 hours ago</div></div>
+        </div>
+        <div class="notif-item">
+          <span class="notif-dot" style="background:var(--accent);"></span>
+          <div><div class="notif-text">Tier 1 review cycle time back under the 8&nbsp;hr guardrail (6.2&nbsp;hrs avg).</div><div class="notif-time">Yesterday</div></div>
+        </div>
+        <div class="notif-item">
+          <span class="notif-dot" style="background:var(--warn);"></span>
+          <div><div class="notif-text">Germany market entered <b>Stage 2 &mdash; Governance layer integration</b>.</div><div class="notif-time">3 days ago</div></div>
+        </div>
+        <div class="dd-foot"><a href="#" data-goto="markets">View market status &rarr;</a></div>
+      </div>
+    </div>
+
+    <div class="dropdown-wrap">
+      <div class="mh-user" id="userBtn">
+        <div class="mh-avatar">PG</div>
+        <div class="mh-user-text"><div class="mh-user-name">Pranav Gupta</div><div class="mh-user-role">Platform PM, VP</div></div>
+        <svg class="icon sm" viewBox="0 0 18 18" style="color:var(--ink-faint);"><polyline points="4,7 9,12 14,7"/></svg>
+      </div>
+      <div class="dropdown-panel user-menu" id="userPanel">
+        <div class="user-menu-head">
+          <div class="mh-avatar" style="width:34px;height:34px;font-size:12.5px;">PG</div>
+          <div><div style="font-size:12.8px;font-weight:700;">Pranav Gupta</div><div style="font-size:11px;color:var(--ink-faint);">Platform Product Manager, VP</div></div>
+        </div>
+        <button class="user-menu-item" data-goto="settings"><svg class="icon" viewBox="0 0 18 18"><circle cx="9" cy="9" r="5.2"/><circle cx="9" cy="9" r="2"/><line x1="9" y1="2.4" x2="9" y2="1" /><line x1="9" y1="15.6" x2="9" y2="17"/><line x1="2.4" y1="9" x2="1" y2="9"/><line x1="15.6" y1="9" x2="17" y2="9"/><line x1="4.76" y1="4.76" x2="3.63" y2="3.63"/><line x1="13.24" y1="13.24" x2="14.37" y2="14.37"/><line x1="13.24" y1="4.76" x2="14.37" y2="3.63"/><line x1="4.76" y1="13.24" x2="3.63" y2="14.37"/></svg>Settings &amp; admin</button>
+        <button class="user-menu-item" data-goto="overview"><svg class="icon" viewBox="0 0 18 18"><rect x="2" y="2" width="6" height="6" rx="1.2"/><rect x="10" y="2" width="6" height="6" rx="1.2"/><rect x="2" y="10" width="6" height="6" rx="1.2"/><rect x="10" y="10" width="6" height="6" rx="1.2"/></svg>Overview</button>
+        <a class="user-menu-item" href="https://github.com/PlanetCodify/JPMC" target="_blank" rel="noopener" style="text-decoration:none;"><svg class="icon" viewBox="0 0 18 18"><path d="M7 3 H15 V11"/><line x1="15" y1="3" x2="6" y2="12"/><path d="M11 3 H4 C3.4 3 3 3.4 3 4 V14 C3 14.6 3.4 15 4 15 H14 C14.6 15 15 14.6 15 14 V8"/></svg>Source &amp; PRD</a>
+        <div class="user-menu-sep"></div>
+        <div style="padding:8px 16px 12px;font-size:10.5px;color:var(--ink-faint);line-height:1.5;">Illustrative PoC session. No real authentication.</div>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="brand-rule"></div>
+
 <div class="app">
   <!-- Sidebar -->
   <nav class="sidebar" aria-label="Console navigation">
-    <div class="brand">
-      <div class="brand-mark">I</div>
-      <div class="brand-name">JPMC Trust Platform</div>
-      <div class="brand-sub">Product Console &middot; PoC</div>
-      <div class="env-badge"><span class="dot"></span>Staging &middot; illustrative data</div>
-    </div>
-
     <div class="nav" role="tablist" aria-orientation="vertical">
       <div class="nav-label">Strategy</div>
-      <button class="nav-item" role="tab" data-tab="overview" aria-selected="true"><span class="dot"></span>Overview</button>
-      <button class="nav-item" role="tab" data-tab="architecture" aria-selected="false"><span class="dot"></span>Architecture</button>
-      <button class="nav-item" role="tab" data-tab="roadmap" aria-selected="false"><span class="dot"></span>Roadmap &middot; RICE</button>
+      <button class="nav-item" role="tab" data-tab="overview" aria-selected="true">
+        <svg class="icon" viewBox="0 0 18 18"><rect x="2" y="2" width="6" height="6" rx="1.2"/><rect x="10" y="2" width="6" height="6" rx="1.2"/><rect x="2" y="10" width="6" height="6" rx="1.2"/><rect x="10" y="10" width="6" height="6" rx="1.2"/></svg>
+        Overview
+      </button>
+      <button class="nav-item" role="tab" data-tab="architecture" aria-selected="false">
+        <svg class="icon" viewBox="0 0 18 18"><polygon points="9,2 16,6 9,10 2,6"/><polyline points="2,9.5 9,13.5 16,9.5"/><polyline points="2,13 9,17 16,13"/></svg>
+        Architecture
+      </button>
+      <button class="nav-item" role="tab" data-tab="roadmap" aria-selected="false">
+        <svg class="icon" viewBox="0 0 18 18"><polyline points="1.5,3 3.2,4.7 6.5,1.4"/><line x1="8.5" y1="3" x2="16.5" y2="3"/><polyline points="1.5,9 3.2,10.7 6.5,7.4"/><line x1="8.5" y1="9" x2="16.5" y2="9"/><polyline points="1.5,15 3.2,16.7 6.5,13.4"/><line x1="8.5" y1="15" x2="16.5" y2="15"/></svg>
+        Roadmap &middot; RICE
+      </button>
 
       <div class="nav-label">Operate</div>
-      <button class="nav-item" role="tab" data-tab="governance" aria-selected="false"><span class="dot"></span>Governance Simulator</button>
-      <button class="nav-item" role="tab" data-tab="queue" aria-selected="false"><span class="dot"></span>MRGR Queue<span class="nb" id="queueBadge">2</span></button>
-      <button class="nav-item" role="tab" data-tab="metrics" aria-selected="false"><span class="dot"></span>Metrics</button>
-      <button class="nav-item" role="tab" data-tab="markets" aria-selected="false"><span class="dot"></span>Market Status</button>
+      <button class="nav-item" role="tab" data-tab="governance" aria-selected="false">
+        <svg class="icon" viewBox="0 0 18 18"><path d="M9 2 L15.5 4.5 V9 C15.5 13 12.5 16 9 17 C5.5 16 2.5 13 2.5 9 V4.5 Z"/><polyline points="6,9 8.2,11.2 12,7"/></svg>
+        Governance Simulator
+      </button>
+      <button class="nav-item" role="tab" data-tab="queue" aria-selected="false">
+        <svg class="icon" viewBox="0 0 18 18"><path d="M2.5 9 H6.5 L8 11.5 H10 L11.5 9 H15.5"/><path d="M2.5 9 V4.5 C2.5 3.7 3.2 3 4 3 H14 C14.8 3 15.5 3.7 15.5 4.5 V9"/><path d="M2.5 9 V13.5 C2.5 14.3 3.2 15 4 15 H14 C14.8 15 15.5 14.3 15.5 13.5 V9"/></svg>
+        MRGR Queue<span class="nb" id="queueBadge">2</span>
+      </button>
+      <button class="nav-item" role="tab" data-tab="metrics" aria-selected="false">
+        <svg class="icon" viewBox="0 0 18 18"><line x1="3" y1="15.5" x2="15" y2="15.5"/><rect x="4" y="10" width="3" height="5.5" rx="0.5"/><rect x="8" y="6" width="3" height="9.5" rx="0.5"/><rect x="12" y="2.5" width="3" height="13" rx="0.5"/></svg>
+        Metrics
+      </button>
+      <button class="nav-item" role="tab" data-tab="markets" aria-selected="false">
+        <svg class="icon" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7"/><ellipse cx="9" cy="9" rx="3" ry="7"/><line x1="2" y1="9" x2="16" y2="9"/><line x1="3.5" y1="5.5" x2="14.5" y2="5.5"/><line x1="3.5" y1="12.5" x2="14.5" y2="12.5"/></svg>
+        Market Status
+      </button>
+
+      <div class="nav-label">Administer</div>
+      <button class="nav-item" role="tab" data-tab="settings" aria-selected="false">
+        <svg class="icon" viewBox="0 0 18 18"><circle cx="9" cy="9" r="5.2"/><circle cx="9" cy="9" r="2"/><line x1="9" y1="2.4" x2="9" y2="1"/><line x1="9" y1="15.6" x2="9" y2="17"/><line x1="2.4" y1="9" x2="1" y2="9"/><line x1="15.6" y1="9" x2="17" y2="9"/><line x1="4.76" y1="4.76" x2="3.63" y2="3.63"/><line x1="13.24" y1="13.24" x2="14.37" y2="14.37"/><line x1="13.24" y1="4.76" x2="14.37" y2="3.63"/><line x1="4.76" y1="13.24" x2="3.63" y2="14.37"/></svg>
+        Settings &amp; API
+      </button>
     </div>
 
     <div class="sidebar-foot">
@@ -333,31 +644,58 @@
         <button type="button" data-theme-choice="dark" aria-pressed="false">Dark</button>
         <button type="button" data-theme-choice="system" aria-pressed="true">Auto</button>
       </div>
-      <p style="margin:10px 0 0;">Illustrative PoC built from public sources only. Not a real JPMC system. Palette from JPMC's public Salt Design System.</p>
+      <p style="margin:0;">Illustrative PoC built from public sources only. Not a real JPMC system. Palette from JPMC's public Salt Design System.</p>
     </div>
   </nav>
 
   <!-- Main -->
   <div class="main">
-    <div class="topbar">
-      <div class="crumb">icb-trust-platform / <b id="crumbLabel">overview</b></div>
-      <div class="topbar-right">
-        <div class="status-pill"><span class="dot"></span>Prototype build</div>
-      </div>
-    </div>
+
+    <div class="crumbbar"><span>Trust Platform</span><span class="sep">/</span><b id="crumbLabel">Overview</b></div>
 
     <!-- OVERVIEW -->
     <section class="panel" id="panel-overview">
-      <h1 class="page-title">A firmwide gen-AI governance layer, piloted in International Consumer Bank</h1>
-      <p class="page-dek">An automated tiering service that classifies gen-AI and agentic features by risk, auto-clears the low-risk ones, and routes the highest-risk cases into JPMC's existing Model Risk Governance &amp; Review (MRGR) process &mdash; instead of a new governance function standing up next to it. Built as JPMC-wide infrastructure; ICB is the first line of business to integrate against it, not the boundary of what it does.</p>
+      <div class="page-header">
+        <div class="page-header-text">
+          <h1 class="page-title">Overview</h1>
+          <p class="page-dek">A firmwide gen-AI governance layer, piloted in International Consumer Bank (ICB) &mdash; classifies gen-AI and agentic features by risk, auto-clears the low-risk ones, and routes the highest-risk cases into JPMC's existing Model Risk Governance &amp; Review (MRGR) process instead of standing up a new governance function next to it.</p>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn-secondary" data-goto="architecture"><svg class="icon sm" viewBox="0 0 18 18"><polygon points="9,2 16,6 9,10 2,6"/><polyline points="2,9.5 9,13.5 16,9.5"/></svg>View architecture</button>
+          <button class="btn-primary" data-goto="governance"><svg class="icon sm" viewBox="0 0 18 18" style="color:#fff;"><path d="M9 2 L15.5 4.5 V9 C15.5 13 12.5 16 9 17 C5.5 16 2.5 13 2.5 9 V4.5 Z"/><polyline points="6,9 8.2,11.2 12,7"/></svg>Classify a feature</button>
+        </div>
+      </div>
 
       <section class="block">
-        <p class="thesis">MRGR's authority isn't ICB-specific &mdash; the evidence for its current scope just happens to come from a job posting scoped to ICB, and appears to cover traditional statistical models only, the same boundary the Fed's SR 26-2 guidance draws for gen-AI firmwide. This platform is the technical layer that extends MRGR's existing authority into the category it doesn't cover yet &mdash; it doesn't compete with MRGR, it feeds it, and it's designed to feed it from any JPMC line of business, not just ICB.</p>
+        <p class="thesis">MRGR's authority isn't ICB-specific &mdash; the evidence for its current scope just happens to come from a job posting scoped to ICB, and appears to cover traditional statistical models only, the same boundary the Fed's SR&nbsp;26-2 guidance draws for gen-AI firmwide. This platform is the technical layer that extends MRGR's existing authority into the category it doesn't cover yet. It doesn't compete with MRGR, it feeds it &mdash; from any JPMC line of business, not just ICB.</p>
+      </section>
+
+      <section class="block">
+        <h2 class="section-title">Quick actions</h2>
+        <p class="section-dek">The four things someone new to this console does first.</p>
+        <div class="qa-grid">
+          <div class="card qa-card clickable" data-goto="governance">
+            <div class="qa-icon"><svg class="icon" viewBox="0 0 18 18"><path d="M9 2 L15.5 4.5 V9 C15.5 13 12.5 16 9 17 C5.5 16 2.5 13 2.5 9 V4.5 Z"/><polyline points="6,9 8.2,11.2 12,7"/></svg></div>
+            <div><div class="qa-title">Classify a feature</div><div class="qa-desc">Run the risk-tiering engine against a real feature description</div></div>
+          </div>
+          <div class="card qa-card clickable" data-goto="queue">
+            <div class="qa-icon"><svg class="icon" viewBox="0 0 18 18"><path d="M2.5 9 H6.5 L8 11.5 H10 L11.5 9 H15.5"/><path d="M2.5 9 V4.5 C2.5 3.7 3.2 3 4 3 H14 C14.8 3 15.5 3.7 15.5 4.5 V9"/></svg></div>
+            <div><div class="qa-title">Review MRGR queue</div><div class="qa-desc">See what a reviewer sees for a Tier 3 escalation</div></div>
+          </div>
+          <div class="card qa-card clickable" data-goto="architecture">
+            <div class="qa-icon"><svg class="icon" viewBox="0 0 18 18"><path d="M7 3 H15 V11"/><line x1="15" y1="3" x2="6" y2="12"/><path d="M11 3 H4 C3.4 3 3 3.4 3 4 V14 C3 14.6 3.4 15 4 15 H14 C14.6 15 15 14.6 15 14 V8"/></svg></div>
+            <div><div class="qa-title">Read the API reference</div><div class="qa-desc">Endpoint contract for the versioned Tiering API</div></div>
+          </div>
+          <div class="card qa-card clickable" data-goto="settings">
+            <div class="qa-icon"><svg class="icon" viewBox="0 0 18 18"><circle cx="9" cy="9" r="5.2"/><circle cx="9" cy="9" r="2"/></svg></div>
+            <div><div class="qa-title">Get an API key</div><div class="qa-desc">Sandbox credentials and integrator onboarding checklist</div></div>
+          </div>
+        </div>
       </section>
 
       <section class="block">
         <h2 class="section-title">Platform at a glance</h2>
-        <p class="section-dek">These figures are illustrative &mdash; there is no real deployment behind them. See the Metrics tab for the full trend lines and what each one is actually protecting against.</p>
+        <p class="section-dek">These figures are illustrative &mdash; there is no real deployment behind them. See the Metrics tab for full trend lines and what each one is actually protecting against.</p>
         <div class="kpi-grid">
           <div class="card kpi">
             <div class="kpi-label">Time to first integration</div>
@@ -382,10 +720,45 @@
         </div>
       </section>
 
-      <section class="block">
+      <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:20px;align-items:start;" id="overviewLowerGrid">
+        <section class="block" style="margin-bottom:0;">
+          <h2 class="section-title">Recent activity</h2>
+          <p class="section-dek">Latest MRGR escalations &mdash; click through for the full queue.</p>
+          <div class="card">
+            <div id="recentActivity"></div>
+          </div>
+        </section>
+
+        <section class="block" style="margin-bottom:0;">
+          <h2 class="section-title">Integrator onboarding</h2>
+          <p class="section-dek">Illustrative checklist for a team's first integration.</p>
+          <div class="card card-pad">
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <svg class="icon" viewBox="0 0 18 18" style="color:var(--good);margin-top:1px;"><circle cx="9" cy="9" r="7.5" fill="var(--good-soft)"/><polyline points="5.5,9.5 8,12 13,6"/></svg>
+                <div><div style="font-size:12.8px;font-weight:700;">Sandbox API key generated</div><div style="font-size:11.3px;color:var(--ink-faint);">Done in Settings &amp; API</div></div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <svg class="icon" viewBox="0 0 18 18" style="color:var(--good);margin-top:1px;"><circle cx="9" cy="9" r="7.5" fill="var(--good-soft)"/><polyline points="5.5,9.5 8,12 13,6"/></svg>
+                <div><div style="font-size:12.8px;font-weight:700;">First sandbox classification call made</div><div style="font-size:11.3px;color:var(--ink-faint);">Try it in Governance Simulator</div></div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <svg class="icon" viewBox="0 0 18 18" style="color:var(--warn);margin-top:1px;"><circle cx="9" cy="9" r="7.5" fill="var(--warn-soft)"/></svg>
+                <div><div style="font-size:12.8px;font-weight:700;">MRGR validation conversation scheduled</div><div style="font-size:11.3px;color:var(--ink-faint);">Phase 1 gate &mdash; not yet confirmed</div></div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <svg class="icon" viewBox="0 0 18 18" style="color:var(--ink-faint);margin-top:1px;"><circle cx="9" cy="9" r="7.5" fill="var(--surface-2)"/></svg>
+                <div><div style="font-size:12.8px;font-weight:700;color:var(--ink-muted);">Production access requested</div><div style="font-size:11.3px;color:var(--ink-faint);">Locked until Phase 1 gate clears</div></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="block" style="margin-top:30px;">
         <h2 class="section-title">Why this exists now</h2>
-        <div class="card card-pad" style="font-size:13.5px;color:var(--ink-muted);line-height:1.65;">
-          On <b style="color:var(--ink)">April&nbsp;17,&nbsp;2026</b>, the Federal Reserve issued <b style="color:var(--ink)">SR&nbsp;26-2</b>, superseding SR&nbsp;11-7, and explicitly excluded generative and agentic AI from formal model-risk scope for banks over $30B in assets &mdash; JPMC clears that threshold many times over. A live MRGR job posting scoped to ICB lists only traditional quantitative-model skills, with no mention of gen-AI, LLMs, or agentic systems. Read together: MRGR almost certainly has the standing and expertise to govern this, but no confirmed entry point for it yet. That gap is what this platform closes &mdash; not by inventing a new governance body, but by building the triage layer that decides what needs MRGR's attention and routes it there automatically. See the <a href="#" data-goto="governance">Governance Simulator</a> to try the classifier, or <a href="#" data-goto="queue">MRGR Queue</a> to see what a reviewer actually sees.
+        <div class="card card-pad" style="font-size:13.2px;color:var(--ink-muted);line-height:1.65;">
+          On <b style="color:var(--ink)">April&nbsp;17,&nbsp;2026</b>, the Federal Reserve issued <b style="color:var(--ink)">SR&nbsp;26-2</b>, superseding SR&nbsp;11-7, and explicitly excluded generative and agentic AI from formal model-risk scope for banks over $30B in assets &mdash; firmwide, for JPMC as a whole. A live MRGR job posting scoped to ICB lists only traditional quantitative-model skills, with no mention of gen-AI, LLMs, or agentic systems. Read together: MRGR almost certainly has the standing and expertise to govern this, but no confirmed entry point for it yet, in any line of business. That gap is what this platform closes &mdash; not by inventing a new governance body, but by building the triage layer that decides what needs MRGR's attention and routes it there automatically. See the <a href="#" data-goto="governance">Governance Simulator</a> to try the classifier, or <a href="#" data-goto="queue">MRGR Queue</a> to see what a reviewer actually sees.
         </div>
       </section>
 
@@ -397,13 +770,23 @@
         </div>
       </section>
 
-      <div class="disclaimer">Grounded entirely in public sources (Federal Reserve, JPMC press coverage, ICB public disclosures, a public MRGR job posting). Makes no claim to JPMorgan Chase's actual internal systems, vendors, or roadmap &mdash; see the accompanying PRD and research notes for the full source trail.</div>
+      <div class="disclaimer">
+        <svg class="icon" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7.2"/><line x1="9" y1="8" x2="9" y2="13"/><circle cx="9" cy="5.3" r="0.9" fill="currentColor"/></svg>
+        <span>Grounded entirely in public sources (Federal Reserve, JPMC press coverage, ICB public disclosures, a public MRGR job posting). Makes no claim to JPMorgan Chase's actual internal systems, vendors, or roadmap &mdash; see the accompanying PRD and research notes for the full source trail.</span>
+      </div>
     </section>
 
     <!-- ARCHITECTURE -->
     <section class="panel" id="panel-architecture" hidden>
-      <h1 class="page-title">Architecture</h1>
-      <p class="page-dek">Everything inside the platform boundary below is what gets built. MRGR's own review process sits outside it on purpose &mdash; this platform calls into it, it doesn't redesign it.</p>
+      <div class="page-header">
+        <div class="page-header-text">
+          <h1 class="page-title">Architecture</h1>
+          <p class="page-dek">Everything inside the platform boundary below is what gets built. MRGR's own review process sits outside it on purpose &mdash; this platform calls into it, it doesn't redesign it.</p>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn-secondary" id="copyApiBase"><svg class="icon sm" viewBox="0 0 18 18"><rect x="6" y="6" width="9" height="9" rx="1.3"/><path d="M3 12 V4 C3 3.4 3.4 3 4 3 H12"/></svg>Copy API base URL</button>
+        </div>
+      </div>
 
       <div class="arch-legend" role="group" aria-label="Highlight a data path">
         <button data-path="all" aria-pressed="true"><span class="sw" style="background:var(--ink-faint)"></span>All paths</button>
@@ -523,12 +906,18 @@
       </section>
 
       <section class="block">
-        <h2 class="section-title">Integrator experience</h2>
+        <h2 class="section-title">API reference</h2>
         <p class="section-dek">Per the platform's own adoption research: 64% of engineers bypass an internal platform that's slower than the workaround. This is the surface that has to win that fight.</p>
-        <div class="card card-pad">
+        <div class="api-ref">
+          <div class="api-ref-row"><span class="api-method post">POST</span><span class="api-path">/v1/classify</span><span class="api-desc">Classify a feature description, return tier + review path</span><span class="api-latency">P50 &lt;2s</span></div>
+          <div class="api-ref-row"><span class="api-method get">GET</span><span class="api-path">/v1/status/{id}</span><span class="api-desc">Self-serve status for a submitted classification or escalation</span><span class="api-latency">P50 &lt;200ms</span></div>
+          <div class="api-ref-row"><span class="api-method get">GET</span><span class="api-path">/v1/audit/{id}</span><span class="api-desc">Retrieve the full audit record for a Tier 2/3 decision</span><span class="api-latency">P50 &lt;300ms</span></div>
+        </div>
+        <div class="card card-pad" style="margin-top:14px;">
           <div class="explain-label" style="margin-bottom:10px;">Example call &mdash; classify a feature</div>
           <pre class="code-block"><span class="k">POST</span> /v1/classify
 <span class="c">Content-Type: application/json</span>
+<span class="c">Authorization: Bearer &lt;sandbox_api_key&gt;</span>
 
 {
   <span class="s">"feature_description"</span>: <span class="s">"Next-best-action messaging using purchase history"</span>,
@@ -549,8 +938,12 @@
 
     <!-- ROADMAP -->
     <section class="panel" id="panel-roadmap" hidden>
-      <h1 class="page-title">Roadmap &mdash; RICE prioritized</h1>
-      <p class="page-dek">Reach &times; Impact &times; Confidence &divide; Effort. Click a column header to sort. Every item below maps directly to a phase in the PRD's Rollout Plan.</p>
+      <div class="page-header">
+        <div class="page-header-text">
+          <h1 class="page-title">Roadmap &mdash; RICE prioritized</h1>
+          <p class="page-dek">Reach &times; Impact &times; Confidence &divide; Effort. Click a column header to sort. Every item below maps directly to a phase in the PRD's Rollout Plan.</p>
+        </div>
+      </div>
 
       <div class="table-wrap">
         <table id="riceTable">
@@ -600,7 +993,7 @@
 
             <text x="4" y="192" font-size="11" fill="var(--good)" font-weight="700">Phase 3</text>
             <rect x="660" y="176" width="220" height="26" rx="3" fill="var(--good)"/>
-            <text x="770" y="193" text-anchor="middle" font-size="10.5" fill="#fff">Full platform, if justified by Phase 1&ndash;2 data</text>
+            <text x="770" y="193" text-anchor="middle" font-size="10.5" fill="#fff">Full platform + 2nd JPMC line of business, if justified</text>
           </svg>
         </div>
       </section>
@@ -608,8 +1001,12 @@
 
     <!-- GOVERNANCE SIMULATOR -->
     <section class="panel" id="panel-governance" hidden>
-      <h1 class="page-title">Governance &amp; Policy Engine</h1>
-      <p class="page-dek">Describe a feature. The engine returns a risk tier and the review path it triggers &mdash; the same call any market team would make against the live API.</p>
+      <div class="page-header">
+        <div class="page-header-text">
+          <h1 class="page-title">Governance &amp; Policy Engine</h1>
+          <p class="page-dek">Describe a feature. The engine returns a risk tier and the review path it triggers &mdash; the same call any market team would make against the live API.</p>
+        </div>
+      </div>
 
       <div class="sim-grid">
         <div class="card card-pad">
@@ -622,7 +1019,12 @@
             <button class="chip" type="button">Chatbot response drafting for support agents</button>
           </div>
           <textarea id="simInput" placeholder="e.g. an agent that recommends the next product to offer a customer based on their transaction history..."></textarea>
-          <button class="btn-primary" id="simRun">Classify feature</button>
+          <button class="btn-primary" id="simRun"><svg class="icon sm" viewBox="0 0 18 18" style="color:#fff;"><path d="M9 2 L15.5 4.5 V9 C15.5 13 12.5 16 9 17 C5.5 16 2.5 13 2.5 9 V4.5 Z"/><polyline points="6,9 8.2,11.2 12,7"/></svg>Classify feature</button>
+
+          <div class="sim-history" id="simHistoryWrap" hidden>
+            <div class="sim-path-label">This session</div>
+            <div id="simHistory"></div>
+          </div>
         </div>
 
         <div class="card card-pad sim-result" id="simResult">
@@ -648,12 +1050,29 @@
 
     <!-- MRGR QUEUE -->
     <section class="panel" id="panel-queue" hidden>
-      <h1 class="page-title">MRGR Escalation Queue</h1>
-      <p class="page-dek">What an MRGR reviewer actually sees for a Tier 3 escalation &mdash; the classifier's reasoning, the data inputs it used, and the full audit trail, attached before it ever reaches a human. Click a row to expand.</p>
+      <div class="page-header">
+        <div class="page-header-text">
+          <h1 class="page-title">MRGR Escalation Queue</h1>
+          <p class="page-dek">What an MRGR reviewer actually sees for a Tier 3 escalation &mdash; the classifier's reasoning, the data inputs it used, and the full audit trail, attached before it ever reaches a human. Click a row to expand.</p>
+        </div>
+      </div>
 
       <div class="explain">
         <span class="explain-label">Why this view exists</span>
         The PRD flags that a "consistent, defensible review process" is meaningless without a real reviewer-facing surface &mdash; the first review panel caught that this was implied but never designed. This is that surface, at a stub level: a queue, a stated SLA, and full audit-trail visibility before any decision is made.
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar-search">
+          <svg class="icon sm" viewBox="0 0 18 18"><circle cx="8" cy="8" r="5.5"/><line x1="12.2" y1="12.2" x2="16.5" y2="16.5"/></svg>
+          <input type="text" id="queueSearch" placeholder="Search feature or ID…" autocomplete="off">
+        </div>
+        <button class="filter-chip" data-qstatus="all" aria-pressed="true">All</button>
+        <button class="filter-chip" data-qstatus="pending" aria-pressed="false">Pending</button>
+        <button class="filter-chip" data-qstatus="approved" aria-pressed="false">Approved</button>
+        <button class="filter-chip" data-qstatus="rejected" aria-pressed="false">Rejected</button>
+        <div class="toolbar-spacer"></div>
+        <span class="toolbar-count" id="queueCount"></span>
       </div>
 
       <div class="table-wrap">
@@ -668,8 +1087,12 @@
 
     <!-- METRICS -->
     <section class="panel" id="panel-metrics" hidden>
-      <h1 class="page-title">Metrics</h1>
-      <p class="page-dek">Platform metrics, not feature metrics. Each one traces directly to a metric named in the PRD's Success Metrics section &mdash; nothing here is decorative.</p>
+      <div class="page-header">
+        <div class="page-header-text">
+          <h1 class="page-title">Metrics</h1>
+          <p class="page-dek">Platform metrics, not feature metrics. Each one traces directly to a metric named in the PRD's Success Metrics section &mdash; nothing here is decorative.</p>
+        </div>
+      </div>
 
       <div class="market-toggle" role="group" aria-label="Filter by market">
         <button data-market="all" aria-pressed="true">All markets</button>
@@ -698,8 +1121,12 @@
 
     <!-- MARKETS -->
     <section class="panel" id="panel-markets" hidden>
-      <h1 class="page-title">Market Status</h1>
-      <p class="page-dek">Onboarding progress per market. Illustrative sequencing against ICB's public multi-country roadmap &mdash; not a claimed internal timeline.</p>
+      <div class="page-header">
+        <div class="page-header-text">
+          <h1 class="page-title">Market Status</h1>
+          <p class="page-dek">Onboarding progress per market. Illustrative sequencing against ICB's public multi-country roadmap &mdash; not a claimed internal timeline.</p>
+        </div>
+      </div>
 
       <div class="callout" style="margin-bottom:18px;"><b>Still open:</b> the PRD deliberately doesn't resolve UK-first vs. Germany-parallel sequencing. NatWest's Cora and Lloyds' Envoy are already live in the UK market Chase competes in, which the original RICE-only roadmap didn't account for.</div>
 
@@ -728,15 +1155,111 @@
       </div>
     </section>
 
+    <!-- SETTINGS -->
+    <section class="panel" id="panel-settings" hidden>
+      <div class="page-header">
+        <div class="page-header-text">
+          <h1 class="page-title">Settings &amp; API</h1>
+          <p class="page-dek">Integrator credentials, team access, and environment configuration for this platform. Illustrative &mdash; no real keys or authentication behind any of it.</p>
+        </div>
+      </div>
+
+      <div class="settings-grid">
+        <section class="block">
+          <h2 class="section-title">API credentials</h2>
+          <p class="section-dek">Sandbox keys for integrating against the Tiering API. Production keys unlock once the Phase 1 MRGR validation gate clears.</p>
+          <div class="card card-pad">
+            <div class="settings-row">
+              <div class="settings-row-text">
+                <div class="settings-row-title">Sandbox API key</div>
+                <div class="settings-row-desc">Full read/write access to <code class="inline">/v1/classify</code> in the staging environment only.</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div class="key-field" id="apiKeyField">sk_sandbox_••••••••7f21</div>
+                <button class="icon-btn" id="copyKeyBtn" aria-label="Copy key"><svg class="icon" viewBox="0 0 18 18"><rect x="6" y="6" width="9" height="9" rx="1.3"/><path d="M3 12 V4 C3 3.4 3.4 3 4 3 H12"/></svg></button>
+                <button class="icon-btn" id="regenKeyBtn" aria-label="Regenerate key"><svg class="icon" viewBox="0 0 18 18"><path d="M14 6 A6 6 0 1 0 15 9"/><polyline points="14,2 14,6 10,6"/></svg></button>
+              </div>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row-text">
+                <div class="settings-row-title">Production API key</div>
+                <div class="settings-row-desc">Locked until the Phase 1 gate clears: time-to-first-integration &lt;1 day and a real answer from MRGR on accepting escalations.</div>
+              </div>
+              <span class="badge neutral">Locked</span>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row-text">
+                <div class="settings-row-title">Webhook endpoint</div>
+                <div class="settings-row-desc">Receive async notifications when a Tier 3 escalation resolves.</div>
+              </div>
+              <div class="key-field" style="font-family:var(--mono);color:var(--ink-faint);">Not configured</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <h2 class="section-title">Team &amp; access</h2>
+          <p class="section-dek">Illustrative allocation, matching Section 8 of the PRD &mdash; not a claim about actual JPMC staffing.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Name</th><th>Role</th><th>Access level</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Pranav Gupta</td><td>Platform Product Manager, VP</td><td>Owner</td><td><span class="badge rice-high">Active</span></td></tr>
+                <tr><td>Engineering Lead (TBD)</td><td>Tech Lead, co-owns architecture</td><td>Admin</td><td><span class="badge neutral">Invited</span></td></tr>
+                <tr><td>MRGR Liaison (TBD)</td><td>Named point of contact, Phase 1 validation</td><td>Reviewer</td><td><span class="badge neutral">Invited</span></td></tr>
+                <tr><td>Legal &amp; Compliance (TBD)</td><td>Fair-lending &amp; cross-border data review</td><td>Read-only</td><td><span class="badge neutral">Invited</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <button class="btn-secondary" style="margin-top:12px;" id="inviteBtn"><svg class="icon sm" viewBox="0 0 18 18"><line x1="9" y1="3" x2="9" y2="15"/><line x1="3" y1="9" x2="15" y2="9"/></svg>Invite team member</button>
+        </section>
+
+        <section class="block">
+          <h2 class="section-title">Environment</h2>
+          <p class="section-dek">This console currently runs against staging with illustrative data only.</p>
+          <div class="card card-pad">
+            <div class="settings-row">
+              <div class="settings-row-text">
+                <div class="settings-row-title">Staging environment</div>
+                <div class="settings-row-desc">Illustrative data throughout. Safe for demos and integration testing.</div>
+              </div>
+              <label class="switch"><input type="checkbox" checked disabled><span class="switch-track"></span></label>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row-text">
+                <div class="settings-row-title">Production environment</div>
+                <div class="settings-row-desc">Requires MRGR-approved GA sign-off (Phase 1 gate) before this toggle unlocks.</div>
+              </div>
+              <label class="switch"><input type="checkbox" disabled><span class="switch-track"></span></label>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row-text">
+                <div class="settings-row-title">Weekly digest email</div>
+                <div class="settings-row-desc">MRGR acceptance rate, SLA breaches, and reuse metrics, once weekly.</div>
+              </div>
+              <label class="switch"><input type="checkbox" id="digestToggle"><span class="switch-track"></span></label>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="disclaimer">
+        <svg class="icon" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7.2"/><line x1="9" y1="8" x2="9" y2="13"/><circle cx="9" cy="5.3" r="0.9" fill="currentColor"/></svg>
+        <span>Every control on this page is illustrative UI. No real keys are issued, no invitations are sent, and no settings persist beyond this browser session.</span>
+      </div>
+    </section>
+
   </div>
 </div>
+
+<div class="toast-stack" id="toastStack"></div>
 
 <script>
 (function () {
   // ---------- Theme ----------
   var root = document.documentElement;
   var stored = null;
-  try { stored = localStorage.getItem('icb-theme'); } catch (e) {}
+  try { stored = localStorage.getItem('jpmc-trust-theme'); } catch (e) {}
   function applyTheme(choice) {
     if (choice === 'light') root.setAttribute('data-theme', 'light');
     else if (choice === 'dark') root.setAttribute('data-theme', 'dark');
@@ -744,27 +1267,111 @@
     document.querySelectorAll('[data-theme-choice]').forEach(function (b) {
       b.setAttribute('aria-pressed', b.getAttribute('data-theme-choice') === choice ? 'true' : 'false');
     });
-    try { localStorage.setItem('icb-theme', choice); } catch (e) {}
+    try { localStorage.setItem('jpmc-trust-theme', choice); } catch (e) {}
   }
   applyTheme(stored || 'light');
   document.querySelectorAll('[data-theme-choice]').forEach(function (b) {
     b.addEventListener('click', function () { applyTheme(b.getAttribute('data-theme-choice')); });
   });
 
+  // ---------- Toasts ----------
+  function toast(msg, opts) {
+    opts = opts || {};
+    var stack = document.getElementById('toastStack');
+    var el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = '<svg class="icon" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7.5"/><polyline points="5.5,9.5 8,12 13,6"/></svg><span>' + msg + '</span>';
+    stack.appendChild(el);
+    setTimeout(function () {
+      el.classList.add('leaving');
+      setTimeout(function () { el.remove(); }, 200);
+    }, opts.duration || 3200);
+  }
+  window.__toast = toast;
+
   // ---------- Tabs ----------
   var tabs = document.querySelectorAll('.nav-item[role="tab"]');
   var panels = document.querySelectorAll('.panel');
   var crumb = document.getElementById('crumbLabel');
-  var labels = { overview: 'overview', architecture: 'architecture', roadmap: 'roadmap', governance: 'governance-simulator', queue: 'mrgr-queue', metrics: 'metrics', markets: 'market-status' };
+  var labels = { overview: 'Overview', architecture: 'Architecture', roadmap: 'Roadmap · RICE', governance: 'Governance Simulator', queue: 'MRGR Queue', metrics: 'Metrics', markets: 'Market Status', settings: 'Settings & API' };
   function showTab(name) {
     tabs.forEach(function (t) { t.setAttribute('aria-selected', t.getAttribute('data-tab') === name ? 'true' : 'false'); });
     panels.forEach(function (p) { p.hidden = p.id !== ('panel-' + name); });
     crumb.textContent = labels[name] || name;
     window.scrollTo({ top: 0, behavior: 'auto' });
+    closeAllDropdowns();
   }
   tabs.forEach(function (t) { t.addEventListener('click', function () { showTab(t.getAttribute('data-tab')); }); });
   document.querySelectorAll('[data-goto]').forEach(function (l) {
     l.addEventListener('click', function (e) { e.preventDefault(); showTab(l.getAttribute('data-goto')); });
+  });
+
+  // ---------- Masthead dropdowns ----------
+  var dropdowns = [
+    { btn: document.getElementById('notifBtn'), panel: document.getElementById('notifPanel') },
+    { btn: document.getElementById('userBtn'), panel: document.getElementById('userPanel') },
+    { btn: document.getElementById('envPillBtn'), panel: document.getElementById('envMenu') }
+  ];
+  function closeAllDropdowns() { dropdowns.forEach(function (d) { d.panel.classList.remove('open'); }); }
+  dropdowns.forEach(function (d) {
+    d.btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var willOpen = !d.panel.classList.contains('open');
+      closeAllDropdowns();
+      if (willOpen) d.panel.classList.add('open');
+    });
+  });
+  document.addEventListener('click', function () { closeAllDropdowns(); document.getElementById('searchResults').classList.remove('open'); });
+
+  // ---------- Global search (quick jump) ----------
+  var searchIndex = [
+    { label: 'Overview', tab: 'overview', tag: 'Strategy' },
+    { label: 'Platform at a glance (KPIs)', tab: 'overview', tag: 'Strategy' },
+    { label: 'Architecture diagram', tab: 'architecture', tag: 'Strategy' },
+    { label: 'API reference', tab: 'architecture', tag: 'Docs' },
+    { label: 'Roadmap · RICE prioritization', tab: 'roadmap', tag: 'Strategy' },
+    { label: 'Delivery cadence', tab: 'roadmap', tag: 'Strategy' },
+    { label: 'Governance Simulator', tab: 'governance', tag: 'Operate' },
+    { label: 'Classify a feature', tab: 'governance', tag: 'Operate' },
+    { label: 'MRGR Escalation Queue', tab: 'queue', tag: 'Operate' },
+    { label: 'Metrics', tab: 'metrics', tag: 'Operate' },
+    { label: 'Market Status — UK', tab: 'markets', tag: 'Operate' },
+    { label: 'Market Status — Germany', tab: 'markets', tag: 'Operate' },
+    { label: 'Settings & API keys', tab: 'settings', tag: 'Admin' },
+    { label: 'Team & access', tab: 'settings', tag: 'Admin' }
+  ];
+  var searchInput = document.getElementById('globalSearch');
+  var searchResults = document.getElementById('searchResults');
+  function renderSearch(q) {
+    var query = q.trim().toLowerCase();
+    if (!query) { searchResults.classList.remove('open'); searchResults.innerHTML = ''; return; }
+    var matches = searchIndex.filter(function (it) { return it.label.toLowerCase().indexOf(query) !== -1; }).slice(0, 8);
+    if (!matches.length) {
+      searchResults.innerHTML = '<div class="mh-search-empty">No matches for "' + q + '"</div>';
+    } else {
+      searchResults.innerHTML = matches.map(function (m) {
+        return '<button type="button" data-tab="' + m.tab + '">' + m.label + '<span class="sr-tag">' + m.tag + '</span></button>';
+      }).join('');
+    }
+    searchResults.classList.add('open');
+  }
+  searchInput.addEventListener('input', function () { renderSearch(searchInput.value); });
+  searchInput.addEventListener('focus', function () { if (searchInput.value) renderSearch(searchInput.value); });
+  searchInput.addEventListener('click', function (e) { e.stopPropagation(); });
+  searchResults.addEventListener('click', function (e) { e.stopPropagation(); });
+  searchResults.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-tab]');
+    if (!b) return;
+    showTab(b.getAttribute('data-tab'));
+    searchInput.value = '';
+    searchResults.classList.remove('open');
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === '/' && document.activeElement !== searchInput && document.activeElement.tagName !== 'TEXTAREA' && document.activeElement.tagName !== 'INPUT') {
+      e.preventDefault();
+      searchInput.focus();
+    }
+    if (e.key === 'Escape') { searchInput.blur(); searchResults.classList.remove('open'); closeAllDropdowns(); }
   });
 
   // ---------- Architecture path highlight ----------
@@ -779,6 +1386,12 @@
         el.classList.toggle('dim', target !== 'all' && g !== target);
       });
     });
+  });
+  var copyApiBase = document.getElementById('copyApiBase');
+  if (copyApiBase) copyApiBase.addEventListener('click', function () {
+    var text = 'https://api.jpmc-trust-platform.internal';
+    if (navigator.clipboard) navigator.clipboard.writeText(text).catch(function () {});
+    toast('API base URL copied to clipboard (illustrative).');
   });
 
   // ---------- RICE table ----------
@@ -851,6 +1464,18 @@
     return fallback;
   }
 
+  var simHistory = [];
+  function renderSimHistory() {
+    var wrap = document.getElementById('simHistoryWrap');
+    var list = document.getElementById('simHistory');
+    if (!simHistory.length) { wrap.hidden = true; return; }
+    wrap.hidden = false;
+    list.innerHTML = simHistory.slice(0, 5).map(function (h) {
+      var cls = h.tier === 1 ? 'rice-high' : h.tier === 3 ? 'rice-low' : 'rice-mid';
+      return '<div class="sim-history-item"><span class="badge ' + cls + '">T' + h.tier + '</span><span class="sim-history-text">' + h.text + '</span><span class="sim-history-time">' + h.time + '</span></div>';
+    }).join('');
+  }
+
   function renderResult(text) {
     var r = classify(text);
     var html = '<div class="tier-badge ' + r.cls + '">' + r.label + '</div>' +
@@ -860,6 +1485,11 @@
       r.steps.map(function (s, i) { return '<div class="sim-step"><span class="num">' + (i + 1) + '</span>' + s + '</div>'; }).join('') +
       '</div></div>';
     document.getElementById('simResult').innerHTML = html;
+    var now = new Date();
+    var timeStr = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
+    simHistory.unshift({ text: text.length > 46 ? text.slice(0, 46) + '…' : text, tier: r.tier, time: timeStr });
+    renderSimHistory();
+    toast('Classified as Tier ' + r.tier + ' — ' + (r.tier === 3 ? 'routed to MRGR queue.' : 'auto-approved.'));
   }
 
   document.getElementById('simRun').addEventListener('click', function () {
@@ -913,11 +1543,31 @@
     if (s === 'approved') return '<span class="badge rice-high">Approved</span>';
     return '<span class="badge rice-low">Rejected</span>';
   }
+
+  var queueFilterStatus = 'all', queueFilterText = '';
+  function filteredQueue() {
+    return queue.filter(function (q) {
+      if (queueFilterStatus !== 'all' && q.status !== queueFilterStatus) return false;
+      if (queueFilterText) {
+        var t = queueFilterText.toLowerCase();
+        if (q.feature.toLowerCase().indexOf(t) === -1 && q.id.toLowerCase().indexOf(t) === -1) return false;
+      }
+      return true;
+    });
+  }
+
   function renderQueue() {
     var body = document.getElementById('queueBody');
     var pendingCount = queue.filter(function (q) { return q.status === 'pending'; }).length;
     document.getElementById('queueBadge').textContent = pendingCount;
-    body.innerHTML = queue.map(function (q, i) {
+    var list = filteredQueue();
+    document.getElementById('queueCount').textContent = list.length + ' of ' + queue.length + ' escalations';
+    if (!list.length) {
+      body.innerHTML = '<tr><td colspan="6" class="row-empty">No escalations match this filter.</td></tr>';
+      return;
+    }
+    body.innerHTML = list.map(function (q) {
+      var i = queue.indexOf(q);
       var slaLabel = q.slaUsed >= 1 ? 'Closed' : Math.round((1 - q.slaUsed) * q.slaHrs) + 'h left';
       var main = '<tr class="clickable" data-idx="' + i + '">' +
         '<td class="num" style="text-align:left;font-family:var(--mono);">' + q.id + '</td>' +
@@ -943,6 +1593,31 @@
     });
   }
   renderQueue();
+
+  document.querySelectorAll('.filter-chip[data-qstatus]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.filter-chip[data-qstatus]').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      queueFilterStatus = b.getAttribute('data-qstatus');
+      renderQueue();
+    });
+  });
+  var queueSearchEl = document.getElementById('queueSearch');
+  queueSearchEl.addEventListener('input', function () { queueFilterText = queueSearchEl.value; renderQueue(); });
+
+  // ---------- Overview: recent activity ----------
+  (function () {
+    var recent = queue.slice(0, 3);
+    var wrap = document.getElementById('recentActivity');
+    wrap.innerHTML = recent.map(function (q) {
+      return '<div class="settings-row" style="padding:12px 18px;border-bottom:1px solid var(--border);">' +
+        '<div class="settings-row-text"><div class="settings-row-title" style="font-size:12.5px;">' + q.feature + '</div>' +
+        '<div class="settings-row-desc">' + q.market + ' &middot; ' + q.id + ' &middot; ' + q.submitted + '</div></div>' +
+        statusBadge(q.status) + '</div>';
+    }).join('');
+    wrap.querySelectorAll('.settings-row').forEach(function (row) { row.style.cursor = 'pointer'; row.addEventListener('click', function () { showTab('queue'); }); });
+    var last = wrap.lastElementChild; if (last) last.style.borderBottom = 'none';
+  })();
 
   // ---------- Metrics ----------
   var metricSets = {
@@ -1001,6 +1676,28 @@
       b.setAttribute('aria-pressed', 'true');
       renderMetrics(b.getAttribute('data-market'));
     });
+  });
+
+  // ---------- Settings interactions ----------
+  var copyKeyBtn = document.getElementById('copyKeyBtn');
+  if (copyKeyBtn) copyKeyBtn.addEventListener('click', function () {
+    if (navigator.clipboard) navigator.clipboard.writeText('sk_sandbox_a91f7c3e2b4d0e8f7f21').catch(function () {});
+    toast('Sandbox API key copied to clipboard (illustrative).');
+  });
+  var regenKeyBtn = document.getElementById('regenKeyBtn');
+  if (regenKeyBtn) regenKeyBtn.addEventListener('click', function () {
+    var field = document.getElementById('apiKeyField');
+    var rand = Math.random().toString(16).slice(2, 6);
+    field.textContent = 'sk_sandbox_••••••••' + rand;
+    toast('Sandbox API key regenerated. Previous key invalidated (illustrative).');
+  });
+  var inviteBtn = document.getElementById('inviteBtn');
+  if (inviteBtn) inviteBtn.addEventListener('click', function () {
+    toast('Invitations are illustrative in this PoC — no email is sent.');
+  });
+  var digestToggle = document.getElementById('digestToggle');
+  if (digestToggle) digestToggle.addEventListener('change', function () {
+    toast(digestToggle.checked ? 'Weekly digest enabled (illustrative).' : 'Weekly digest disabled.');
   });
 })();
 </script>
