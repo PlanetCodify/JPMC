@@ -505,11 +505,26 @@
     display: flex; gap: 10px; align-items: flex-start; font-size: 12.5px; line-height: 1.5;
     animation: toast-in 0.18s ease;
   }
-  :root[data-theme="dark"] .toast, @media (prefers-color-scheme: dark) { }
   .toast .icon { color: var(--good); flex-shrink: 0; margin-top: 1px; }
   @keyframes toast-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   .toast.leaving { animation: toast-out 0.15s ease forwards; }
   @keyframes toast-out { to { opacity: 0; transform: translateY(-4px); } }
+
+  .thesis-toast {
+    position: fixed; bottom: 20px; right: 20px; width: 380px; max-width: calc(100vw - 40px);
+    background: var(--accent-ink); color: #fff; border-radius: var(--radius); padding: 16px 40px 16px 18px;
+    box-shadow: var(--shadow-lg); z-index: 210; font-size: 12.5px; line-height: 1.6; animation: toast-in 0.25s ease;
+  }
+  .thesis-toast.leaving { animation: toast-out 0.2s ease forwards; }
+  .thesis-toast-label { font-family: var(--display); font-weight: 800; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; opacity: 0.8; }
+  .thesis-toast-body { opacity: 0.96; }
+  .thesis-toast-close {
+    position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.15); border: none; color: #fff;
+    width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 15px; line-height: 1;
+    display: flex; align-items: center; justify-content: center; transition: background 0.12s ease;
+  }
+  .thesis-toast-close:hover { background: rgba(255,255,255,0.3); }
+  @media (max-width: 500px) { .thesis-toast { left: 20px; right: 20px; width: auto; } }
 
   .foot-links { display: flex; gap: 16px; margin-top: 34px; font-size: 12.5px; }
 
@@ -674,10 +689,6 @@
           <button class="btn-primary" data-goto="governance"><svg class="icon sm" viewBox="0 0 18 18" style="color:#fff;"><path d="M9 2 L15.5 4.5 V9 C15.5 13 12.5 16 9 17 C5.5 16 2.5 13 2.5 9 V4.5 Z"/><polyline points="6,9 8.2,11.2 12,7"/></svg>Classify a feature</button>
         </div>
       </div>
-
-      <section class="block">
-        <p class="thesis">MRGR's authority isn't ICB-specific &mdash; the evidence for its current scope just happens to come from a job posting scoped to ICB, and appears to cover traditional statistical models only, the same boundary the Fed's SR&nbsp;26-2 guidance draws for gen-AI firmwide. This platform is the technical layer that extends MRGR's existing authority into the category it doesn't cover yet. It doesn't compete with MRGR, it feeds it &mdash; from any JPMC line of business, not just ICB.</p>
-      </section>
 
       <section class="block">
         <h2 class="section-title">Quick actions</h2>
@@ -1310,6 +1321,12 @@
 
 <div class="toast-stack" id="toastStack"></div>
 
+<div class="thesis-toast" id="thesisToast" hidden>
+  <button class="thesis-toast-close" id="thesisToastClose" aria-label="Dismiss">&times;</button>
+  <div class="thesis-toast-label">Platform thesis</div>
+  <div class="thesis-toast-body">MRGR's authority isn't ICB-specific &mdash; the evidence for its current scope just happens to come from a job posting scoped to ICB, and appears to cover traditional statistical models only, the same boundary the Fed's SR&nbsp;26-2 guidance draws for gen-AI firmwide. This platform is the technical layer that extends MRGR's existing authority into the category it doesn't cover yet. It doesn't compete with MRGR, it feeds it &mdash; from any JPMC line of business, not just ICB.</div>
+</div>
+
 <script>
 (function () {
   // ---------- Theme ----------
@@ -1329,6 +1346,18 @@
   document.querySelectorAll('[data-theme-choice]').forEach(function (b) {
     b.addEventListener('click', function () { applyTheme(b.getAttribute('data-theme-choice')); });
   });
+
+  // ---------- Platform thesis notification ----------
+  (function () {
+    var el = document.getElementById('thesisToast');
+    var closeBtn = document.getElementById('thesisToastClose');
+    function dismiss() {
+      el.classList.add('leaving');
+      setTimeout(function () { el.hidden = true; }, 220);
+    }
+    closeBtn.addEventListener('click', dismiss);
+    setTimeout(function () { el.hidden = false; }, 700);
+  })();
 
   // ---------- Toasts ----------
   function toast(msg, opts) {
