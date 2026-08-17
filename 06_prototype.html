@@ -746,7 +746,7 @@
     });
     try { localStorage.setItem('icb-theme', choice); } catch (e) {}
   }
-  applyTheme(stored || 'system');
+  applyTheme(stored || 'light');
   document.querySelectorAll('[data-theme-choice]').forEach(function (b) {
     b.addEventListener('click', function () { applyTheme(b.getAttribute('data-theme-choice')); });
   });

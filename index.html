@@ -3,62 +3,477 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ICB Trust Platform</title>
+<title>ICB Trust Platform — Pranav Gupta</title>
+<meta name="description" content="An automated gen-AI governance layer for JPMC's International Consumer Bank, built as a Platform PM application artifact.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400..800;1,400..800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --paper: #F1F4F7; --surface: #FFFFFF;
-    --ink: #12161C; --ink-muted: #5B6675;
-    --border: #D7DEE6; --accent: #0E6B63; --accent-ink: #084A44; --accent-soft: #E4F1EF;
-    --serif: ui-serif, "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-    --sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --paper: #0A0E13; --surface: #121821;
-      --ink: #E8EDF2; --ink-muted: #98A3B3;
-      --border: #232C38; --accent: #45C2B4; --accent-ink: #B7ECE3; --accent-soft: #10302C;
-    }
+    --paper: #FBFAF7;
+    --surface: #FFFFFF;
+    --surface-2: #F3F1EC;
+    --ink: #13110F;
+    --ink-muted: #5C574E;
+    --ink-faint: #918C80;
+    --border: #E4E0D7;
+    --border-strong: #CFC9BB;
+    --accent: #2943CA;
+    --accent-ink: #1B2E8F;
+    --accent-soft: #EBEEFB;
+    --dk-red: #5C1A1A; --dk-red-ink: #F3C9C9;
+    --dk-blue: #1A3D5C; --dk-blue-ink: #C7DCEE;
+    --dk-green: #1A4D2E; --dk-green-ink: #C3E3CF;
+    --dk-amber: #5C4A1A; --dk-amber-ink: #EBD8A8;
+    --dk-gray: #2B2B2B; --dk-gray-ink: #CFCFCF;
+    --display: "Inter Tight", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Consolas, monospace;
+    --shadow: 0 1px 2px rgba(19,17,15,0.04), 0 8px 24px rgba(19,17,15,0.05);
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
-    margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans);
-    min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 32px;
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--display); font-size: 16.5px; line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 640px; width: 100%; }
-  .kicker { font-size: 12px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--accent); font-weight: 600; margin-bottom: 10px; }
-  h1 { font-family: var(--serif); font-size: 32px; margin: 0 0 12px; }
-  p.lede { color: var(--ink-muted); font-size: 15px; line-height: 1.6; margin: 0 0 32px; }
-  .card {
-    display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
-    padding: 20px 22px; margin-bottom: 14px; text-decoration: none; color: var(--ink);
-    transition: border-color 0.15s ease;
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  ::selection { background: var(--accent-soft); }
+  img, svg { max-width: 100%; }
+
+  .progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--ink); z-index: 100; width: 0%; transition: width 0.1s ease; }
+
+  /* ---- Top nav ---- */
+  .topnav {
+    position: sticky; top: 0; z-index: 40; background: var(--paper);
+    border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 5vw;
   }
-  .card:hover { border-color: var(--accent); }
-  .card h2 { font-family: var(--serif); font-size: 18px; margin: 0 0 6px; }
-  .card p { color: var(--ink-muted); font-size: 13.5px; margin: 0; line-height: 1.5; }
-  .tag { display: inline-block; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-ink); background: var(--accent-soft); padding: 3px 9px; border-radius: 100px; margin-bottom: 8px; }
-  footer { margin-top: 28px; font-size: 12px; color: var(--ink-muted); }
+  .topnav-id { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .topnav-name { font-weight: 700; font-size: 15px; }
+  .topnav-role { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--ink-faint); text-transform: uppercase; }
+  .topnav-links { display: flex; gap: 22px; font-size: 13.5px; }
+  .topnav-links a { color: var(--ink-muted); }
+  .topnav-links a:hover { color: var(--ink); }
+  @media (max-width: 700px) { .topnav-links { display: none; } }
+
+  /* ---- Layout ---- */
+  .shell { display: flex; max-width: 1320px; margin: 0 auto; }
+  .railnav {
+    width: 176px; flex-shrink: 0; position: sticky; top: 70px; align-self: flex-start;
+    padding: 64px 0 40px 5vw; display: flex; flex-direction: column; gap: 3px;
+  }
+  .railnav a {
+    font-size: 12.5px; color: var(--ink-faint); padding: 4px 0; border-left: 2px solid transparent; padding-left: 12px; margin-left: -13px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .railnav a:hover, .railnav a.active { color: var(--ink); border-left-color: var(--ink); text-decoration: none; }
+  @media (max-width: 1100px) { .railnav { display: none; } }
+
+  main { flex: 1; min-width: 0; padding: 56px 5vw 100px; max-width: 860px; }
+
+  /* ---- Hero ---- */
+  .back-link { font-size: 13px; color: var(--ink-muted); display: inline-flex; align-items: center; gap: 6px; margin-bottom: 34px; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--ink-faint); text-transform: uppercase; margin-bottom: 18px; }
+  h1.title { font-size: clamp(38px, 6vw, 60px); font-weight: 500; line-height: 1.03; margin: 0 0 20px; letter-spacing: -0.01em; }
+  p.subtitle { font-size: clamp(19px, 2.4vw, 24px); color: var(--ink-muted); font-weight: 400; line-height: 1.4; margin: 0 0 22px; max-width: 34ch; }
+  .tag-row { font-size: 13.5px; color: var(--ink-faint); line-height: 1.7; margin-bottom: 48px; }
+  .tag-row b { color: var(--ink-muted); font-weight: 500; }
+
+  h2.section-h { font-size: 12px; font-family: var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 18px; padding-top: 4px; }
+  section.sec { margin: 64px 0; scroll-margin-top: 90px; }
+  section.sec > p, section.sec > .prose p { font-size: 17px; color: var(--ink); line-height: 1.75; margin: 0 0 18px; max-width: 68ch; }
+  section.sec strong { font-weight: 600; }
+
+  .pullquote {
+    font-size: clamp(22px, 3vw, 30px); font-weight: 500; line-height: 1.3; margin: 30px 0; padding: 0 0 0 20px;
+    border-left: 3px solid var(--ink); max-width: 30ch;
+  }
+
+  .summary-box { font-size: 18px; line-height: 1.7; color: var(--ink); max-width: 68ch; }
+
+  /* ---- Stat strip ---- */
+  .stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin: 40px 0; border-radius: 10px; overflow: hidden; }
+  .stat { background: var(--surface); padding: 22px 18px; }
+  .stat-val { font-family: var(--mono); font-size: clamp(22px, 3vw, 30px); font-weight: 600; letter-spacing: -0.01em; }
+  .stat-label { font-size: 12px; color: var(--ink-muted); margin-top: 6px; line-height: 1.4; }
+  @media (max-width: 640px) { .stat-strip { grid-template-columns: repeat(2, 1fr); } }
+
+  .caveat { font-size: 13px; color: var(--ink-faint); border-top: 1px solid var(--border); padding-top: 14px; margin-top: 6px; line-height: 1.6; }
+  .caveat b { color: var(--ink-muted); }
+
+  /* ---- Prototype embed ---- */
+  .proto-card { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface); box-shadow: var(--shadow); margin: 34px 0; }
+  .proto-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 22px; border-bottom: 1px solid var(--border); gap: 16px; flex-wrap: wrap; }
+  .proto-head-text .eyebrow { margin-bottom: 6px; }
+  .proto-head-text p { margin: 0; font-size: 13.5px; color: var(--ink-muted); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--accent); color: #fff; border: none; border-radius: 8px;
+    padding: 10px 18px; font-size: 13.5px; font-weight: 600; cursor: pointer; white-space: nowrap; font-family: var(--display);
+  }
+  .btn:hover { background: var(--accent-ink); text-decoration: none; }
+  .btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--border-strong); }
+  .btn.ghost:hover { background: var(--surface-2); }
+  .proto-url { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); padding: 8px 22px; border-bottom: 1px solid var(--border); background: var(--surface-2); }
+  iframe.proto-frame { width: 100%; height: 640px; border: none; display: block; background: var(--paper); }
+  .proto-foot { padding: 14px 22px; font-size: 12.5px; color: var(--ink-faint); line-height: 1.6; }
+
+  /* ---- Tables ---- */
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; margin: 20px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; background: var(--surface); }
+  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+  thead th { background: var(--surface-2); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted); white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.mono { font-family: var(--mono); font-size: 13px; }
+
+  .kv-list { display: flex; flex-direction: column; gap: 14px; margin: 20px 0; }
+  .kv-item { display: grid; grid-template-columns: 160px 1fr; gap: 18px; font-size: 14.5px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .kv-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .kv-key { font-family: var(--mono); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); padding-top: 2px; }
+  .kv-val { color: var(--ink); line-height: 1.6; }
+  @media (max-width: 560px) { .kv-item { grid-template-columns: 1fr; gap: 4px; } }
+
+  .card-list { display: grid; gap: 10px; margin: 20px 0; }
+  .fail-card { border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; background: var(--surface); }
+  .fail-card b { display: block; font-size: 14.5px; margin-bottom: 4px; }
+  .fail-card span { font-size: 13.5px; color: var(--ink-muted); line-height: 1.55; }
+
+  /* ---- Diagram cards (dark semantic, matching editorial diagram convention) ---- */
+  .diagram-frame { border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin: 30px 0; background: var(--surface); overflow-x: auto; }
+  .diagram-caption { font-size: 12.5px; color: var(--ink-faint); text-align: center; margin-top: 14px; font-style: italic; }
+  .diagram-legend { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .dl-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--ink-muted); }
+  .dl-sw { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+  .sub-hero { margin: 88px 0 40px; padding-top: 40px; border-top: 1px solid var(--border); }
+  .sub-hero h2 { font-size: clamp(28px, 4vw, 38px); font-weight: 500; margin: 0 0 12px; letter-spacing: -0.01em; }
+  .sub-hero p { font-size: 16.5px; color: var(--ink-muted); max-width: 60ch; margin: 0; }
+
+  .turn-block { background: var(--surface-2); border-radius: 12px; padding: 26px 28px; margin: 26px 0; }
+  .turn-block .eyebrow { margin-bottom: 10px; }
+
+  code.inline { font-family: var(--mono); background: var(--surface-2); padding: 1.5px 6px; border-radius: 4px; font-size: 0.9em; }
+  pre.code-block {
+    background: #191714; color: #EDEAE3; border-radius: 10px; padding: 18px 20px; font-family: var(--mono);
+    font-size: 12.5px; line-height: 1.7; overflow-x: auto; margin: 20px 0;
+  }
+  pre.code-block .k { color: #8FB4F5; }
+  pre.code-block .s { color: #B7D9A8; }
+  pre.code-block .c { color: #7A756A; }
+
+  footer.page-foot {
+    max-width: 860px; margin: 90px auto 0; padding: 34px 5vw 60px; border-top: 1px solid var(--border);
+    font-size: 13px; color: var(--ink-faint); line-height: 1.8;
+  }
+  footer.page-foot a { color: var(--ink-muted); }
+  .foot-links { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 16px; font-size: 13.5px; }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="kicker">Platform Product Manager PoC</div>
-    <h1>ICB Trust Platform</h1>
-    <p class="lede">An automated gen-AI governance layer that extends JPMorgan Chase's existing Model Risk Governance function into agentic AI &mdash; built as a job-application proof of concept, grounded entirely in public sources.</p>
+  <div class="progress" id="progress"></div>
 
-    <a class="card" href="icb-trust-platform-prd.html">
-      <span class="tag">Primary</span>
-      <h2>Product Requirements Document</h2>
-      <p>The full PRD &mdash; executive summary, problem definition, architecture, user flow, requirements, risks, and open questions.</p>
-    </a>
+  <nav class="topnav">
+    <div class="topnav-id">
+      <span class="topnav-name">Pranav Gupta</span>
+      <span class="topnav-role">Technical AI PM &middot; Application Artifact</span>
+    </div>
+    <div class="topnav-links">
+      <a href="#prototype">Prototype</a>
+      <a href="#system">System</a>
+      <a href="#decisions">Decisions</a>
+      <a href="https://github.com/PlanetCodify/JPMC" target="_blank" rel="noopener">Source ↗</a>
+    </div>
+  </nav>
 
-    <a class="card" href="06_prototype.html">
-      <span class="tag">Prototype</span>
-      <h2>ICB Trust Platform Console</h2>
-      <p>A clickable product console: architecture explorer, RICE-scored roadmap, a live governance-tier classifier, and metrics.</p>
-    </a>
+  <div class="shell">
+    <nav class="railnav" id="railnav" aria-label="Section navigation">
+      <a href="#top">Intro</a>
+      <a href="#summary">Summary</a>
+      <a href="#prototype">Prototype</a>
+      <a href="#context">Context</a>
+      <a href="#problem">Problem</a>
+      <a href="#approach">Approach</a>
+      <a href="#outcome">Outcome</a>
+      <a href="#behavior">Behavior</a>
+      <a href="#system">System</a>
+      <a href="#evaluation">Evaluation</a>
+      <a href="#shortfall">Shortfall</a>
+      <a href="#turn">The Turn</a>
+      <a href="#ethics">Ethics</a>
+      <a href="#decisions">Decisions</a>
+    </nav>
 
-    <footer>Full research trail and earlier drafts in the repository.</footer>
+    <main id="top">
+      <a class="back-link" href="#top">&larr; JPMorgan Chase &middot; Platform Product Manager, VP</a>
+      <div class="eyebrow">Application Artifact &middot; Aug 2026</div>
+      <h1 class="title">ICB Trust Platform</h1>
+      <p class="subtitle">The bank already has the reviewer. Nobody built the door.</p>
+      <div class="tag-row"><b>Regulatory research &middot; governance design &middot; systems architecture &middot; working prototype</b><br>Internal platform &middot; automated gen-AI risk tiering, not a customer-facing product</div>
+
+      <section class="sec" id="summary">
+        <h2 class="section-h">Summary</h2>
+        <div class="summary-box">
+          In April 2026 the Federal Reserve excluded generative and agentic AI from formal bank model-risk rules. JPMC already runs a review function scoped to exactly this bank &mdash; Model Risk Governance &amp; Review, ICB &mdash; but its public scope stops at traditional statistical models. <strong>The gap isn't that nobody can govern this. It's that nobody built the way in.</strong> This platform is that door: an automated tiering layer that clears low-risk gen-AI features on its own and escalates the rest into MRGR's real queue, with the reasoning and audit trail already attached.
+        </div>
+
+        <div class="stat-strip">
+          <div class="stat"><div class="stat-val">18.4hrs</div><div class="stat-label">Time to first integration (target)</div></div>
+          <div class="stat"><div class="stat-val">88%</div><div class="stat-label">MRGR escalation acceptance (target)</div></div>
+          <div class="stat"><div class="stat-val">3</div><div class="stat-label">Independent risk tiers</div></div>
+          <div class="stat"><div class="stat-val">Apr 2026</div><div class="stat-label">SR 26-2 &mdash; the gap this closes</div></div>
+        </div>
+        <div class="caveat"><b>Every number above is a modelled target from the PRD, not a measured result.</b> This platform hasn't been built or deployed. What's real: the regulation (SR 26-2, verified against federalreserve.gov) and the MRGR job posting. What's modelled: everything with a target attached. See Context below for the full split.</div>
+      </section>
+
+      <section class="sec" id="prototype">
+        <h2 class="section-h">Live Prototype</h2>
+        <p>Embedded below &mdash; loads in a sandboxed iframe. Open it in a new tab for full interactivity, including the governance classifier and the MRGR reviewer queue.</p>
+        <div class="proto-card">
+          <div class="proto-head">
+            <div class="proto-head-text">
+              <div class="eyebrow" style="margin-bottom:4px;">ICB Trust Platform Console</div>
+              <p>Architecture explorer &middot; RICE roadmap &middot; governance classifier &middot; MRGR queue &middot; metrics</p>
+            </div>
+            <a class="btn" href="06_prototype.html" target="_blank" rel="noopener">Open in new tab ↗</a>
+          </div>
+          <div class="proto-url">planetcodify.github.io/JPMC/06_prototype.html</div>
+          <iframe class="proto-frame" src="06_prototype.html" title="ICB Trust Platform Console — live prototype"></iframe>
+          <div class="proto-foot">Concept-stage prototype &mdash; illustrative data throughout, built to demonstrate the product thinking, not a real JPMC system.</div>
+        </div>
+      </section>
+
+      <section class="sec" id="context">
+        <h2 class="section-h">Context</h2>
+        <p>International Consumer Bank is scaling a branchless, digital-only retail model across markets &mdash; UK live since 2021, Germany publicly targeted for 2026. Every new market ships more gen-AI-adjacent features, right as a real regulatory gap opened underneath all of them.</p>
+        <p>On April 17, 2026, the Federal Reserve issued SR 26-2, superseding SR 11-7, and explicitly excluded generative and agentic AI from formal model-risk scope for banks over $30B in assets &mdash; JPMC clears that threshold many times over. Separately, a live MRGR job posting scoped to ICB lists only traditional quantitative-model skills: financial math, probability theory, numerical methods. No mention of gen-AI, LLMs, or agentic systems anywhere in it.</p>
+        <p class="pullquote">Read together, those two facts say the same thing from opposite directions: the expertise to govern this exists. The entry point doesn't.</p>
+      </section>
+
+      <section class="sec" id="problem">
+        <h2 class="section-h">Problem</h2>
+        <p>The obvious fix &mdash; stand up a new governance function for gen-AI &mdash; is also the wrong one. MRGR already has the regulatory relationships, the examiner trust, and the review discipline this needs. Building a parallel function next to it doesn't close the gap, it duplicates the exact thing that's already there and adds a second, less-trusted process for the bank to maintain.</p>
+        <p>The harder problem sits one layer down. Research on comparable internal-platform populations shows <strong>64% of engineers bypass a platform that's slower than just building the workaround themselves.</strong> A governance layer that's technically correct but slow to integrate against doesn't get used &mdash; it gets routed around, and the SR 26-2 gap stays exactly as open as it was before anyone built anything.</p>
+      </section>
+
+      <section class="sec" id="approach">
+        <h2 class="section-h">Approach</h2>
+        <p>The first version of this platform proposed a full customer data, communications, and CMS build, with AI governance bundled in as one feature inside it. A structured review across engineering, design, executive, legal, research, and skeptic perspectives flagged that as backwards: it bet the largest investment on the least-validated assumption in the whole plan &mdash; whether a governance function even wants standardized tiering routed into it.</p>
+        <p>The rebuild inverts that. Ship the tiering layer alone, first. Validate it against a real, named function &mdash; MRGR &mdash; before any bigger platform investment follows. If MRGR doesn't want the routing, the platform's job shrinks to a much smaller, cheaper build. If it does, everything else has a foundation actually worth building on.</p>
+      </section>
+
+      <section class="sec" id="outcome">
+        <h2 class="section-h">Outcome</h2>
+        <p>Still concept-stage &mdash; nothing here has shipped to a real organization. Modelled against the PRD's own targets: a market engineer gets a working classification response in under a business day, MRGR accepts and reviews the majority of what's routed to it, and the platform can't pass its own bar by being fast but going unused &mdash; a 90-day sustained-use check is a required gate before any further investment, not an afterthought metric.</p>
+      </section>
+
+      <div class="sub-hero">
+        <h2>How the system actually behaves</h2>
+        <p>The mechanics behind the headline claim &mdash; what the classifier is required to do, how the architecture is structured, what a reviewer actually sees, and where a seven-perspective review found it wrong.</p>
+      </div>
+
+      <section class="sec" id="behavior">
+        <h2 class="section-h">Behavior Specification</h2>
+        <p><strong>Task</strong> &mdash; classify a gen-AI or agentic feature request into one of three risk tiers and return the required review path, routing Tier 3 into MRGR's real queue rather than a parallel process this platform invents.</p>
+
+        <div class="kv-list">
+          <div class="kv-item"><div class="kv-key">Inputs</div><div class="kv-val">Feature description, data sources touched, customer-facing surface, whether it influences a credit or account decision</div></div>
+          <div class="kv-item"><div class="kv-key">Constraints</div><div class="kv-val">Never auto-approves anything touching a credit or account decision. Self-routing logic for credit-adjacent features requires a fair-lending (ECOA/Reg B) review before this ships &mdash; the classifier doesn't get to decide its own jurisdiction over that category.</div></div>
+          <div class="kv-item"><div class="kv-key">Disallowed</div><div class="kv-val">Silent approval of anything the classifier is uncertain about &mdash; ambiguous input defaults to Tier 2, never Tier 1. No fail-safe if the classifier itself is unavailable also defaults to Tier 2, logged, never a silent failure.</div></div>
+          <div class="kv-item"><div class="kv-key">Latency budget</div><div class="kv-val">P50 under 2 seconds, P95 under 10 seconds &mdash; synchronous enough that an engineer never files a ticket and waits</div></div>
+        </div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Scenario</th><th>Feature</th><th>Output</th></tr></thead>
+            <tbody>
+              <tr><td>Low risk</td><td>Marketing copy A/B variants</td><td>Tier 1 &mdash; automated approval</td></tr>
+              <tr><td>Medium risk</td><td>Next-best-action messaging using purchase history</td><td>Tier 2 &mdash; approved + logged for sample review</td></tr>
+              <tr><td>High risk</td><td>AI-drafted credit decision narrative</td><td>Tier 3 &mdash; routed to MRGR, full human review</td></tr>
+              <tr><td>Ambiguous</td><td>Doesn't clearly match a known pattern</td><td>Defaults to Tier 2, never silently ships</td></tr>
+              <tr><td>Classifier down</td><td>Service unavailable or times out</td><td>Defaults to Tier 2, logged, no silent failure</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sec" id="system">
+        <h2 class="section-h">System Architecture</h2>
+        <p>Everything inside the boundary is what gets built. MRGR's own review process sits outside it on purpose &mdash; this platform calls into it, it doesn't redesign it.</p>
+
+        <div class="diagram-frame">
+          <svg viewBox="0 0 940 500" style="width:100%;height:auto;">
+            <defs>
+              <marker id="m1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0L6,3L0,6Z" fill="#6E7B8C"/></marker>
+              <marker id="m2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0L6,3L0,6Z" fill="#3A7A54"/></marker>
+              <marker id="m3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0L6,3L0,6Z" fill="#A33"/></marker>
+              <marker id="m4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0L6,3L0,6Z" fill="#8A7228"/></marker>
+            </defs>
+
+            <rect x="180" y="18" width="745" height="410" rx="10" fill="none" stroke="#CFC9BB" stroke-width="1.3" stroke-dasharray="6,4"/>
+            <text x="196" y="36" font-size="10" font-weight="700" letter-spacing="0.06em" fill="#918C80" font-family="JetBrains Mono, monospace">ICB TRUST PLATFORM &#8212; IN SCOPE</text>
+
+            <rect x="10" y="115" width="150" height="52" rx="8" fill="#F3F1EC" stroke="#CFC9BB"/>
+            <text x="85" y="137" text-anchor="middle" font-size="12" fill="#13110F" font-family="Inter Tight, sans-serif">Market Engineer</text>
+            <text x="85" y="153" text-anchor="middle" font-size="10" fill="#5C574E" font-family="Inter Tight, sans-serif">submits feature</text>
+            <text x="10" y="105" font-size="9" fill="#918C80" font-family="JetBrains Mono, monospace">EXTERNAL ACTOR</text>
+
+            <rect x="200" y="150" width="150" height="40" rx="8" fill="none" stroke="#CFC9BB" stroke-dasharray="4,3"/>
+            <text x="275" y="174" text-anchor="middle" font-size="10.5" fill="#5C574E" font-family="Inter Tight, sans-serif">Docs + Sandbox</text>
+            <line x1="160" y1="141" x2="196" y2="141" stroke="#6E7B8C" stroke-width="1.5" marker-end="url(#m1)"/>
+
+            <rect x="200" y="65" width="160" height="62" rx="8" fill="#FFFFFF" stroke="#CFC9BB" stroke-width="1.5"/>
+            <text x="280" y="90" text-anchor="middle" font-size="12.5" font-weight="700" fill="#13110F" font-family="Inter Tight, sans-serif">Tiering API</text>
+            <text x="280" y="106" text-anchor="middle" font-size="10" fill="#5C574E" font-family="Inter Tight, sans-serif">versioned contract</text>
+
+            <line x1="360" y1="96" x2="400" y2="96" stroke="#6E7B8C" stroke-width="2" marker-end="url(#m1)"/>
+            <text x="380" y="86" text-anchor="middle" font-size="8.5" fill="#6E7B8C" font-family="JetBrains Mono, monospace">sync &lt;2s</text>
+
+            <rect x="400" y="55" width="180" height="82" rx="8" fill="#1A3D5C" stroke="#1A3D5C" stroke-width="1.5"/>
+            <text x="490" y="85" text-anchor="middle" font-size="13" font-weight="700" fill="#C7DCEE" font-family="Inter Tight, sans-serif">Classifier Engine</text>
+            <text x="490" y="101" text-anchor="middle" font-size="10" fill="#C7DCEE" font-family="Inter Tight, sans-serif">Tier 1 / 2 / 3 decision</text>
+            <text x="490" y="120" text-anchor="middle" font-size="9.5" fill="#C7DCEE" opacity="0.9" font-family="Inter Tight, sans-serif">ambiguous or down &#8594; Tier 2</text>
+
+            <line x1="580" y1="70" x2="630" y2="35" stroke="#3A7A54" stroke-width="1.5" marker-end="url(#m2)"/>
+            <line x1="580" y1="96" x2="630" y2="118" stroke="#3A7A54" stroke-width="1.5" marker-end="url(#m2)"/>
+            <line x1="580" y1="122" x2="630" y2="232" stroke="#A33" stroke-width="2" marker-end="url(#m3)"/>
+
+            <rect x="630" y="10" width="290" height="46" rx="8" fill="#1A4D2E"/>
+            <text x="650" y="29" font-size="11.5" font-weight="700" fill="#C3E3CF" font-family="Inter Tight, sans-serif">TIER 1</text>
+            <text x="650" y="45" font-size="11" fill="#C3E3CF" font-family="Inter Tight, sans-serif">Automated policy check &#8594; auto-approved</text>
+
+            <rect x="630" y="94" width="290" height="46" rx="8" fill="#5C4A1A"/>
+            <text x="650" y="113" font-size="11.5" font-weight="700" fill="#EBD8A8" font-family="Inter Tight, sans-serif">TIER 2</text>
+            <text x="650" y="129" font-size="11" fill="#EBD8A8" font-family="Inter Tight, sans-serif">Auto-approve + logged for sample review</text>
+
+            <line x1="630" y1="187" x2="560" y2="187" stroke="#8A7228" stroke-width="1.3" stroke-dasharray="3,3" marker-end="url(#m4)"/>
+            <rect x="630" y="168" width="290" height="38" rx="8" fill="#F3F1EC" stroke="#CFC9BB"/>
+            <text x="775" y="191" text-anchor="middle" font-size="10.5" fill="#5C574E" font-family="Inter Tight, sans-serif">Periodic human spot-check (sample)</text>
+
+            <rect x="630" y="232" width="290" height="46" rx="8" fill="#5C1A1A"/>
+            <text x="650" y="251" font-size="11.5" font-weight="700" fill="#F3C9C9" font-family="Inter Tight, sans-serif">TIER 3</text>
+            <text x="650" y="267" font-size="11" fill="#F3C9C9" font-family="Inter Tight, sans-serif">Full review required, no auto-path</text>
+
+            <line x1="775" y1="278" x2="775" y2="306" stroke="#A33" stroke-width="2" marker-end="url(#m3)"/>
+            <rect x="630" y="306" width="290" height="40" rx="8" fill="#FFFFFF" stroke="#A33" stroke-width="1.5"/>
+            <text x="775" y="330" text-anchor="middle" font-size="11" fill="#13110F" font-family="Inter Tight, sans-serif">MRGR Escalation Queue</text>
+
+            <line x1="630" y1="326" x2="560" y2="326" stroke="#8A7228" stroke-width="1.3" stroke-dasharray="3,3" marker-end="url(#m4)"/>
+
+            <line x1="900" y1="346" x2="900" y2="365" stroke="#A33" stroke-width="2"/>
+            <line x1="900" y1="365" x2="825" y2="365" stroke="#A33" stroke-width="2" marker-end="url(#m3)"/>
+            <text x="775" y="360" text-anchor="middle" font-size="8.5" fill="#A33" font-family="JetBrains Mono, monospace">request + reasoning + audit trail</text>
+
+            <rect x="615" y="374" width="320" height="58" rx="8" fill="#2B2B2B"/>
+            <text x="775" y="397" text-anchor="middle" font-size="11.5" font-weight="700" fill="#F2F2F2" font-family="Inter Tight, sans-serif">Existing MRGR Review Process</text>
+            <text x="775" y="413" text-anchor="middle" font-size="9.5" fill="#CFCFCF" font-family="Inter Tight, sans-serif">EXTERNAL &#8212; not built by this platform</text>
+
+            <ellipse cx="450" cy="435" rx="130" ry="12" fill="#FFFFFF" stroke="#CFC9BB" stroke-width="1.5"/>
+            <rect x="320" y="435" width="260" height="50" fill="#FFFFFF" stroke="none"/>
+            <line x1="320" y1="435" x2="320" y2="485" stroke="#CFC9BB" stroke-width="1.5"/>
+            <line x1="580" y1="435" x2="580" y2="485" stroke="#CFC9BB" stroke-width="1.5"/>
+            <path d="M 320 485 A 130 12 0 0 0 580 485" fill="none" stroke="#CFC9BB" stroke-width="1.5"/>
+            <text x="450" y="458" text-anchor="middle" font-size="11.5" font-weight="700" fill="#13110F" font-family="Inter Tight, sans-serif">Audit Trail Store</text>
+            <text x="450" y="473" text-anchor="middle" font-size="9" fill="#5C574E" font-family="Inter Tight, sans-serif">reasoning, inputs, reviewer, timestamp</text>
+          </svg>
+          <div class="diagram-legend">
+            <div class="dl-item"><span class="dl-sw" style="background:#1A4D2E;"></span>Tier 1 &mdash; low risk</div>
+            <div class="dl-item"><span class="dl-sw" style="background:#5C4A1A;"></span>Tier 2 &mdash; medium risk</div>
+            <div class="dl-item"><span class="dl-sw" style="background:#5C1A1A;"></span>Tier 3 &mdash; high risk, escalated</div>
+            <div class="dl-item"><span class="dl-sw" style="background:#2B2B2B;"></span>External &mdash; already exists at JPMC</div>
+          </div>
+        </div>
+        <p class="diagram-caption">The one deliberate exception to an otherwise synchronous design: Tier 2 and Tier 3 both write to the same Audit Trail Store, so a rollback decision has one place to check, not two.</p>
+      </section>
+
+      <section class="sec" id="evaluation">
+        <h2 class="section-h">Evaluation Strategy</h2>
+        <p>Modelled thresholds against the PRD's own targets &mdash; concept-stage projections, not measured production results.</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Metric</th><th>Role</th><th>What it actually catches</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">Time-to-first-integration</td><td>Primary</td><td>Whether the platform is fast enough that engineers don't route around it</td></tr>
+              <tr><td class="mono">90-day sustained use</td><td>Co-primary</td><td>A fast first integration that never gets used again &mdash; can't be gamed by one shallow test call</td></tr>
+              <tr><td class="mono">MRGR escalation acceptance</td><td>Guardrail</td><td>Whether MRGR actually uses the routing, or quietly works around it</td></tr>
+              <tr><td class="mono">Tier 1 review cycle time</td><td>Guardrail</td><td>Automated review staying genuinely fast as volume grows</td></tr>
+              <tr><td class="mono">Tier 3 audit completeness</td><td>Kill-switch</td><td>Any incomplete record triggers immediate rollback, no exceptions</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sec" id="shortfall">
+        <h2 class="section-h">Where It Fell Short &mdash; Not Just What Passed</h2>
+        <p>A seven-perspective structured review (engineering, design, executive, legal, research, skeptic, customer voice) ran against the first full draft. It found real problems, not just polish notes:</p>
+        <div class="card-list">
+          <div class="fail-card"><b>The primary metric was gameable.</b><span>Time-to-first-integration alone rewards a fast handshake, not sustained use &mdash; a team could hit the target with one throwaway test call and never touch the platform again. Fixed by adding 90-day sustained use as a co-primary metric, specifically so speed can't stand in for adoption.</span></div>
+          <div class="fail-card"><b>The integrator and reviewer experiences were assumed, never designed.</b><span>The whole adoption thesis rested on an integration path that was never actually specified &mdash; no docs, no sandbox, no error handling. Same gap on the reviewer side: nothing described what an MRGR reviewer would actually see. The prototype's MRGR Queue tab exists specifically because this was flagged as missing, not nice-to-have.</span></div>
+          <div class="fail-card"><b>A real liability gap in the classifier's self-routing logic.</b><span>The system decides its own review tier for features that could touch fair lending law (ECOA/Reg B) &mdash; and nothing confirmed the existing model-risk process Tier 3 depends on actually covers gen-AI outputs. Added as an explicit Phase 1 blocker, not a footnote.</span></div>
+        </div>
+      </section>
+
+      <div class="turn-block" id="turn">
+        <div class="eyebrow">Failure Analysis &mdash; The Turn</div>
+        <p><strong>What failed</strong> &mdash; the original plan bundled AI governance as one feature inside a full customer data, communications, and CMS platform build.</p>
+        <p><strong>Why</strong> &mdash; that bet the largest, most expensive part of the investment on the single least-validated assumption in the whole thesis: whether a governance function even wants standardized tiering routed into it. If that assumption was wrong, the bigger build would have been wasted underneath it.</p>
+        <p><strong>What changed</strong> &mdash; a direct question ("how much of this already exists at JPMC?") surfaced a real finding: a Model Risk Governance &amp; Review function already exists, scoped to ICB, for traditional models. The platform's entire positioning inverted around that &mdash; from "build new governance" to "build the door into governance that already exists." Phase 1 now ships the tiering layer alone, validated against MRGR directly, before any bigger platform investment follows it.</p>
+      </div>
+
+      <section class="sec" id="ethics">
+        <h2 class="section-h">AI Ethics &amp; Risk</h2>
+        <p>The governance model exists because customers are already weighing this trade-off, whether the bank instruments for it or not. Published research: 64% of consumers want personalization, but only 39% think it's worth the privacy cost. 52% worry AI could mistakenly freeze their account. 62% say they'd lose confidence in their bank after a data breach.</p>
+        <div class="card-list">
+          <div class="fail-card"><b>Default-deny, not default-allow.</b><span>Ambiguous classification and classifier downtime both default to Tier 2, never silently to Tier 1 &mdash; the system is required to escalate its own uncertainty, not hide it.</span></div>
+          <div class="fail-card"><b>No self-governance on credit decisions.</b><span>The classifier can never auto-approve a feature touching a credit or account decision, under any circumstance. That category always reaches a human, by construction, not by policy that could be quietly relaxed.</span></div>
+          <div class="fail-card"><b>Fair-lending review is a gate, not a formality.</b><span>Before the classifier's self-routing logic ships, an ECOA/Reg B review is required &mdash; a system that decides its own jurisdiction over credit-adjacent features is exactly the kind of thing an examiner would probe first.</span></div>
+        </div>
+      </section>
+
+      <section class="sec" id="decisions">
+        <h2 class="section-h">Decisions Log</h2>
+        <div class="kv-list">
+          <div class="kv-item"><div class="kv-key">Open</div><div class="kv-val">Does MRGR's actual scope for ICB already cover gen-AI, contrary to what one job posting suggests? This is checkable, not a guess, for anyone with access to ask &mdash; and it's the single highest-priority question in the whole platform.</div></div>
+          <div class="kv-item"><div class="kv-key">Open</div><div class="kv-val">UK-first or Germany-first sequencing? NatWest's Cora and Lloyds' Envoy are already live in the UK market Chase competes in &mdash; deliberately left unresolved here, not silently decided.</div></div>
+          <div class="kv-item"><div class="kv-key">Decided</div><div class="kv-val">Governance ships standalone in Phase 1, not bundled with a customer data/comms/CMS build &mdash; reversed from the original plan after review.</div></div>
+          <div class="kv-item"><div class="kv-key">Decided</div><div class="kv-val">The platform versions its own API, not the vendor's &mdash; a future CDP/CMS vendor swap happens behind the contract, invisible to integrated teams.</div></div>
+          <div class="kv-item"><div class="kv-key">Decided</div><div class="kv-val">90-day sustained use is a required gate before Phase 2 spend, tracked from day one rather than introduced later.</div></div>
+        </div>
+      </section>
+
+    </main>
   </div>
+
+  <footer class="page-foot">
+    <div class="foot-links">
+      <a href="06_prototype.html" target="_blank" rel="noopener">Open prototype ↗</a>
+      <a href="https://github.com/PlanetCodify/JPMC" target="_blank" rel="noopener">Full source &amp; research trail ↗</a>
+      <a href="#top">Back to top</a>
+    </div>
+    Grounded entirely in public sources cited throughout &mdash; the Federal Reserve's SR 26-2, a public MRGR job posting, published consumer and platform-adoption research. Makes no claim to JPMorgan Chase's actual internal systems, vendors, or roadmap. Built as a Platform Product Manager application artifact, August 2026.
+  </footer>
+
+<script>
+(function () {
+  var progress = document.getElementById('progress');
+  function onScroll() {
+    var h = document.documentElement;
+    var scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progress.style.width = scrolled + '%';
+
+    var sections = document.querySelectorAll('main section[id], main#top');
+    var current = 'top';
+    sections.forEach(function (s) {
+      var r = s.getBoundingClientRect();
+      if (r.top < 140) current = s.id;
+    });
+    document.querySelectorAll('.railnav a').forEach(function (a) {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
 </body>
 </html>
