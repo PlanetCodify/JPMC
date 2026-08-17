@@ -392,8 +392,8 @@
     padding: 6px 11px; border-radius: 100px; font-size: 12px; cursor: pointer; transition: all 0.12s ease;
   }
   .chip:hover { border-color: var(--accent); color: var(--accent-ink); }
-  textarea#simInput {
-    width: 100%; min-height: 88px; resize: vertical; background: var(--surface); color: var(--ink);
+  textarea#simDesc {
+    width: 100%; min-height: 70px; resize: vertical; background: var(--surface); color: var(--ink);
     border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 11px 13px;
     font-family: var(--sans); font-size: 13.5px; line-height: 1.5;
   }
@@ -432,6 +432,15 @@
   .sim-history-item .badge { flex-shrink: 0; }
   .sim-history-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .sim-history-time { font-family: var(--mono); font-size: 10px; color: var(--ink-faint); flex-shrink: 0; }
+  .field-label { display: block; font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); font-weight: 700; margin: 18px 0 6px; }
+  .field-hint { font-size: 11.3px; color: var(--ink-faint); margin: 0 0 8px; line-height: 1.5; }
+  .chip.toggle[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
+  .field-toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .btn-toggle-group { display: flex; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); overflow: hidden; flex-shrink: 0; }
+  .btn-toggle { border: none; background: var(--surface); color: var(--ink-muted); padding: 7px 16px; font-size: 12.3px; font-weight: 700; cursor: pointer; }
+  .btn-toggle + .btn-toggle { border-left: 1px solid var(--border-strong); }
+  .btn-toggle[aria-pressed="true"] { background: var(--good-soft); color: var(--good); }
+  .btn-toggle.warn[aria-pressed="true"] { background: var(--crit-soft); color: var(--crit); }
 
   /* market status */
   .market-toggle { display: flex; gap: 8px; margin-bottom: 18px; }
@@ -608,15 +617,14 @@
         <svg class="icon" viewBox="0 0 18 18"><polygon points="9,2 16,6 9,10 2,6"/><polyline points="2,9.5 9,13.5 16,9.5"/><polyline points="2,13 9,17 16,13"/></svg>
         Architecture
       </button>
-      <button class="nav-item" role="tab" data-tab="roadmap" aria-selected="false">
-        <svg class="icon" viewBox="0 0 18 18"><polyline points="1.5,3 3.2,4.7 6.5,1.4"/><line x1="8.5" y1="3" x2="16.5" y2="3"/><polyline points="1.5,9 3.2,10.7 6.5,7.4"/><line x1="8.5" y1="9" x2="16.5" y2="9"/><polyline points="1.5,15 3.2,16.7 6.5,13.4"/><line x1="8.5" y1="15" x2="16.5" y2="15"/></svg>
-        Roadmap &middot; RICE
-      </button>
-
       <div class="nav-label">Operate</div>
       <button class="nav-item" role="tab" data-tab="governance" aria-selected="false">
         <svg class="icon" viewBox="0 0 18 18"><path d="M9 2 L15.5 4.5 V9 C15.5 13 12.5 16 9 17 C5.5 16 2.5 13 2.5 9 V4.5 Z"/><polyline points="6,9 8.2,11.2 12,7"/></svg>
-        Governance Simulator
+        Classify a Feature
+      </button>
+      <button class="nav-item" role="tab" data-tab="requests" aria-selected="false">
+        <svg class="icon" viewBox="0 0 18 18"><rect x="2.5" y="2.5" width="13" height="13" rx="1.5"/><line x1="5.5" y1="6.3" x2="12.5" y2="6.3"/><line x1="5.5" y1="9" x2="12.5" y2="9"/><line x1="5.5" y1="11.7" x2="10" y2="11.7"/></svg>
+        Feature Requests<span class="nb" id="requestsBadge">10</span>
       </button>
       <button class="nav-item" role="tab" data-tab="queue" aria-selected="false">
         <svg class="icon" viewBox="0 0 18 18"><path d="M2.5 9 H6.5 L8 11.5 H10 L11.5 9 H15.5"/><path d="M2.5 9 V4.5 C2.5 3.7 3.2 3 4 3 H14 C14.8 3 15.5 3.7 15.5 4.5 V9"/><path d="M2.5 9 V13.5 C2.5 14.3 3.2 15 4 15 H14 C14.8 15 15.5 14.3 15.5 13.5 V9"/></svg>
@@ -682,9 +690,9 @@
             <div class="qa-icon"><svg class="icon" viewBox="0 0 18 18"><path d="M2.5 9 H6.5 L8 11.5 H10 L11.5 9 H15.5"/><path d="M2.5 9 V4.5 C2.5 3.7 3.2 3 4 3 H14 C14.8 3 15.5 3.7 15.5 4.5 V9"/></svg></div>
             <div><div class="qa-title">Review MRGR queue</div><div class="qa-desc">See what a reviewer sees for a Tier 3 escalation</div></div>
           </div>
-          <div class="card qa-card clickable" data-goto="architecture">
-            <div class="qa-icon"><svg class="icon" viewBox="0 0 18 18"><path d="M7 3 H15 V11"/><line x1="15" y1="3" x2="6" y2="12"/><path d="M11 3 H4 C3.4 3 3 3.4 3 4 V14 C3 14.6 3.4 15 4 15 H14 C14.6 15 15 14.6 15 14 V8"/></svg></div>
-            <div><div class="qa-title">Read the API reference</div><div class="qa-desc">Endpoint contract for the versioned Tiering API</div></div>
+          <div class="card qa-card clickable" data-goto="requests">
+            <div class="qa-icon"><svg class="icon" viewBox="0 0 18 18"><rect x="2.5" y="2.5" width="13" height="13" rx="1.5"/><line x1="5.5" y1="6.3" x2="12.5" y2="6.3"/><line x1="5.5" y1="9" x2="12.5" y2="9"/><line x1="5.5" y1="11.7" x2="10" y2="11.7"/></svg></div>
+            <div><div class="qa-title">View feature requests</div><div class="qa-desc">Every classified feature, all three tiers, with captured inputs</div></div>
           </div>
           <div class="card qa-card clickable" data-goto="settings">
             <div class="qa-icon"><svg class="icon" viewBox="0 0 18 18"><circle cx="9" cy="9" r="5.2"/><circle cx="9" cy="9" r="2"/></svg></div>
@@ -936,116 +944,122 @@
       </section>
     </section>
 
-    <!-- ROADMAP -->
-    <section class="panel" id="panel-roadmap" hidden>
-      <div class="page-header">
-        <div class="page-header-text">
-          <h1 class="page-title">Roadmap &mdash; RICE prioritized</h1>
-          <p class="page-dek">Reach &times; Impact &times; Confidence &divide; Effort. Click a column header to sort. Every item below maps directly to a phase in the PRD's Rollout Plan.</p>
-        </div>
-      </div>
-
-      <div class="table-wrap">
-        <table id="riceTable">
-          <thead>
-            <tr>
-              <th data-key="name">Initiative</th>
-              <th class="num" data-key="reach">Reach</th>
-              <th class="num" data-key="impact">Impact</th>
-              <th class="num" data-key="confidence">Confidence</th>
-              <th class="num" data-key="effort">Effort (mo)</th>
-              <th class="num sorted" data-key="rice">RICE</th>
-            </tr>
-          </thead>
-          <tbody id="riceBody"></tbody>
-        </table>
-      </div>
-
-      <div class="callout info"><b>Why governance-only, not bundled:</b> the original roadmap paired this with a full customer data/comms/CMS build in Phase 1. That's gone. The review panel's strongest finding was that Risk &amp; Compliance's appetite for standardized tiering was the single least-validated, highest-stakes assumption in the whole thesis &mdash; so it gets tested alone, first, in one line of business, before any bigger investment or firmwide rollout follows it.</div>
-
-      <div class="callout"><b>Trade-off, stated on purpose:</b> pure RICE still ranks Germany-track work low on reach and confidence given external launch dependencies. It stays in the roadmap as a conditional Phase 2 item, not a Phase 1 commitment &mdash; sequencing UK-first vs. Germany-parallel is an open question the PRD deliberately leaves unresolved, not one this roadmap quietly decides.</div>
-
-      <section class="block" style="margin-top:26px;">
-        <h2 class="section-title">Delivery cadence</h2>
-        <p class="section-dek">Illustrative sequencing, not a claimed timeline. Each phase gate is a real decision point, not a calendar milestone.</p>
-        <div class="card card-pad" style="overflow-x:auto;">
-          <svg viewBox="0 0 900 240" style="width:100%;height:auto;min-width:640px;">
-            <text x="110" y="18" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Q1</text>
-            <text x="330" y="18" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Q2</text>
-            <text x="550" y="18" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Q3</text>
-            <text x="770" y="18" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Q4</text>
-            <line x1="220" y1="0" x2="220" y2="230" stroke="var(--border)"/>
-            <line x1="440" y1="0" x2="440" y2="230" stroke="var(--border)"/>
-            <line x1="660" y1="0" x2="660" y2="230" stroke="var(--border)"/>
-            <line x1="880" y1="0" x2="880" y2="230" stroke="var(--border)"/>
-
-            <text x="4" y="42" font-size="11" fill="var(--ink)" font-weight="700">Phase 1</text>
-            <rect x="0" y="26" width="440" height="26" rx="3" fill="var(--ink)"/>
-            <text x="220" y="43" text-anchor="middle" font-size="10.5" fill="var(--paper)">Tiering layer + Tier 1, validated directly with MRGR</text>
-
-            <text x="4" y="92" font-size="11" fill="var(--violet)" font-weight="700">Phase 2</text>
-            <rect x="440" y="76" width="220" height="26" rx="3" fill="var(--violet)"/>
-            <text x="550" y="93" text-anchor="middle" font-size="10.5" fill="#fff">Tier 2/3 live, CDP/CMS decision made</text>
-
-            <text x="4" y="142" font-size="11" fill="var(--bronze)" font-weight="700">Sequencing</text>
-            <rect x="440" y="126" width="220" height="26" rx="3" fill="var(--bronze)"/>
-            <text x="550" y="143" text-anchor="middle" font-size="10.5" fill="#fff">UK-first vs. Germany-parallel forced to a decision</text>
-
-            <text x="4" y="192" font-size="11" fill="var(--good)" font-weight="700">Phase 3</text>
-            <rect x="660" y="176" width="220" height="26" rx="3" fill="var(--good)"/>
-            <text x="770" y="193" text-anchor="middle" font-size="10.5" fill="#fff">Full platform + 2nd JPMC line of business, if justified</text>
-          </svg>
-        </div>
-      </section>
-    </section>
-
     <!-- GOVERNANCE SIMULATOR -->
     <section class="panel" id="panel-governance" hidden>
       <div class="page-header">
         <div class="page-header-text">
-          <h1 class="page-title">Governance &amp; Policy Engine</h1>
-          <p class="page-dek">Describe a feature. The engine returns a risk tier and the review path it triggers &mdash; the same call any market team would make against the live API.</p>
+          <h1 class="page-title">Classify a Feature</h1>
+          <p class="page-dek">The exact fields <code class="inline">POST /v1/classify</code> requires. The engine reads these four fields, not free text &mdash; the same structured call any market team's service would make against the live API.</p>
         </div>
       </div>
 
       <div class="sim-grid">
-        <div class="card card-pad">
-          <h2 class="section-title" style="font-size:14px;">Describe the feature</h2>
+        <form class="card card-pad" id="simForm">
+          <h2 class="section-title" style="font-size:14px;">Request payload</h2>
           <div class="chip-row" id="chipRow">
-            <button class="chip" type="button">Personalized next-best-action messaging</button>
-            <button class="chip" type="button">Marketing copy A/B variants</button>
-            <button class="chip" type="button">AI-assisted credit decision narrative</button>
-            <button class="chip" type="button">Automated translation of support articles</button>
-            <button class="chip" type="button">Chatbot response drafting for support agents</button>
+            <button class="chip" type="button" data-preset="0">Next-best-action messaging</button>
+            <button class="chip" type="button" data-preset="1">Marketing copy A/B variants</button>
+            <button class="chip" type="button" data-preset="2">AI-assisted credit decision narrative</button>
+            <button class="chip" type="button" data-preset="3">Support article translation</button>
+            <button class="chip" type="button" data-preset="4">Chatbot drafting for support agents</button>
           </div>
-          <textarea id="simInput" placeholder="e.g. an agent that recommends the next product to offer a customer based on their transaction history..."></textarea>
-          <button class="btn-primary" id="simRun"><svg class="icon sm" viewBox="0 0 18 18" style="color:#fff;"><path d="M9 2 L15.5 4.5 V9 C15.5 13 12.5 16 9 17 C5.5 16 2.5 13 2.5 9 V4.5 Z"/><polyline points="6,9 8.2,11.2 12,7"/></svg>Classify feature</button>
+
+          <label class="field-label" for="simDesc">feature_description</label>
+          <textarea id="simDesc" placeholder="e.g. an agent that recommends the next product to offer a customer based on their transaction history..."></textarea>
+
+          <label class="field-label">data_sources touched</label>
+          <p class="field-hint">Select every data source this feature reads from. None selected means no customer data is touched.</p>
+          <div class="chip-row" id="dataSourceChips">
+            <button class="chip toggle" type="button" data-src="transaction_history">transaction_history</button>
+            <button class="chip toggle" type="button" data-src="credit_bureau_summary">credit_bureau_summary</button>
+            <button class="chip toggle" type="button" data-src="product_catalog">product_catalog</button>
+            <button class="chip toggle" type="button" data-src="application_data">application_data</button>
+            <button class="chip toggle" type="button" data-src="device_signal">device_signal</button>
+            <button class="chip toggle" type="button" data-src="support_ticket_history">support_ticket_history</button>
+            <button class="chip toggle" type="button" data-src="customer_segment">customer_segment</button>
+          </div>
+
+          <div class="field-toggle-row">
+            <div>
+              <label class="field-label" style="margin:0;">customer_facing</label>
+              <p class="field-hint" style="margin:2px 0 0;">Does a customer directly see this feature's output?</p>
+            </div>
+            <div class="btn-toggle-group" id="customerFacingToggle" role="group">
+              <button type="button" class="btn-toggle" data-val="false" aria-pressed="true">No</button>
+              <button type="button" class="btn-toggle" data-val="true" aria-pressed="false">Yes</button>
+            </div>
+          </div>
+
+          <div class="field-toggle-row">
+            <div>
+              <label class="field-label" style="margin:0;">credit_or_account_decision</label>
+              <p class="field-hint" style="margin:2px 0 0;">Does this influence a credit, lending, or account-standing decision?</p>
+            </div>
+            <div class="btn-toggle-group" id="creditToggle" role="group">
+              <button type="button" class="btn-toggle" data-val="false" aria-pressed="true">No</button>
+              <button type="button" class="btn-toggle warn" data-val="true" aria-pressed="false">Yes</button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary" id="simRun"><svg class="icon sm" viewBox="0 0 18 18" style="color:#fff;"><path d="M9 2 L15.5 4.5 V9 C15.5 13 12.5 16 9 17 C5.5 16 2.5 13 2.5 9 V4.5 Z"/><polyline points="6,9 8.2,11.2 12,7"/></svg>POST /v1/classify</button>
 
           <div class="sim-history" id="simHistoryWrap" hidden>
             <div class="sim-path-label">This session</div>
             <div id="simHistory"></div>
           </div>
-        </div>
+        </form>
 
         <div class="card card-pad sim-result" id="simResult">
-          <div class="sim-empty">Pick an example or describe a feature, then classify it to see the tier, reasoning, and required review path.</div>
+          <div class="sim-empty">Fill in the request payload, then submit it to see the tier, reasoning, and required review path &mdash; and the record it creates in Feature Requests.</div>
         </div>
       </div>
 
       <section class="block" style="margin-top:26px;">
         <h2 class="section-title">The three tiers</h2>
-        <p class="section-dek">Ambiguous input and classifier downtime both default to Tier 2 &mdash; never silently to Tier 1. That fail-safe is a named requirement in the PRD's AI Behavior Contract, not an implementation detail.</p>
+        <p class="section-dek">The tier is a deterministic function of two fields: whether it touches a credit/account decision, and whether it touches any customer data source. A classifier outage still defaults every in-flight request to Tier 2, never silently to Tier 1 &mdash; a named requirement in the PRD's AI Behavior Contract, not an implementation detail.</p>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Tier</th><th>Risk</th><th>Review path</th><th>Example</th></tr></thead>
+            <thead><tr><th>Tier</th><th>Rule</th><th>Review path</th><th>Example</th></tr></thead>
             <tbody>
-              <tr><td><span class="badge rice-high">Tier 1</span></td><td class="wrap">Low &mdash; no customer-data-driven decisioning</td><td class="wrap">Automated policy check, no human review</td><td class="wrap">Content copy variants, translations</td></tr>
-              <tr><td><span class="badge rice-mid">Tier 2</span></td><td class="wrap">Medium &mdash; uses customer data to personalize</td><td class="wrap">Automated check + logged, periodic human spot-check</td><td class="wrap">Next-best-action messaging</td></tr>
-              <tr><td><span class="badge rice-low">Tier 3</span></td><td class="wrap">High &mdash; influences credit/account decisions</td><td class="wrap">Full human-in-the-loop, routed to MRGR</td><td class="wrap">Credit decision narratives</td></tr>
+              <tr><td><span class="badge rice-high">Tier 1</span></td><td class="wrap"><code class="inline">credit_or_account_decision=false</code> and <code class="inline">data_sources=[]</code></td><td class="wrap">Automated policy check, no human review</td><td class="wrap">Content copy variants, translations</td></tr>
+              <tr><td><span class="badge rice-mid">Tier 2</span></td><td class="wrap"><code class="inline">credit_or_account_decision=false</code> and <code class="inline">data_sources.length&gt;0</code></td><td class="wrap">Automated check + logged, periodic human spot-check</td><td class="wrap">Next-best-action messaging</td></tr>
+              <tr><td><span class="badge rice-low">Tier 3</span></td><td class="wrap"><code class="inline">credit_or_account_decision=true</code></td><td class="wrap">Full human-in-the-loop, routed to MRGR</td><td class="wrap">Credit decision narratives</td></tr>
             </tbody>
           </table>
         </div>
       </section>
+    </section>
+
+    <!-- FEATURE REQUESTS -->
+    <section class="panel" id="panel-requests" hidden>
+      <div class="page-header">
+        <div class="page-header-text">
+          <h1 class="page-title">Feature Requests</h1>
+          <p class="page-dek">Every feature classified through this platform, across all three tiers, with the exact input data captured at submission time. MRGR Queue is the Tier 3 subset of this same registry, not a separate system.</p>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar-search">
+          <svg class="icon sm" viewBox="0 0 18 18"><circle cx="8" cy="8" r="5.5"/><line x1="12.2" y1="12.2" x2="16.5" y2="16.5"/></svg>
+          <input type="text" id="requestsSearch" placeholder="Search feature or ID…" autocomplete="off">
+        </div>
+        <button class="filter-chip" data-rtier="all" aria-pressed="true">All tiers</button>
+        <button class="filter-chip" data-rtier="1">Tier 1</button>
+        <button class="filter-chip" data-rtier="2">Tier 2</button>
+        <button class="filter-chip" data-rtier="3">Tier 3</button>
+        <div class="toolbar-spacer"></div>
+        <span class="toolbar-count" id="requestsCount"></span>
+      </div>
+
+      <div class="table-wrap">
+        <table id="requestsTable">
+          <thead><tr><th>ID</th><th>Feature description</th><th>Data sources</th><th>Cust.-facing</th><th>Credit/acct</th><th>Tier</th><th>Status</th></tr></thead>
+          <tbody id="requestsBody"></tbody>
+        </table>
+      </div>
+
+      <div class="callout info" style="margin-top:18px;"><b>Why this exists:</b> a governance layer that only shows Tier 3 escalations can't answer "is Tier 1 actually staying automated, or is everything drifting into manual review?" This registry is the full picture &mdash; every submission, every tier, with the raw fields the classifier actually used.</div>
     </section>
 
     <!-- MRGR QUEUE -->
@@ -1077,7 +1091,7 @@
 
       <div class="table-wrap">
         <table id="queueTable">
-          <thead><tr><th>ID</th><th>Feature</th><th>Market</th><th>Submitted</th><th>SLA</th><th>Status</th></tr></thead>
+          <thead><tr><th>ID</th><th>Feature</th><th>Market</th><th>Submitted</th><th>SLA</th><th>Status</th><th>Action</th></tr></thead>
           <tbody id="queueBody"></tbody>
         </table>
       </div>
@@ -1114,6 +1128,17 @@
               <tr><td class="wrap"><b>Tier 1 review cycle time</b></td><td><span class="badge rice-high">Guardrail</span></td><td class="wrap">Automated review staying genuinely fast as volume grows</td></tr>
               <tr><td class="wrap"><b>Tier 3 audit completeness</b></td><td><span class="badge rice-low">Kill-switch</span></td><td class="wrap">Any incomplete audit record triggers an immediate rollback, no exceptions</td></tr>
             </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2 class="section-title">Recent classifications</h2>
+        <p class="section-dek">The raw input fields behind the aggregate numbers above &mdash; every metric on this page is computed from records like these. Full registry in <a href="#" data-goto="requests">Feature Requests</a>.</p>
+        <div class="table-wrap">
+          <table id="recentClassTable">
+            <thead><tr><th>ID</th><th>Feature description</th><th>Data sources</th><th>Cust.-facing</th><th>Credit/acct</th><th>Tier</th><th>Status</th></tr></thead>
+            <tbody id="recentClassBody"></tbody>
           </table>
         </div>
       </section>
@@ -1293,7 +1318,7 @@
   var tabs = document.querySelectorAll('.nav-item[role="tab"]');
   var panels = document.querySelectorAll('.panel');
   var crumb = document.getElementById('crumbLabel');
-  var labels = { overview: 'Overview', architecture: 'Architecture', roadmap: 'Roadmap · RICE', governance: 'Governance Simulator', queue: 'MRGR Queue', metrics: 'Metrics', markets: 'Market Status', settings: 'Settings & API' };
+  var labels = { overview: 'Overview', architecture: 'Architecture', governance: 'Classify a Feature', requests: 'Feature Requests', queue: 'MRGR Queue', metrics: 'Metrics', markets: 'Market Status', settings: 'Settings & API' };
   function showTab(name) {
     tabs.forEach(function (t) { t.setAttribute('aria-selected', t.getAttribute('data-tab') === name ? 'true' : 'false'); });
     panels.forEach(function (p) { p.hidden = p.id !== ('panel-' + name); });
@@ -1329,12 +1354,11 @@
     { label: 'Platform at a glance (KPIs)', tab: 'overview', tag: 'Strategy' },
     { label: 'Architecture diagram', tab: 'architecture', tag: 'Strategy' },
     { label: 'API reference', tab: 'architecture', tag: 'Docs' },
-    { label: 'Roadmap · RICE prioritization', tab: 'roadmap', tag: 'Strategy' },
-    { label: 'Delivery cadence', tab: 'roadmap', tag: 'Strategy' },
-    { label: 'Governance Simulator', tab: 'governance', tag: 'Operate' },
     { label: 'Classify a feature', tab: 'governance', tag: 'Operate' },
+    { label: 'Feature Requests registry', tab: 'requests', tag: 'Operate' },
     { label: 'MRGR Escalation Queue', tab: 'queue', tag: 'Operate' },
     { label: 'Metrics', tab: 'metrics', tag: 'Operate' },
+    { label: 'Recent classifications', tab: 'metrics', tag: 'Operate' },
     { label: 'Market Status — UK', tab: 'markets', tag: 'Operate' },
     { label: 'Market Status — Germany', tab: 'markets', tag: 'Operate' },
     { label: 'Settings & API keys', tab: 'settings', tag: 'Admin' },
@@ -1394,74 +1418,216 @@
     toast('API base URL copied to clipboard (illustrative).');
   });
 
-  // ---------- RICE table ----------
-  var rice = [
-    { name: 'Tiering layer + Tier 1 automated (Phase 1)', note: 'Foundation — ships alone, validated directly with MRGR before anything bigger is built.', reach: 10, impact: 3, confidence: 0.7, effort: 3 },
-    { name: 'MRGR escalation validation', note: 'Highest-leverage unknown in the whole platform — confirms whether MRGR accepts the routing at all.', reach: 1, impact: 3, confidence: 0.4, effort: 1 },
-    { name: 'Tier 2/3 full governance + CDP/CMS decision (Phase 2)', note: 'Conditional on Phase 1 passing — not committed yet.', reach: 3, impact: 2, confidence: 0.55, effort: 5 },
-    { name: 'Germany market onboarding', note: 'Lowest RICE, still the most visible milestone — sequencing vs. UK-first is an open question.', reach: 1, impact: 3, confidence: 0.5, effort: 4 }
-  ];
-  rice.forEach(function (r) { r.rice = (r.reach * r.impact * r.confidence) / r.effort; });
+  // ==========================================================
+  // Shared data model: Feature Requests
+  // Every classification (Governance Simulator submit, or seed data)
+  // is a record here. MRGR Queue and Metrics' "Recent classifications"
+  // are both views over this single array, not separate stores.
+  // ==========================================================
+  var nextReqNum = 3050;
+  function newReqId() { nextReqNum += 1; return 'FR-' + nextReqNum; }
 
-  function riceBadge(v) {
-    var cls = v >= 2 ? 'rice-high' : v >= 0.8 ? 'rice-mid' : 'rice-low';
-    return '<span class="badge ' + cls + '">' + v.toFixed(2) + '</span>';
+  var featureRequests = [
+    { id: 'FR-3001', description: 'Marketing copy A/B variant generation for email subject lines', dataSources: [], customerFacing: true, creditOrAccountDecision: false, market: 'UK', submittedBy: 'm.osei@icb', submittedAt: '2026-08-09 10:12', tier: 1, status: 'auto_approved', reasoning: 'No data sources touched and no credit/account decision — lowest risk category. Automated policy check clears it, no escalation.', auditRef: 'aud_9b02a1' },
+    { id: 'FR-3006', description: 'Automated translation of support help-center articles', dataSources: [], customerFacing: true, creditOrAccountDecision: false, market: 'Germany', submittedBy: 'l.hartmann@icb', submittedAt: '2026-08-10 14:03', tier: 1, status: 'auto_approved', reasoning: 'No customer data sources touched — content-only generation. Automated policy check clears it, no escalation.', auditRef: 'aud_9b14f2' },
+    { id: 'FR-3011', description: 'Tone and wording adjustment for push notification copy', dataSources: [], customerFacing: true, creditOrAccountDecision: false, market: 'UK', submittedBy: 'r.khan@icb', submittedAt: '2026-08-11 09:47', tier: 1, status: 'auto_approved', reasoning: 'No customer data sources touched. Automated policy check clears it, no escalation.', auditRef: 'aud_9b21c4' },
+
+    { id: 'FR-3018', description: 'Personalized next-best-action messaging using purchase history', dataSources: ['transaction_history', 'product_catalog'], customerFacing: true, creditOrAccountDecision: false, market: 'UK', submittedBy: 'j.reyes@icb', submittedAt: '2026-08-12 08:30', tier: 2, status: 'auto_approved_sampled', reasoning: 'Uses transaction_history, product_catalog to shape a customer-facing surface, but doesn’t touch a credit/account decision. Automated check + logged for periodic spot-check.', auditRef: 'aud_9b45e7' },
+    { id: 'FR-3022', description: 'Chatbot response drafting for support agents', dataSources: ['support_ticket_history'], customerFacing: false, creditOrAccountDecision: false, market: 'Germany', submittedBy: 'l.hartmann@icb', submittedAt: '2026-08-13 13:20', tier: 2, status: 'auto_approved_sampled', reasoning: 'Uses support_ticket_history to draft agent-facing suggestions. Not directly customer-facing, but touches customer data — automated check + logged for periodic spot-check.', auditRef: 'aud_9b58a0' },
+    { id: 'FR-3027', description: 'Fraud-risk narrative for card dispute review (advisory only)', dataSources: ['device_signal', 'customer_segment'], customerFacing: false, creditOrAccountDecision: false, market: 'Germany', submittedBy: 'l.hartmann@icb', submittedAt: '2026-08-14 16:40', tier: 2, status: 'auto_approved_sampled', reasoning: 'Uses device_signal, customer_segment for an advisory narrative that doesn’t itself decide account standing. Automated check + logged for periodic spot-check.', auditRef: 'aud_9c11a7' },
+
+    { id: 'FR-3033', description: 'AI-assisted credit line increase narrative', dataSources: ['transaction_history', 'credit_bureau_summary'], customerFacing: true, creditOrAccountDecision: true, market: 'UK', submittedBy: 'j.reyes@icb', submittedAt: '2026-08-15 09:14', tier: 3, status: 'pending', reasoning: 'credit_or_account_decision = true — the highest-consequence category by definition. No automated path permitted under the AI Behavior Contract; routed to MRGR’s existing review process.', auditRef: 'aud_9c14e2', slaHrs: 48, slaUsed: 0.82 },
+    { id: 'FR-3037', description: 'Underwriting risk-score explanation for a declined application', dataSources: ['credit_bureau_summary', 'application_data'], customerFacing: true, creditOrAccountDecision: true, market: 'Germany', submittedBy: 'l.hartmann@icb', submittedAt: '2026-08-14 16:40', tier: 3, status: 'pending', reasoning: 'credit_or_account_decision = true — explains a declined-application outcome, an account-standing decision even though framed as advisory. Routed to MRGR.', auditRef: 'aud_9c11b3', slaHrs: 48, slaUsed: 0.35 },
+    { id: 'FR-3021', description: 'Adverse-action explanation drafting', dataSources: ['application_data'], customerFacing: true, creditOrAccountDecision: true, market: 'UK', submittedBy: 'r.khan@icb', submittedAt: '2026-08-12 11:02', tier: 3, status: 'approved', reasoning: 'credit_or_account_decision = true — ECOA/Reg B relevant category, routed to full MRGR review by design, no automated path.', auditRef: 'aud_9b88f0', slaHrs: 48, slaUsed: 1 },
+    { id: 'FR-3016', description: 'Interest-rate offer personalization copy', dataSources: ['customer_segment'], customerFacing: true, creditOrAccountDecision: true, market: 'UK', submittedBy: 'm.osei@icb', submittedAt: '2026-08-10 08:55', tier: 3, status: 'rejected', reasoning: 'credit_or_account_decision = true on a rate-setting feature. MRGR rejected: feature redesigned to remove rate-setting logic from the AI-generated component before resubmission.', auditRef: 'aud_9b41d3', slaHrs: 48, slaUsed: 1 }
+  ];
+
+  function tier3Requests() { return featureRequests.filter(function (r) { return r.tier === 3; }); }
+
+  function tierBadge(t) {
+    var cls = t === 1 ? 'rice-high' : t === 3 ? 'rice-low' : 'rice-mid';
+    return '<span class="badge ' + cls + '">Tier ' + t + '</span>';
   }
-  function renderRice(list) {
-    var body = document.getElementById('riceBody');
+  function statusBadge(s) {
+    if (s === 'pending') return '<span class="badge rice-mid">Pending</span>';
+    if (s === 'approved') return '<span class="badge rice-high">Approved</span>';
+    if (s === 'rejected') return '<span class="badge rice-low">Rejected</span>';
+    if (s === 'auto_approved') return '<span class="badge rice-high">Auto-approved</span>';
+    if (s === 'auto_approved_sampled') return '<span class="badge rice-mid">Auto-approved &middot; sampled</span>';
+    return '<span class="badge neutral">' + s + '</span>';
+  }
+  function boolBadge(v, risky) {
+    if (!v) return '<span style="color:var(--ink-faint);">No</span>';
+    return risky ? '<span class="badge rice-low">Yes</span>' : '<span style="color:var(--ink);font-weight:700;">Yes</span>';
+  }
+  function slaColor(used) {
+    if (used >= 1) return 'var(--ink-faint)';
+    if (used >= 0.8) return 'var(--crit)';
+    if (used >= 0.5) return 'var(--warn)';
+    return 'var(--good)';
+  }
+
+  // ---------- Feature Requests registry ----------
+  var reqFilterTier = 'all', reqFilterText = '';
+  function filteredRequests() {
+    return featureRequests.filter(function (r) {
+      if (reqFilterTier !== 'all' && String(r.tier) !== reqFilterTier) return false;
+      if (reqFilterText) {
+        var t = reqFilterText.toLowerCase();
+        if (r.description.toLowerCase().indexOf(t) === -1 && r.id.toLowerCase().indexOf(t) === -1) return false;
+      }
+      return true;
+    });
+  }
+  function renderRequests() {
+    var body = document.getElementById('requestsBody');
+    if (!body) return;
+    document.getElementById('requestsBadge').textContent = featureRequests.length;
+    var list = filteredRequests();
+    document.getElementById('requestsCount').textContent = list.length + ' of ' + featureRequests.length + ' requests';
+    if (!list.length) { body.innerHTML = '<tr><td colspan="7" class="row-empty">No feature requests match this filter.</td></tr>'; return; }
     body.innerHTML = list.map(function (r) {
-      return '<tr><td><b>' + r.name + '</b><div class="wrap" style="white-space:normal;font-size:11.5px;">' + r.note + '</div></td>' +
-        '<td class="num">' + r.reach + '</td><td class="num">' + r.impact + '</td>' +
-        '<td class="num">' + Math.round(r.confidence * 100) + '%</td><td class="num">' + r.effort + '</td>' +
-        '<td class="num">' + riceBadge(r.rice) + '</td></tr>';
+      return '<tr><td class="mono">' + r.id + '</td><td class="wrap">' + r.description + '</td>' +
+        '<td class="wrap" style="font-family:var(--mono);font-size:11px;">' + (r.dataSources.length ? r.dataSources.join(', ') : '—') + '</td>' +
+        '<td>' + boolBadge(r.customerFacing, false) + '</td>' +
+        '<td>' + boolBadge(r.creditOrAccountDecision, true) + '</td>' +
+        '<td>' + tierBadge(r.tier) + '</td>' +
+        '<td>' + statusBadge(r.status) + '</td></tr>';
     }).join('');
   }
-  renderRice(rice.slice().sort(function (a, b) { return b.rice - a.rice; }));
-
-  var sortKey = 'rice', sortDir = -1;
-  document.querySelectorAll('#riceTable thead th').forEach(function (th) {
-    th.addEventListener('click', function () {
-      var key = th.getAttribute('data-key');
-      sortDir = (key === sortKey) ? -sortDir : (key === 'name' ? 1 : -1);
-      sortKey = key;
-      document.querySelectorAll('#riceTable thead th').forEach(function (x) { x.classList.remove('sorted'); });
-      th.classList.add('sorted');
-      var sorted = rice.slice().sort(function (a, b) {
-        var av = key === 'rice' ? a.rice : a[key], bv = key === 'rice' ? b.rice : b[key];
-        if (typeof av === 'string') return sortDir * av.localeCompare(bv);
-        return sortDir * (av - bv);
-      });
-      renderRice(sorted);
+  document.querySelectorAll('.filter-chip[data-rtier]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.filter-chip[data-rtier]').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      reqFilterTier = b.getAttribute('data-rtier');
+      renderRequests();
     });
   });
+  var requestsSearchEl = document.getElementById('requestsSearch');
+  if (requestsSearchEl) requestsSearchEl.addEventListener('input', function () { reqFilterText = requestsSearchEl.value; renderRequests(); });
 
-  // ---------- Governance simulator ----------
-  var rules = [
-    { tier: 3, cls: 't3', label: 'Tier 3 — Full human-in-the-loop', keywords: ['credit', 'underwrit', 'loan decision', 'adverse action', 'account clos', 'interest rate', 'risk score'],
-      reason: 'This touches a credit, account, or lending decision — the highest-consequence category. It escalates into MRGR’s existing review process rather than the platform inventing new controls for it.',
-      dest: 'Routes to: MRGR Escalation Queue — see the MRGR Queue tab for what a reviewer sees.',
-      steps: ['Feature submitted with full documentation', 'Escalation package (request + reasoning + audit trail) sent to MRGR queue', 'Human sign-off required before any customer exposure', 'Ongoing monitoring under MRGR’s standard cadence'] },
-    { tier: 2, cls: 't2', label: 'Tier 2 — Policy enforcement + logged spot-check', keywords: ['personaliz', 'next-best-action', 'recommend', 'nudge', 'chatbot', 'support agent', 'customer history', 'transaction history'],
-      reason: 'This uses customer data to shape what an individual sees or is told, but doesn’t make a credit/account decision. Platform policy enforces guardrails automatically; a human spot-checks a sample on a fixed cadence.',
-      dest: 'Routes to: automated approval, logged to Audit Trail Store for periodic sampling.',
-      steps: ['Feature checked against platform policy rules automatically', 'Approved to ship immediately, logging enabled', 'Compliance spot-checks a sample of outputs weekly', 'Escalates to Tier 3 review if drift or complaints appear'] },
-    { tier: 1, cls: 't1', label: 'Tier 1 — Automated policy check', keywords: ['copy variant', 'content', 'subject line', 'translat', 'a/b', 'tone', 'wording'],
-      reason: 'This is content generation without customer-data-driven decisioning — lowest risk category. An automated check confirms it meets brand/compliance policy; no human review blocks shipping.',
-      dest: 'Routes to: automated approval, no escalation.',
-      steps: ['Feature checked against automated policy rules', 'Ships immediately if checks pass', 'Sampled in periodic audits, not gated pre-launch'] }
-  ];
-  var fallback = { tier: 2, cls: 't2', label: 'Tier 2 — Policy enforcement + logged spot-check (default)', reason: 'The description didn’t clearly match a known pattern, so the engine defaults to the middle tier rather than guessing. A human reviewer confirms the correct tier before this ships — this is a named requirement, not a gap.',
-    dest: 'Routes to: automated approval pending human tier confirmation.',
-    steps: ['Feature flagged as unclassified by automated rules', 'Routed to a human reviewer for manual tiering', 'Treated as Tier 2 pending that review, not shipped un-reviewed'] };
-
-  function classify(text) {
-    var t = text.toLowerCase();
-    for (var i = 0; i < rules.length; i++) {
-      for (var j = 0; j < rules[i].keywords.length; j++) {
-        if (t.indexOf(rules[i].keywords[j]) !== -1) return rules[i];
+  // ---------- MRGR Queue (Tier 3 subset of Feature Requests, ID-keyed) ----------
+  var queueFilterStatus = 'all', queueFilterText = '';
+  function filteredQueue() {
+    return tier3Requests().filter(function (q) {
+      if (queueFilterStatus !== 'all' && q.status !== queueFilterStatus) return false;
+      if (queueFilterText) {
+        var t = queueFilterText.toLowerCase();
+        if (q.description.toLowerCase().indexOf(t) === -1 && q.id.toLowerCase().indexOf(t) === -1) return false;
       }
-    }
-    return fallback;
+      return true;
+    });
+  }
+  function renderQueue() {
+    var body = document.getElementById('queueBody');
+    if (!body) return;
+    var pendingCount = tier3Requests().filter(function (q) { return q.status === 'pending'; }).length;
+    document.getElementById('queueBadge').textContent = pendingCount;
+    var list = filteredQueue();
+    document.getElementById('queueCount').textContent = list.length + ' of ' + tier3Requests().length + ' escalations';
+    if (!list.length) { body.innerHTML = '<tr><td colspan="7" class="row-empty">No escalations match this filter.</td></tr>'; return; }
+    body.innerHTML = list.map(function (q) {
+      var slaLabel = q.slaUsed >= 1 ? 'Closed' : Math.round((1 - q.slaUsed) * q.slaHrs) + 'h left';
+      var actionCell = q.status === 'pending'
+        ? '<div style="display:flex;gap:6px;"><button class="btn-toggle req-act" data-act="approve" data-id="' + q.id + '" style="padding:4px 10px;font-size:11px;">Approve</button><button class="btn-toggle warn req-act" data-act="reject" data-id="' + q.id + '" style="padding:4px 10px;font-size:11px;">Reject</button></div>'
+        : '<span style="color:var(--ink-faint);font-size:11.5px;">&mdash;</span>';
+      var main = '<tr class="clickable" data-id="' + q.id + '">' +
+        '<td class="num" style="text-align:left;font-family:var(--mono);">' + q.id + '</td>' +
+        '<td class="wrap">' + q.description + '</td>' +
+        '<td>' + q.market + '</td>' +
+        '<td style="font-family:var(--mono);font-size:11.5px;">' + q.submittedAt + '</td>' +
+        '<td><span class="sla-bar"><span class="sla-bar-fill" style="width:' + Math.round(q.slaUsed * 100) + '%;background:' + slaColor(q.slaUsed) + ';"></span></span>' + slaLabel + '</td>' +
+        '<td>' + statusBadge(q.status) + '</td>' +
+        '<td>' + actionCell + '</td></tr>';
+      var detail = '<tr class="queue-row-detail" id="qdetail-' + q.id + '"><td colspan="7" class="queue-detail-pad">' +
+        '<div class="queue-detail-grid">' +
+        '<div><div class="qd-label">Classifier reasoning</div><div class="qd-val">' + q.reasoning + '</div></div>' +
+        '<div><div class="qd-label">Data sources used</div><div class="qd-val" style="font-family:var(--mono);font-size:11.5px;">' + (q.dataSources.length ? q.dataSources.join(', ') : '—') + '</div></div>' +
+        '<div><div class="qd-label">Customer-facing / credit-account decision</div><div class="qd-val">' + (q.customerFacing ? 'Yes' : 'No') + ' / ' + (q.creditOrAccountDecision ? 'Yes' : 'No') + '</div></div>' +
+        '<div><div class="qd-label">Audit reference</div><div class="qd-val" style="font-family:var(--mono);">' + q.auditRef + '</div></div>' +
+        '</div></td></tr>';
+      return main + detail;
+    }).join('');
+    document.querySelectorAll('#queueBody tr.clickable').forEach(function (row) {
+      row.addEventListener('click', function () {
+        var id = row.getAttribute('data-id');
+        var d = document.getElementById('qdetail-' + id);
+        if (d) d.classList.toggle('open');
+      });
+    });
+    document.querySelectorAll('#queueBody button.req-act').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var id = btn.getAttribute('data-id');
+        var act = btn.getAttribute('data-act');
+        var rec = featureRequests.filter(function (r) { return r.id === id; })[0];
+        if (!rec) return;
+        rec.status = act === 'approve' ? 'approved' : 'rejected';
+        rec.slaUsed = 1;
+        toast((act === 'approve' ? 'Approved ' : 'Rejected ') + id + ' — MRGR decision recorded (illustrative).');
+        renderQueue();
+        renderRequests();
+        renderRecentClassifications();
+        renderRecentActivity();
+      });
+    });
+  }
+  document.querySelectorAll('.filter-chip[data-qstatus]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.filter-chip[data-qstatus]').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      queueFilterStatus = b.getAttribute('data-qstatus');
+      renderQueue();
+    });
+  });
+  var queueSearchEl = document.getElementById('queueSearch');
+  if (queueSearchEl) queueSearchEl.addEventListener('input', function () { queueFilterText = queueSearchEl.value; renderQueue(); });
+
+  // ---------- Governance Simulator: structured intake ----------
+  var dataSourceState = {};
+  document.querySelectorAll('#dataSourceChips .chip.toggle').forEach(function (c) {
+    var src = c.getAttribute('data-src');
+    dataSourceState[src] = false;
+    c.addEventListener('click', function () {
+      dataSourceState[src] = !dataSourceState[src];
+      c.setAttribute('aria-pressed', dataSourceState[src] ? 'true' : 'false');
+    });
+  });
+  var customerFacingVal = false, creditVal = false;
+  function wireToggleGroup(id, onChange) {
+    var group = document.getElementById(id);
+    group.querySelectorAll('.btn-toggle').forEach(function (b) {
+      b.addEventListener('click', function () {
+        group.querySelectorAll('.btn-toggle').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+        b.setAttribute('aria-pressed', 'true');
+        onChange(b.getAttribute('data-val') === 'true');
+      });
+    });
+  }
+  wireToggleGroup('customerFacingToggle', function (v) { customerFacingVal = v; });
+  wireToggleGroup('creditToggle', function (v) { creditVal = v; });
+
+  function evaluateTier(input) {
+    if (input.creditOrAccountDecision) return 3;
+    if (input.dataSources.length > 0) return 2;
+    return 1;
+  }
+  function reasonFor(tier, input) {
+    if (tier === 3) return 'credit_or_account_decision = true — the highest-consequence category by definition. No automated path permitted under the AI Behavior Contract; routed to MRGR’s existing review process.';
+    if (tier === 2) return 'Uses ' + input.dataSources.join(', ') + ' to shape ' + (input.customerFacing ? 'a customer-facing' : 'an internal') + ' surface, but doesn’t touch a credit/account decision. Automated check + logged for periodic spot-check.';
+    return 'No data sources touched and no credit/account decision — lowest risk category. Automated policy check clears it, no escalation.';
+  }
+  function stepsFor(tier) {
+    if (tier === 3) return ['Feature submitted with full documentation', 'Escalation package (request + reasoning + audit trail) sent to MRGR queue', 'Human sign-off required before any customer exposure', 'Ongoing monitoring under MRGR’s standard cadence'];
+    if (tier === 2) return ['Feature checked against platform policy rules automatically', 'Approved to ship immediately, logging enabled', 'Compliance spot-checks a sample of outputs weekly', 'Escalates to Tier 3 review if drift or complaints appear'];
+    return ['Feature checked against automated policy rules', 'Ships immediately if checks pass', 'Sampled in periodic audits, not gated pre-launch'];
+  }
+  function tierLabel(tier) { return tier === 3 ? 'Tier 3 — Full human-in-the-loop' : tier === 2 ? 'Tier 2 — Policy enforcement + logged spot-check' : 'Tier 1 — Automated policy check'; }
+  function tierCls(tier) { return tier === 3 ? 't3' : tier === 2 ? 't2' : 't1'; }
+  function destFor(tier) {
+    if (tier === 3) return 'Routes to: MRGR Escalation Queue — see the MRGR Queue tab for what a reviewer sees.';
+    if (tier === 2) return 'Routes to: automated approval, logged to Audit Trail Store for periodic sampling.';
+    return 'Routes to: automated approval, no escalation.';
   }
 
   var simHistory = [];
@@ -1476,148 +1642,104 @@
     }).join('');
   }
 
-  function renderResult(text) {
-    var r = classify(text);
-    var html = '<div class="tier-badge ' + r.cls + '">' + r.label + '</div>' +
-      '<div class="sim-reason">' + r.reason + '</div>' +
-      '<div class="sim-dest">' + r.dest + '</div>' +
+  var simForm = document.getElementById('simForm');
+  simForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var desc = document.getElementById('simDesc').value.trim();
+    if (!desc) { document.getElementById('simDesc').focus(); toast('feature_description is required.'); return; }
+    var dataSources = Object.keys(dataSourceState).filter(function (k) { return dataSourceState[k]; });
+    var input = { description: desc, dataSources: dataSources, customerFacing: customerFacingVal, creditOrAccountDecision: creditVal };
+    var tier = evaluateTier(input);
+    var reasoning = reasonFor(tier, input);
+    var steps = stepsFor(tier);
+
+    document.getElementById('simResult').innerHTML =
+      '<div class="tier-badge ' + tierCls(tier) + '">' + tierLabel(tier) + '</div>' +
+      '<div class="sim-reason">' + reasoning + '</div>' +
+      '<div class="sim-dest">' + destFor(tier) + '</div>' +
       '<div class="sim-path"><div class="sim-path-label">Review path triggered</div><div class="sim-steps">' +
-      r.steps.map(function (s, i) { return '<div class="sim-step"><span class="num">' + (i + 1) + '</span>' + s + '</div>'; }).join('') +
+      steps.map(function (s, i) { return '<div class="sim-step"><span class="num">' + (i + 1) + '</span>' + s + '</div>'; }).join('') +
       '</div></div>';
-    document.getElementById('simResult').innerHTML = html;
+
     var now = new Date();
     var timeStr = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
-    simHistory.unshift({ text: text.length > 46 ? text.slice(0, 46) + '…' : text, tier: r.tier, time: timeStr });
+    simHistory.unshift({ text: desc.length > 46 ? desc.slice(0, 46) + '…' : desc, tier: tier, time: timeStr });
     renderSimHistory();
-    toast('Classified as Tier ' + r.tier + ' — ' + (r.tier === 3 ? 'routed to MRGR queue.' : 'auto-approved.'));
-  }
 
-  document.getElementById('simRun').addEventListener('click', function () {
-    var v = document.getElementById('simInput').value.trim();
-    if (!v) { document.getElementById('simInput').focus(); return; }
-    renderResult(v);
-  });
-  document.querySelectorAll('#chipRow .chip').forEach(function (c) {
-    c.addEventListener('click', function () {
-      document.getElementById('simInput').value = c.textContent;
-      renderResult(c.textContent);
-    });
+    var rec = {
+      id: newReqId(), description: desc, dataSources: dataSources, customerFacing: customerFacingVal, creditOrAccountDecision: creditVal,
+      market: 'UK', submittedBy: 'you@icb (this session)', submittedAt: now.toISOString().slice(0, 10) + ' ' + timeStr,
+      tier: tier, status: tier === 3 ? 'pending' : (tier === 2 ? 'auto_approved_sampled' : 'auto_approved'),
+      reasoning: reasoning, auditRef: 'aud_' + Math.random().toString(16).slice(2, 8)
+    };
+    if (tier === 3) { rec.slaHrs = 48; rec.slaUsed = 0; }
+    featureRequests.unshift(rec);
+    renderRequests();
+    renderQueue();
+    renderRecentClassifications();
+    renderRecentActivity();
+
+    toast('Classified as Tier ' + tier + ' — ' + (tier === 3 ? 'routed to MRGR queue.' : 'auto-approved.') + ' Added to Feature Requests as ' + rec.id + '.');
   });
 
-  // ---------- MRGR Queue ----------
-  var queue = [
-    {
-      id: 'ESC-2091', feature: 'AI-assisted credit line increase narrative', market: 'UK', submitted: '2026-08-15 09:14', slaHrs: 48, slaUsed: 0.82, status: 'pending',
-      reasoning: 'Classified Tier 3: feature text references "credit line increase," a direct account-decision keyword. No automated path permitted for this category under the AI Behavior Contract.',
-      inputs: 'transaction_history, credit_bureau_summary, account_tenure',
-      auditRef: 'aud_9c14e2'
-    },
-    {
-      id: 'ESC-2088', feature: 'Fraud-risk narrative for card dispute review', market: 'Germany', submitted: '2026-08-14 16:40', slaHrs: 48, slaUsed: 0.35, status: 'pending',
-      reasoning: 'Classified Tier 3: "risk score" pattern matched — output could influence an account-standing decision even though framed as advisory.',
-      inputs: 'dispute_history, merchant_category, device_signal',
-      auditRef: 'aud_9c11a7'
-    },
-    {
-      id: 'ESC-2081', feature: 'Adverse-action explanation drafting', market: 'UK', submitted: '2026-08-12 11:02', slaHrs: 48, slaUsed: 1, status: 'approved',
-      reasoning: 'Classified Tier 3: adverse-action keyword matched directly — ECOA/Reg B relevant category, routed to full MRGR review by design, no automated path.',
-      inputs: 'application_data, decision_factors, regulatory_template',
-      auditRef: 'aud_9b88f0'
-    },
-    {
-      id: 'ESC-2076', feature: 'Interest-rate offer personalization copy', market: 'UK', submitted: '2026-08-10 08:55', slaHrs: 48, slaUsed: 1, status: 'rejected',
-      reasoning: 'Classified Tier 3 on "interest rate" match. MRGR rejected: feature redesigned to remove rate-setting logic from the AI-generated component before resubmission.',
-      inputs: 'rate_tier, customer_segment, campaign_id',
-      auditRef: 'aud_9b41d3'
-    }
+  var presets = [
+    { desc: 'Personalized next-best-action messaging using purchase history', sources: ['transaction_history', 'product_catalog'], customerFacing: true, credit: false },
+    { desc: 'Marketing copy A/B variant generation for email subject lines', sources: [], customerFacing: true, credit: false },
+    { desc: 'AI-assisted credit decision narrative for a declined application', sources: ['credit_bureau_summary', 'application_data'], customerFacing: true, credit: true },
+    { desc: 'Automated translation of support help-center articles', sources: [], customerFacing: true, credit: false },
+    { desc: 'Chatbot response drafting for support agents', sources: ['support_ticket_history'], customerFacing: false, credit: false }
   ];
-
-  function slaColor(used) {
-    if (used >= 1) return 'var(--ink-faint)';
-    if (used >= 0.8) return 'var(--crit)';
-    if (used >= 0.5) return 'var(--warn)';
-    return 'var(--good)';
-  }
-  function statusBadge(s) {
-    if (s === 'pending') return '<span class="badge rice-mid">Pending</span>';
-    if (s === 'approved') return '<span class="badge rice-high">Approved</span>';
-    return '<span class="badge rice-low">Rejected</span>';
-  }
-
-  var queueFilterStatus = 'all', queueFilterText = '';
-  function filteredQueue() {
-    return queue.filter(function (q) {
-      if (queueFilterStatus !== 'all' && q.status !== queueFilterStatus) return false;
-      if (queueFilterText) {
-        var t = queueFilterText.toLowerCase();
-        if (q.feature.toLowerCase().indexOf(t) === -1 && q.id.toLowerCase().indexOf(t) === -1) return false;
-      }
-      return true;
-    });
-  }
-
-  function renderQueue() {
-    var body = document.getElementById('queueBody');
-    var pendingCount = queue.filter(function (q) { return q.status === 'pending'; }).length;
-    document.getElementById('queueBadge').textContent = pendingCount;
-    var list = filteredQueue();
-    document.getElementById('queueCount').textContent = list.length + ' of ' + queue.length + ' escalations';
-    if (!list.length) {
-      body.innerHTML = '<tr><td colspan="6" class="row-empty">No escalations match this filter.</td></tr>';
-      return;
-    }
-    body.innerHTML = list.map(function (q) {
-      var i = queue.indexOf(q);
-      var slaLabel = q.slaUsed >= 1 ? 'Closed' : Math.round((1 - q.slaUsed) * q.slaHrs) + 'h left';
-      var main = '<tr class="clickable" data-idx="' + i + '">' +
-        '<td class="num" style="text-align:left;font-family:var(--mono);">' + q.id + '</td>' +
-        '<td class="wrap">' + q.feature + '</td>' +
-        '<td>' + q.market + '</td>' +
-        '<td style="font-family:var(--mono);font-size:11.5px;">' + q.submitted + '</td>' +
-        '<td><span class="sla-bar"><span class="sla-bar-fill" style="width:' + Math.round(q.slaUsed * 100) + '%;background:' + slaColor(q.slaUsed) + ';"></span></span>' + slaLabel + '</td>' +
-        '<td>' + statusBadge(q.status) + '</td>' +
-        '</tr>';
-      var detail = '<tr class="queue-row-detail" id="detail-' + i + '"><td colspan="6" class="queue-detail-pad">' +
-        '<div class="queue-detail-grid">' +
-        '<div><div class="qd-label">Classifier reasoning</div><div class="qd-val">' + q.reasoning + '</div></div>' +
-        '<div><div class="qd-label">Data inputs used</div><div class="qd-val" style="font-family:var(--mono);font-size:11.5px;">' + q.inputs + '</div></div>' +
-        '<div><div class="qd-label">Audit reference</div><div class="qd-val" style="font-family:var(--mono);">' + q.auditRef + '</div></div>' +
-        '</div></td></tr>';
-      return main + detail;
-    }).join('');
-    document.querySelectorAll('#queueBody tr.clickable').forEach(function (row) {
-      row.addEventListener('click', function () {
-        var idx = row.getAttribute('data-idx');
-        document.getElementById('detail-' + idx).classList.toggle('open');
+  document.querySelectorAll('#chipRow .chip[data-preset]').forEach(function (c) {
+    c.addEventListener('click', function () {
+      var p = presets[Number(c.getAttribute('data-preset'))];
+      document.getElementById('simDesc').value = p.desc;
+      Object.keys(dataSourceState).forEach(function (src) { dataSourceState[src] = p.sources.indexOf(src) !== -1; });
+      document.querySelectorAll('#dataSourceChips .chip.toggle').forEach(function (chip) {
+        var src = chip.getAttribute('data-src');
+        chip.setAttribute('aria-pressed', dataSourceState[src] ? 'true' : 'false');
       });
-    });
-  }
-  renderQueue();
-
-  document.querySelectorAll('.filter-chip[data-qstatus]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      document.querySelectorAll('.filter-chip[data-qstatus]').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
-      b.setAttribute('aria-pressed', 'true');
-      queueFilterStatus = b.getAttribute('data-qstatus');
-      renderQueue();
+      customerFacingVal = p.customerFacing; creditVal = p.credit;
+      document.querySelectorAll('#customerFacingToggle .btn-toggle').forEach(function (b) { b.setAttribute('aria-pressed', ((b.getAttribute('data-val') === 'true') === p.customerFacing) ? 'true' : 'false'); });
+      document.querySelectorAll('#creditToggle .btn-toggle').forEach(function (b) { b.setAttribute('aria-pressed', ((b.getAttribute('data-val') === 'true') === p.credit) ? 'true' : 'false'); });
+      if (simForm.requestSubmit) simForm.requestSubmit(); else document.getElementById('simRun').click();
     });
   });
-  var queueSearchEl = document.getElementById('queueSearch');
-  queueSearchEl.addEventListener('input', function () { queueFilterText = queueSearchEl.value; renderQueue(); });
 
   // ---------- Overview: recent activity ----------
-  (function () {
-    var recent = queue.slice(0, 3);
+  function renderRecentActivity() {
     var wrap = document.getElementById('recentActivity');
+    if (!wrap) return;
+    var recent = featureRequests.slice(0, 3);
     wrap.innerHTML = recent.map(function (q) {
-      return '<div class="settings-row" style="padding:12px 18px;border-bottom:1px solid var(--border);">' +
-        '<div class="settings-row-text"><div class="settings-row-title" style="font-size:12.5px;">' + q.feature + '</div>' +
-        '<div class="settings-row-desc">' + q.market + ' &middot; ' + q.id + ' &middot; ' + q.submitted + '</div></div>' +
-        statusBadge(q.status) + '</div>';
+      return '<div class="settings-row" style="padding:12px 18px;border-bottom:1px solid var(--border);cursor:pointer;">' +
+        '<div class="settings-row-text"><div class="settings-row-title" style="font-size:12.5px;">' + q.description + '</div>' +
+        '<div class="settings-row-desc">' + q.market + ' &middot; ' + q.id + ' &middot; ' + q.submittedAt + '</div></div>' +
+        tierBadge(q.tier) + '</div>';
     }).join('');
-    wrap.querySelectorAll('.settings-row').forEach(function (row) { row.style.cursor = 'pointer'; row.addEventListener('click', function () { showTab('queue'); }); });
+    wrap.querySelectorAll('.settings-row').forEach(function (row) { row.addEventListener('click', function () { showTab('requests'); }); });
     var last = wrap.lastElementChild; if (last) last.style.borderBottom = 'none';
-  })();
+  }
+
+  // ---------- Metrics: recent classifications ----------
+  function renderRecentClassifications() {
+    var body = document.getElementById('recentClassBody');
+    if (!body) return;
+    var recent = featureRequests.slice(0, 6);
+    body.innerHTML = recent.map(function (r) {
+      return '<tr><td class="mono">' + r.id + '</td><td class="wrap">' + r.description + '</td>' +
+        '<td class="wrap" style="font-family:var(--mono);font-size:11px;">' + (r.dataSources.length ? r.dataSources.join(', ') : '—') + '</td>' +
+        '<td>' + boolBadge(r.customerFacing, false) + '</td>' +
+        '<td>' + boolBadge(r.creditOrAccountDecision, true) + '</td>' +
+        '<td>' + tierBadge(r.tier) + '</td>' +
+        '<td>' + statusBadge(r.status) + '</td></tr>';
+    }).join('');
+  }
+
+  renderRequests();
+  renderQueue();
+  renderRecentActivity();
+  renderRecentClassifications();
+
 
   // ---------- Metrics ----------
   var metricSets = {
