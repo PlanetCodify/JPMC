@@ -181,7 +181,7 @@
     <div class="topnav-links">
       <a href="#prototype">Prototype</a>
       <a href="#system">System</a>
-      <a href="#decisions">Decisions</a>
+      <a href="#openq">Open Questions</a>
       <a href="https://github.com/PlanetCodify/JPMC" target="_blank" rel="noopener">Source ↗</a>
     </div>
   </nav>
@@ -189,19 +189,17 @@
   <div class="shell">
     <nav class="railnav" id="railnav" aria-label="Section navigation">
       <a href="#top">Intro</a>
-      <a href="#summary">Summary</a>
+      <a href="#summary">Exec Summary</a>
       <a href="#prototype">Prototype</a>
-      <a href="#context">Context</a>
       <a href="#problem">Problem</a>
-      <a href="#approach">Approach</a>
-      <a href="#outcome">Outcome</a>
-      <a href="#behavior">Behavior</a>
-      <a href="#system">System</a>
-      <a href="#evaluation">Evaluation</a>
-      <a href="#shortfall">Shortfall</a>
-      <a href="#turn">The Turn</a>
-      <a href="#ethics">Ethics</a>
-      <a href="#decisions">Decisions</a>
+      <a href="#solution">Solution</a>
+      <a href="#requirements">Requirements</a>
+      <a href="#system">Architecture</a>
+      <a href="#metrics">Success Metrics</a>
+      <a href="#risks">Risks</a>
+      <a href="#rollout">Rollout Plan</a>
+      <a href="#openq">Open Questions</a>
+      <a href="#assumptions">Assumptions</a>
     </nav>
 
     <main id="top">
@@ -212,9 +210,12 @@
       <div class="tag-row"><b>Regulatory research &middot; governance design &middot; systems architecture &middot; working prototype</b><br>Internal platform &middot; automated gen-AI risk tiering, not a customer-facing product</div>
 
       <section class="sec" id="summary">
-        <h2 class="section-h">Summary</h2>
-        <div class="summary-box">
-          In April 2026 the Federal Reserve excluded generative and agentic AI from formal bank model-risk rules. JPMC already runs a review function scoped to exactly this bank &mdash; Model Risk Governance &amp; Review, ICB &mdash; but its public scope stops at traditional statistical models. <strong>The gap isn't that nobody can govern this. It's that nobody built the way in.</strong> This platform is that door: an automated tiering layer that clears low-risk gen-AI features on its own and escalates the rest into MRGR's real queue, with the reasoning and audit trail already attached.
+        <h2 class="section-h">Executive Summary</h2>
+
+        <div class="kv-list">
+          <div class="kv-item"><div class="kv-key">Problem</div><div class="kv-val">In April 2026 the Federal Reserve excluded generative and agentic AI from formal bank model-risk rules (SR 26-2). JPMC already runs a review function scoped to exactly this bank &mdash; Model Risk Governance &amp; Review, ICB &mdash; but its public scope stops at traditional statistical models. The gap isn't that nobody can govern this. It's that nobody built the way in.</div></div>
+          <div class="kv-item"><div class="kv-key">Proposed solution</div><div class="kv-val">An automated tiering layer that classifies gen-AI and agentic features by risk, clears low-risk ones on its own, and escalates the rest into MRGR's real queue &mdash; with the reasoning and audit trail already attached. Not a new governance function; the missing entry point into one that already exists.</div></div>
+          <div class="kv-item"><div class="kv-key">Business impact</div><div class="kv-val">Closes a live, dated regulatory gap without duplicating MRGR's expertise or regulatory relationships &middot; lets ICB ship gen-AI features at competitive pace against UK peers already live with AI-driven experiences (NatWest's Cora, Lloyds' Envoy) &middot; likely lower build cost than standing up a parallel review function</div></div>
         </div>
 
         <div class="stat-strip">
@@ -223,7 +224,7 @@
           <div class="stat"><div class="stat-val">3</div><div class="stat-label">Independent risk tiers</div></div>
           <div class="stat"><div class="stat-val">Apr 2026</div><div class="stat-label">SR 26-2 &mdash; the gap this closes</div></div>
         </div>
-        <div class="caveat"><b>Every number above is a modelled target from the PRD, not a measured result.</b> This platform hasn't been built or deployed. What's real: the regulation (SR 26-2, verified against federalreserve.gov) and the MRGR job posting. What's modelled: everything with a target attached. See Context below for the full split.</div>
+        <div class="caveat"><b>Every number above is a modelled target from the PRD, not a measured result.</b> This platform hasn't been built or deployed. What's real: the regulation (SR 26-2, verified against federalreserve.gov) and the MRGR job posting. What's modelled: everything with a target attached. See Problem Statement below for the full split.</div>
       </section>
 
       <section class="sec" id="prototype">
@@ -243,37 +244,51 @@
         </div>
       </section>
 
-      <section class="sec" id="context">
-        <h2 class="section-h">Context</h2>
+      <section class="sec" id="problem">
+        <h2 class="section-h">Problem Statement</h2>
         <p>International Consumer Bank is scaling a branchless, digital-only retail model across markets &mdash; UK live since 2021, Germany publicly targeted for 2026. Every new market ships more gen-AI-adjacent features, right as a real regulatory gap opened underneath all of them.</p>
         <p>On April 17, 2026, the Federal Reserve issued SR 26-2, superseding SR 11-7, and explicitly excluded generative and agentic AI from formal model-risk scope for banks over $30B in assets &mdash; JPMC clears that threshold many times over. Separately, a live MRGR job posting scoped to ICB lists only traditional quantitative-model skills: financial math, probability theory, numerical methods. No mention of gen-AI, LLMs, or agentic systems anywhere in it.</p>
         <p class="pullquote">Read together, those two facts say the same thing from opposite directions: the expertise to govern this exists. The entry point doesn't.</p>
+
+        <div class="kv-list">
+          <div class="kv-item"><div class="kv-key">Who</div><div class="kv-val">ICB market launch engineers, JPMC's Model Risk Governance &amp; Review (MRGR) function, and ICB digital banking customers</div></div>
+          <div class="kv-item"><div class="kv-key">Root cause</div><div class="kv-val">The obvious fix &mdash; a new governance function for gen-AI &mdash; is also the wrong one. MRGR already has the regulatory relationships and review discipline this needs; a parallel function would duplicate what's already there and add a second, less-trusted process to maintain.</div></div>
+          <div class="kv-item"><div class="kv-key">Compounding constraint</div><div class="kv-val">Research on comparable internal-platform populations shows <strong>64% of engineers bypass a platform that's slower than building the workaround themselves.</strong> A governance layer that's technically correct but slow to integrate against doesn't get used &mdash; it gets routed around, and the SR 26-2 gap stays exactly as open as before anyone built anything.</div></div>
+          <div class="kv-item"><div class="kv-key">Impact of inaction</div><div class="kv-val">Every gen-AI-adjacent feature ships with no defensible review path by default; UK peers (NatWest, Lloyds) are already live with AI-driven experiences, raising the competitive floor while the gap stays open</div></div>
+        </div>
       </section>
 
-      <section class="sec" id="problem">
-        <h2 class="section-h">Problem</h2>
-        <p>The obvious fix &mdash; stand up a new governance function for gen-AI &mdash; is also the wrong one. MRGR already has the regulatory relationships, the examiner trust, and the review discipline this needs. Building a parallel function next to it doesn't close the gap, it duplicates the exact thing that's already there and adds a second, less-trusted process for the bank to maintain.</p>
-        <p>The harder problem sits one layer down. Research on comparable internal-platform populations shows <strong>64% of engineers bypass a platform that's slower than just building the workaround themselves.</strong> A governance layer that's technically correct but slow to integrate against doesn't get used &mdash; it gets routed around, and the SR 26-2 gap stays exactly as open as it was before anyone built anything.</p>
-      </section>
+      <section class="sec" id="solution">
+        <h2 class="section-h">Solution Overview</h2>
+        <p><strong>What we're building</strong> &mdash; a tiering layer that classifies a gen-AI or agentic feature request into one of three risk tiers and returns the required review path. Tier 1 clears an automated policy check. Tier 2 gets an automated check plus a logged human spot-check. Tier 3 routes into MRGR's existing review workflow, with the classifier's full reasoning and an audit trail attached.</p>
 
-      <section class="sec" id="approach">
-        <h2 class="section-h">Approach</h2>
-        <p>The first version of this platform proposed a full customer data, communications, and CMS build, with AI governance bundled in as one feature inside it. A structured review across engineering, design, executive, legal, research, and skeptic perspectives flagged that as backwards: it bet the largest investment on the least-validated assumption in the whole plan &mdash; whether a governance function even wants standardized tiering routed into it.</p>
-        <p>The rebuild inverts that. Ship the tiering layer alone, first. Validate it against a real, named function &mdash; MRGR &mdash; before any bigger platform investment follows. If MRGR doesn't want the routing, the platform's job shrinks to a much smaller, cheaper build. If it does, everything else has a foundation actually worth building on.</p>
-      </section>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>In scope</th><th>Priority</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td>Tier 1 automated classification</td><td class="mono">P0</td><td>Rules-based classification for low-risk features, no human review needed</td></tr>
+              <tr><td>Integrator experience</td><td class="mono">P0</td><td>Docs, non-production sandbox, clear errors, self-serve status</td></tr>
+              <tr><td>MRGR escalation queue</td><td class="mono">P0</td><td>Queue where Tier 3 features land in MRGR's process with reasoning + audit trail</td></tr>
+              <tr><td>Audit trail data model</td><td class="mono">P0</td><td>Complete Tier 3 record: reasoning, reviewer, timestamp, data inputs</td></tr>
+              <tr><td>Tier 2 policy enforcement</td><td class="mono">P1</td><td>Automated check plus logged human sample review on a fixed cadence</td></tr>
+              <tr><td>Customer data / comms / CMS integration</td><td class="mono">P2</td><td>Deferred to Phase 2+, decided only after the governance layer proves itself</td></tr>
+            </tbody>
+          </table>
+        </div>
 
-      <section class="sec" id="outcome">
-        <h2 class="section-h">Outcome</h2>
-        <p>Still concept-stage &mdash; nothing here has shipped to a real organization. Modelled against the PRD's own targets: a market engineer gets a working classification response in under a business day, MRGR accepts and reviews the majority of what's routed to it, and the platform can't pass its own bar by being fast but going unused &mdash; a 90-day sustained-use check is a required gate before any further investment, not an afterthought metric.</p>
+        <div class="kv-list">
+          <div class="kv-item"><div class="kv-key">Out of scope</div><div class="kv-val">Replacing or competing with MRGR &middot; naming a specific vendor &middot; committing to a Germany launch date &middot; building Tier 3 model-validation from scratch (routes into MRGR's process instead)</div></div>
+          <div class="kv-item"><div class="kv-key">MVP definition</div><div class="kv-val">Success = a market engineer gets a working classification response in under a business day, and MRGR gives a real answer &mdash; not an assumption &mdash; on whether it accepts escalations through this routing</div></div>
+        </div>
       </section>
 
       <div class="sub-hero">
         <h2>How the system actually behaves</h2>
-        <p>The mechanics behind the headline claim &mdash; what the classifier is required to do, how the architecture is structured, what a reviewer actually sees, and where a seven-perspective review found it wrong.</p>
+        <p>The mechanics behind the proposal &mdash; what the classifier is required to do, how the architecture is structured, and what a reviewer actually sees.</p>
       </div>
 
-      <section class="sec" id="behavior">
-        <h2 class="section-h">Behavior Specification</h2>
+      <section class="sec" id="requirements">
+        <h2 class="section-h">Requirements &mdash; Behavior Specification</h2>
         <p><strong>Task</strong> &mdash; classify a gen-AI or agentic feature request into one of three risk tiers and return the required review path, routing Tier 3 into MRGR's real queue rather than a parallel process this platform invents.</p>
 
         <div class="kv-list">
@@ -386,8 +401,8 @@
         <p class="diagram-caption">The one deliberate exception to an otherwise synchronous design: Tier 2 and Tier 3 both write to the same Audit Trail Store, so a rollback decision has one place to check, not two.</p>
       </section>
 
-      <section class="sec" id="evaluation">
-        <h2 class="section-h">Evaluation Strategy</h2>
+      <section class="sec" id="metrics">
+        <h2 class="section-h">Success Metrics</h2>
         <p>Modelled thresholds against the PRD's own targets &mdash; concept-stage projections, not measured production results.</p>
         <div class="tbl-wrap">
           <table>
@@ -403,41 +418,65 @@
         </div>
       </section>
 
-      <section class="sec" id="shortfall">
-        <h2 class="section-h">Where It Fell Short &mdash; Not Just What Passed</h2>
-        <p>A seven-perspective structured review (engineering, design, executive, legal, research, skeptic, customer voice) ran against the first full draft. It found real problems, not just polish notes:</p>
+      <section class="sec" id="risks">
+        <h2 class="section-h">Risks &amp; Mitigations</h2>
+        <p>Surfaced by a seven-perspective structured review (engineering, design, executive, legal, research, skeptic, customer voice) run against the first full draft.</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Risk</th><th>Probability</th><th>Impact</th><th>Mitigation</th></tr></thead>
+            <tbody>
+              <tr><td class="wrap">MRGR doesn't want an automated layer feeding into its process</td><td>Medium</td><td>High</td><td>Validate directly with MRGR in Phase 1; fall back to a lightweight standalone tool if declined</td></tr>
+              <tr><td class="wrap">Engineers bypass the platform because it's slower than a workaround</td><td>Med&ndash;High</td><td>High</td><td>Ship a fast, real integration experience in Phase 1 as a hard gate, not an afterthought</td></tr>
+              <tr><td class="wrap">Classifier's self-routing logic fails a fair-lending review</td><td>Medium</td><td>High</td><td>ECOA/Reg B review required before any build touching credit-adjacent classification</td></tr>
+              <tr><td class="wrap">Primary metric gets gamed by a shallow test integration</td><td>Medium</td><td>Medium</td><td>90-day sustained use added as a co-primary metric, tracked from day one</td></tr>
+              <tr><td class="wrap">MRGR's scope already covers gen-AI, contrary to the one posting this thesis relies on</td><td>Low&ndash;Med</td><td>Low</td><td>Confirm directly with MRGR or CDAO before committing further &mdash; build shrinks to a smaller integration if so</td></tr>
+              <tr><td class="wrap">SR 26-2's gen-AI exclusion gets revised</td><td>Low&ndash;Med</td><td>Medium</td><td>Governance model reviewed on a proposed semi-annual cadence, not treated as permanent</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:28px;"><strong>Compliance &amp; ethics constraints</strong></p>
         <div class="card-list">
-          <div class="fail-card"><b>The primary metric was gameable.</b><span>Time-to-first-integration alone rewards a fast handshake, not sustained use &mdash; a team could hit the target with one throwaway test call and never touch the platform again. Fixed by adding 90-day sustained use as a co-primary metric, specifically so speed can't stand in for adoption.</span></div>
-          <div class="fail-card"><b>The integrator and reviewer experiences were assumed, never designed.</b><span>The whole adoption thesis rested on an integration path that was never actually specified &mdash; no docs, no sandbox, no error handling. Same gap on the reviewer side: nothing described what an MRGR reviewer would actually see. The prototype's MRGR Queue tab exists specifically because this was flagged as missing, not nice-to-have.</span></div>
-          <div class="fail-card"><b>A real liability gap in the classifier's self-routing logic.</b><span>The system decides its own review tier for features that could touch fair lending law (ECOA/Reg B) &mdash; and nothing confirmed the existing model-risk process Tier 3 depends on actually covers gen-AI outputs. Added as an explicit Phase 1 blocker, not a footnote.</span></div>
+          <div class="fail-card"><b>Default-deny, not default-allow.</b><span>Ambiguous classification and classifier downtime both default to Tier 2, never silently to Tier 1 &mdash; the system escalates its own uncertainty rather than hiding it.</span></div>
+          <div class="fail-card"><b>No self-governance on credit decisions.</b><span>The classifier can never auto-approve a feature touching a credit or account decision, under any circumstance. That category always reaches a human, by construction.</span></div>
+          <div class="fail-card"><b>The integrator and reviewer experiences were assumed, never designed &mdash; until the review caught it.</b><span>The adoption thesis rested on an integration path that was never specified. The prototype's MRGR Queue tab and documented sandbox exist specifically because this was flagged as missing, not nice-to-have.</span></div>
         </div>
       </section>
 
-      <div class="turn-block" id="turn">
-        <div class="eyebrow">Failure Analysis &mdash; The Turn</div>
-        <p><strong>What failed</strong> &mdash; the original plan bundled AI governance as one feature inside a full customer data, communications, and CMS platform build.</p>
-        <p><strong>Why</strong> &mdash; that bet the largest, most expensive part of the investment on the single least-validated assumption in the whole thesis: whether a governance function even wants standardized tiering routed into it. If that assumption was wrong, the bigger build would have been wasted underneath it.</p>
-        <p><strong>What changed</strong> &mdash; a direct question ("how much of this already exists at JPMC?") surfaced a real finding: a Model Risk Governance &amp; Review function already exists, scoped to ICB, for traditional models. The platform's entire positioning inverted around that &mdash; from "build new governance" to "build the door into governance that already exists." Phase 1 now ships the tiering layer alone, validated against MRGR directly, before any bigger platform investment follows it.</p>
-      </div>
-
-      <section class="sec" id="ethics">
-        <h2 class="section-h">AI Ethics &amp; Risk</h2>
-        <p>The governance model exists because customers are already weighing this trade-off, whether the bank instruments for it or not. Published research: 64% of consumers want personalization, but only 39% think it's worth the privacy cost. 52% worry AI could mistakenly freeze their account. 62% say they'd lose confidence in their bank after a data breach.</p>
-        <div class="card-list">
-          <div class="fail-card"><b>Default-deny, not default-allow.</b><span>Ambiguous classification and classifier downtime both default to Tier 2, never silently to Tier 1 &mdash; the system is required to escalate its own uncertainty, not hide it.</span></div>
-          <div class="fail-card"><b>No self-governance on credit decisions.</b><span>The classifier can never auto-approve a feature touching a credit or account decision, under any circumstance. That category always reaches a human, by construction, not by policy that could be quietly relaxed.</span></div>
-          <div class="fail-card"><b>Fair-lending review is a gate, not a formality.</b><span>Before the classifier's self-routing logic ships, an ECOA/Reg B review is required &mdash; a system that decides its own jurisdiction over credit-adjacent features is exactly the kind of thing an examiner would probe first.</span></div>
+      <section class="sec" id="rollout">
+        <h2 class="section-h">Rollout Plan</h2>
+        <p>Governance ships standalone in Phase 1, not bundled with a customer data/comms/CMS build &mdash; reversed from the original plan after review found it bet the largest investment on the least-validated assumption in the thesis.</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Phase</th><th>Deliverables</th><th>Gate</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">Phase 1</td><td class="wrap">Tiering layer, Tier 1 automated checks, integrator docs + sandbox, validated directly with MRGR</td><td class="wrap">Time-to-first-integration &lt;1 day, real answer from MRGR on accepting escalations</td></tr>
+              <tr><td class="mono">Phase 2</td><td class="wrap">Tier 2/3 routed into MRGR's real workflow; CDP/CMS integration decision made; UK-vs-Germany sequencing forced to a decision</td><td class="wrap">90-day reuse data reviewed; Legal sign-off on cross-border data handling if platform build proceeds</td></tr>
+              <tr><td class="mono">Phase 3</td><td class="wrap">Full platform build if justified by Phase 1&ndash;2 data; customer-trust dashboard; dedicated consent UX</td><td class="wrap">Reuse and MRGR-acceptance metrics both trending in the right direction</td></tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
-      <section class="sec" id="decisions">
-        <h2 class="section-h">Decisions Log</h2>
+      <section class="sec" id="openq">
+        <h2 class="section-h">Open Questions</h2>
         <div class="kv-list">
-          <div class="kv-item"><div class="kv-key">Open</div><div class="kv-val">Does MRGR's actual scope for ICB already cover gen-AI, contrary to what one job posting suggests? This is checkable, not a guess, for anyone with access to ask &mdash; and it's the single highest-priority question in the whole platform.</div></div>
-          <div class="kv-item"><div class="kv-key">Open</div><div class="kv-val">UK-first or Germany-first sequencing? NatWest's Cora and Lloyds' Envoy are already live in the UK market Chase competes in &mdash; deliberately left unresolved here, not silently decided.</div></div>
-          <div class="kv-item"><div class="kv-key">Decided</div><div class="kv-val">Governance ships standalone in Phase 1, not bundled with a customer data/comms/CMS build &mdash; reversed from the original plan after review.</div></div>
-          <div class="kv-item"><div class="kv-key">Decided</div><div class="kv-val">The platform versions its own API, not the vendor's &mdash; a future CDP/CMS vendor swap happens behind the contract, invisible to integrated teams.</div></div>
-          <div class="kv-item"><div class="kv-key">Decided</div><div class="kv-val">90-day sustained use is a required gate before Phase 2 spend, tracked from day one rather than introduced later.</div></div>
+          <div class="kv-item"><div class="kv-key">01</div><div class="kv-val">Does MRGR's actual scope for ICB already cover gen-AI, contrary to what one job posting suggests? Checkable, not a guess, for anyone with access to ask &mdash; the single highest-priority question in the whole platform.</div></div>
+          <div class="kv-item"><div class="kv-key">02</div><div class="kv-val">Would MRGR want an automated triage layer feeding into its process, or see it as unnecessary?</div></div>
+          <div class="kv-item"><div class="kv-key">03</div><div class="kv-val">Does the existing model-risk process actually have scope to cover gen-AI outputs feeding credit decisions, once Tier 3 routes there?</div></div>
+          <div class="kv-item"><div class="kv-key">04</div><div class="kv-val">UK-first or Germany-first sequencing? NatWest's Cora and Lloyds' Envoy are already live in the UK market Chase competes in &mdash; deliberately left unresolved here, not silently decided.</div></div>
+          <div class="kv-item"><div class="kv-key">05</div><div class="kv-val">Does JPMC's engineering culture (MACH Alliance membership, existing LLM Suite platform) mean the general 64% platform-bypass benchmark doesn't fully transfer here?</div></div>
+          <div class="kv-item"><div class="kv-key">06</div><div class="kv-val">Is there a ValidMind-class tool already inside JPMC's model-risk stack that Tier 3 should call into?</div></div>
+        </div>
+      </section>
+
+      <section class="sec" id="assumptions">
+        <h2 class="section-h">Assumptions Made</h2>
+        <div class="kv-list">
+          <div class="kv-item"><div class="kv-key">01</div><div class="kv-val">MRGR's public job posting accurately reflects its current scope &mdash; one source, not a policy document, and could lag reality</div></div>
+          <div class="kv-item"><div class="kv-key">02</div><div class="kv-val">No existing internal JPMC CDP, CMS, or comms vendor was found publicly &mdash; treated as a genuine unknown, not evidence of absence</div></div>
+          <div class="kv-item"><div class="kv-key">03</div><div class="kv-val">Germany is the likely first pilot market given the active public launch timeline, though UK-first is left as an explicitly open question</div></div>
+          <div class="kv-item"><div class="kv-key">04</div><div class="kv-val">The general 64% platform-bypass adoption statistic is a reasonable prior for JPMC's engineering culture, flagged in Open Questions as possibly not fully transferable</div></div>
         </div>
       </section>
 
