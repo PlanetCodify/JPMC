@@ -1,0 +1,70 @@
+# Research Notes — Public Sources Only
+### For: JPMC Platform Product Manager (VP), International Consumer Bank — PoC grounding doc
+### Compiled: Aug 2026 | Status: Verified public sources only. No insider claims.
+
+---
+
+## 1. JPMorgan Chase LLM Suite (the enterprise gen-AI platform)
+
+- **Scale**: ~230,000+ employees have access; ~200,000 daily active users per some reporting. [The Digital Banker](https://thedigitalbanker.com/jpmorgan-chases-llm-suite-drives-ai-transformation-across-the-enterprise/), [American Banker](https://www.americanbanker.com/news/how-jpmorganchase-democratized-employee-access-to-gen-ai)
+- **Use cases**: 450+ in production (2026 reporting), stated goal of ~1,000 by end of 2026. *Flag: this figure is press-aggregated, not a primary JPMC filing.* [Tearsheet](https://tearsheet.co/artificial-intelligence/jpmorgan-chases-gen-ai-implementation-450-use-cases-and-lessons-learned/), [Forbes](https://www.forbes.com/sites/bernardmarr/2026/07/01/how-jpmorgan-chase-is-building-the-ai-powered-bank-of-the-future/)
+- **What it does**: document drafting/summarization, Excel problem-solving, earnings-transcript research, code generation, fraud detection, contact-center transcript summarization. Built in-house, initially in partnership with OpenAI. [CNBC](https://www.cnbc.com/2024/08/09/jpmorgan-chase-ai-artificial-intelligence-assistant-chatgpt-openai.html)
+- **Governance**: Described only in general terms — "tightly controlled environment that prioritises data protection and regulatory compliance." No public technical detail on model-validation mechanics. [The Digital Banker](https://thedigitalbanker.com/jpmorgan-chases-llm-suite-drives-ai-transformation-across-the-enterprise/)
+- **Business value estimate**: ~$1–1.5B annual, per Co-CEO Daniel Pinto (reported).
+- **⚠️ Gap — do not claim**: No public source ties LLM Suite directly to Chase.com, Chase Mobile, or International Consumer Bank teams. EVEE (a separate, narrower call-center Q&A tool) is the closest documented consumer-facing tie-in.
+- **Relationship to COIN**: COIN (2017) is an earlier, narrow NLP contract-review tool — not an architectural predecessor to LLM Suite. Treat as separate initiatives, don't imply lineage.
+
+## 2. JPMC Digital / CCB Technology Org
+
+- CCB (Consumer & Community Banking) technology led by **Gill Haus, CIO of CCB** — ~$7B annual tech budget, 12,000+ technologists. Firm-wide CIO: **Lori Beer**. CCB Co-CEO: **Marianne Lake**, serving 60M+ households. [media.chase.com](https://media.chase.com/leadership/gill-haus)
+- **⚠️ Confirmed gap**: No public source names Chase's actual CDP, CMS, or martech vendor(s). This must be handled as an explicit assumption in the PoC, never stated as fact.
+- JPMorgan **is a formal MACH Alliance member** (Microservices, API-first, Cloud-native, Headless) and runs a public Payments Developer Portal — the clearest public signal of the bank's architectural philosophy. [JPMorgan — MACH Principles](https://www.jpmorgan.com/insights/payments/apis-developer-experience/mach-principles-next-generation-banking)
+
+## 3. International Consumer Bank (ICB) — confirmed real initiative
+
+- Digital-only, branchless multi-country retail banking expansion.
+- **Chase UK**: launched Sept 2021, Canary Wharf-based. [BusinessWire](https://www.businesswire.com/news/home/20210127005468/en/JPMorgan-Chase-to-Launch-Digital-Consumer-Banking-in-the-U.K.)
+- **Germany**: second European market, digital retail launch targeted 2026, no physical branches. [Banking Dive](https://www.bankingdive.com/news/jpmorgan-chase-launch-digital-retail-bank-germany-2026/759280/)
+- Reported early-year losses ~$450M/yr, projected >$1B cumulative before profitability (analyst estimates, not guaranteed current). [Seeking Alpha](https://seekingalpha.com/news/3842129-jpmorgan-chases-international-consumer-digital-bank-could-lose-over-1b)
+- **No public platform/CDP/CMS initiative tied to ICB specifically was found.** This is real whitespace — useful for framing the PoC as addressing a documented, multi-market rollout that plausibly needs shared platform infrastructure, without claiming to know what exists today.
+
+## 4. Regulatory Landscape (the PoC's strongest grounding)
+
+- **GLBA**: requires safeguarding nonpublic personal information (NPI), privacy notices, opt-out rights. [FTC](https://www.ftc.gov/business-guidance/resources/how-comply-privacy-consumer-financial-information-rule-gramm-leach-bliley-act)
+- **CFPB Section 1033 (Open Banking Rule)**: finalized Oct 2024; **currently enjoined** (E.D. Kentucky), under CFPB reconsideration as of Aug 2025 ANPR. Applicability timeline is a live, unsettled risk factor — not a fixed date. [Cozen O'Connor](https://www.cozen.com/news-resources/publications/2026/section-1033-compliance-date-open-banking-rule-enjoined-and-under-reconsideration)
+- **State privacy laws**: CCPA/CPRA gives only a data-level GLBA exemption (NPI only); VA/CO/UT/CT give broader entity-level exemptions. Matters for any CDP handling non-GLBA data (e.g. prospect/marketing data). [Orrick](https://www.orrick.com/en/Insights/2025/07/Where-is-the-GLBA-Entity-Level-Exemption-Two-More-State-Privacy-Laws)
+- **★ SR 26-2 (verified directly against federalreserve.gov)**: On **April 17, 2026**, the Fed (jointly with OCC/FDIC) issued **SR 26-2**, superseding **SR 11-7** (the 2011 model risk management standard) and SR 21-8 (BSA/AML MRM). Applies to banking orgs with **>$30B in total assets** — JPMC is orders of magnitude above this threshold.
+  - **SR 26-2 explicitly excludes generative AI and agentic AI from its formal scope**, calling them "novel and rapidly evolving." Banks are told to apply "broader risk management and governance practices" to these systems instead — i.e., **no dedicated federal MRM framework currently exists for gen-AI/agentic systems.**
+  - Sources: [Federal Reserve — SR 26-2 (primary)](https://www.federalreserve.gov/supervisionreg/srletters/SR2602.htm), [Sia Partners analysis](https://www.sia-partners.com/en/insights/publications/sr-11-7-vs-sr-26-2-model-risk-management-modernization), [Cutover — SR 26-2 & Agentic AI](https://cutover.com/blog/what-sr-26-2-means-for-banks-deploying-agentic-ai)
+  - **This is the PoC's strongest, most defensible hook**: a real, dated, verifiable governance gap at exactly the scale JPMC operates at — "the platform layer needs to supply the governance that the regulator explicitly declined to standardize."
+
+## 5. Industry CDP/Martech Patterns in Banking (general, not JPMC-specific)
+
+- **Composable CDP** (activation layer over existing warehouse, not a new monolith) is the dominant emerging pattern; MACH Alliance reports 87% of FS IT leaders increased MACH investment in the last 12 months. [MACH Alliance](https://machalliance.org/)
+- **U.S. Bank** (named, Adobe Real-Time CDP): 127% increase in annual booked accounts, 4x marketing impressions post-rollout. [Adobe case study](https://business.adobe.com/customer-success-stories/us-bank-case-study.html)
+- **TSB Bank** (named, Adobe AEP): processing latency 3–9 days → <24 hours; 300% increase in leads from personalized comms; compliance review speed improved >60%. [Adobe — TSB](https://business.adobe.com/customer-success-stories/tsb-case-study.html)
+- **Capital One**: no public CDP detail, but confirmed mature MLOps platform explicitly designed around OCC model-governance constraints — a useful pattern reference for "governance as a platform feature." [TechTarget](https://www.techtarget.com/searchcio/feature/Capital-One-machine-learning-strategy-taps-MLOps)
+- **Only 41% of financial-services firms personalize on real-time engagement signals** — lowest of any industry surveyed (Braze 2024 report) — useful market-maturity context. [Braze](https://www.braze.com/resources/reports-and-guides/2024-financial-services-state-of-customer-engagement)
+- **Whitespace finding**: no public case study describes a bank explicitly layering GenAI/agentic capability *on top of* an existing CDP/comms stack with architecture detail. ChiefMartec/CDP Institute commentary argues "CDP foundation first, AI layered on top" is the right sequencing — general industry opinion, not a named bank example. This whitespace is the PoC's positioning: fill a documented gap, don't claim to replicate a known playbook.
+
+## 6. What's Already Built at JPMC — Addendum (Aug 17, 2026)
+
+Added after the user asked directly whether this platform overlaps with existing JPMC infrastructure. This section exists because the earlier draft's Problem Statement implied ICB has no model governance function at all, which turned out to be wrong.
+
+- **LLM Suite's actual scope, confirmed more precisely**: general-purpose internal AI access layer wired into document stores, call records, and a centralized knowledge graph via APIs. It is a productivity/analytics/document layer, not a customer data platform, comms platform, or CMS. Still no public source ties it to Chase.com, Chase Mobile, or ICB specifically. [CIO.com](https://www.cio.com/article/3616622/jpmorgan-chase-builds-ambitious-ai-foundation-on-aws.html)
+- **★ A real, firmwide Chief Data & Analytics Office (CDAO) exists**, led by Teresa Heitsenrether since 2023, who sits on the firm's Operating Committee. CDAO sets firmwide strategy for both data governance and AI governance — including model risk policies, review frameworks, and platform products like LLM Suite — and runs a "firmwide data product" discipline (define, develop, register, govern reusable data products). This is a real, named internal analog to the "shared platform with built-in governance" concept this PoC proposes. [gend.co](https://www.gend.co/blog/leveraging-ai-strategic-data-insights-jpmorgan) — *Confidence: Medium, secondary source describing a real named executive and function, not a primary JPMC policy document.*
+- **★★ A dedicated Model Risk Governance & Review (MRGR) function exists, with a role explicitly scoped to International Consumer Banking.** Found via a live job posting (Frankfurt-based VP role, MRGR Legal Entity Group), which describes the team as "a global team of modeling experts within the firm's Risk Management and Compliance organization" that conducts "independent model review and model governance activities" and explicitly lists "Support and conduct independent model reviews for International Consumer Banking (ICB)" as a responsibility. [Built In job posting](https://builtin.com/job/legal-entity-governance-international-consumer-banking-model-risk-governance-review-mrgr-vice-president-all-genders/8001311) — *Confidence: Medium. A single job posting is a real but narrower signal than an official policy document; postings can lag reality or reflect a narrow hiring need rather than the full scope of a function.*
+- **★★ Critical nuance — the actual remaining gap**: the MRGR/ICB posting's requirements are scoped to traditional quantitative/statistical models ("financial math, probability theory, advance numerical methods," Python noted as a tool, not an AI/ML specialization). There is no mention of generative AI, agentic AI, or LLMs anywhere in the responsibilities or requirements. This matches SR 26-2's own exclusion exactly. **The revised, more defensible claim: ICB already has dedicated model-risk governance for traditional models. The open question is narrower than "does governance exist" — it's "has that governance been extended to cover gen-AI/agentic AI," which the best available public signal suggests it has not, as of this posting.**
+- **Industry response to the same gap**: frameworks like the "Generative AI Control Framework" (GAICF) are emerging industry-wide to translate SR 26-2's concepts into gen-AI-specific controls — risk-tier assignment, evidence-grounded input assessment, output evaluation, monitoring, auditability. This validates that the Tier 1/2/3 pattern this PoC proposes is a real industry response pattern, not an invented one, but it's sourced from unnamed vendor/consultant commentary, not confirmed as JPMC's chosen approach. [pitechsol.com](https://pitechsol.com/blog/governing-genai-agentic-ai-banking/) — *Confidence: Low-Medium, industry commentary, not a named-bank case study.*
+
+## What the PoC Can and Cannot Claim
+
+| Can claim (verified public fact) | Cannot claim (no public source) |
+|---|---|
+| LLM Suite scale, use-case count, general governance framing | LLM Suite's specific use in ICB/Chase.com/Chase Mobile |
+| ICB is real, multi-market, branchless, publicly disclosed | Any specific ICB platform/CDP/CMS initiative |
+| SR 26-2 exists, excludes gen-AI/agentic AI from formal MRM scope | Chase's internal response to SR 26-2 (not public) |
+| MACH Alliance membership, Payments Developer Portal exist | Chase's consumer-side CDP/CMS/martech vendor identity |
+| Industry-pattern CDP/AI-governance practices (Adobe, Capital One, etc.) | That Chase runs any of these named vendors/patterns internally |
+| **CDAO exists, sets firmwide data+AI governance strategy, LLM Suite sits under it** | **The full internal scope of CDAO's AI governance beyond what's publicly described** |
+| **A dedicated MRGR function exists, with a role explicitly scoped to ICB** | **Whether MRGR's ICB scope has been extended to gen-AI/agentic AI (best public signal says no, not confirmed)** |

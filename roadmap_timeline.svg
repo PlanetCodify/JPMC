@@ -1,0 +1,37 @@
+<svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="900" height="300" fill="#ffffff"/>
+  <text x="450" y="28" text-anchor="middle" font-size="16" font-weight="700" fill="#1a1a2e">Delivery Cadence — Parallel Tracks (illustrative, not a claimed timeline)</text>
+
+  <!-- quarter gridlines -->
+  <line x1="180" y1="55" x2="180" y2="270" stroke="#ddd" stroke-width="1"/>
+  <line x1="360" y1="55" x2="360" y2="270" stroke="#ddd" stroke-width="1"/>
+  <line x1="540" y1="55" x2="540" y2="270" stroke="#ddd" stroke-width="1"/>
+  <line x1="720" y1="55" x2="720" y2="270" stroke="#ddd" stroke-width="1"/>
+  <line x1="900" y1="55" x2="900" y2="270" stroke="#ddd" stroke-width="1"/>
+  <text x="90" y="50" text-anchor="middle" font-size="11" fill="#666">Q1</text>
+  <text x="270" y="50" text-anchor="middle" font-size="11" fill="#666">Q2</text>
+  <text x="450" y="50" text-anchor="middle" font-size="11" fill="#666">Q3</text>
+  <text x="630" y="50" text-anchor="middle" font-size="11" fill="#666">Q4</text>
+
+  <!-- Track 1: Foundation -->
+  <text x="15" y="88" font-size="11" fill="#1a1a2e" font-weight="600">Foundation</text>
+  <rect x="0" y="70" width="360" height="30" rx="4" fill="#1a1a2e"/>
+  <text x="180" y="90" text-anchor="middle" font-size="11" fill="#fff">API contract + consent store + event bus</text>
+
+  <!-- Track 2: Governance -->
+  <text x="15" y="148" font-size="11" fill="#3d2a6b" font-weight="600">Governance</text>
+  <rect x="180" y="130" width="270" height="30" rx="4" fill="#5b3fa0"/>
+  <text x="315" y="150" text-anchor="middle" font-size="11" fill="#fff">Tier 1 → Tier 2/3 governance, in parallel with foundation</text>
+
+  <!-- Track 3: Germany -->
+  <text x="15" y="208" font-size="11" fill="#7a5200" font-weight="600">Germany track</text>
+  <rect x="180" y="190" width="360" height="30" rx="4" fill="#b8860b"/>
+  <text x="360" y="210" text-anchor="middle" font-size="11" fill="#fff">Onboarding — deliberately parallel, not sequenced after foundation</text>
+
+  <!-- Track 4: Metrics -->
+  <text x="15" y="248" font-size="11" fill="#2e7d32" font-weight="600">Metrics</text>
+  <rect x="630" y="230" width="270" height="30" rx="4" fill="#2e7d32"/>
+  <text x="765" y="250" text-anchor="middle" font-size="11" fill="#fff">Reuse/cost/API-SLA reported vs. baseline</text>
+
+  <text x="450" y="290" text-anchor="middle" font-size="10" fill="#666">Parallel Germany + Governance tracks trade schedule risk for earlier real-world validation — see Section 4 trade-off.</text>
+</svg>

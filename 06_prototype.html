@@ -1,0 +1,798 @@
+<title>ICB Trust Platform Console</title>
+<style>
+  :root {
+    --paper: #F1F4F7;
+    --surface: #FFFFFF;
+    --surface-2: #F7F9FB;
+    --ink: #12161C;
+    --ink-muted: #5B6675;
+    --ink-faint: #8A93A1;
+    --border: #D7DEE6;
+    --border-strong: #C1CAD4;
+    --accent: #0E6B63;
+    --accent-ink: #084A44;
+    --accent-soft: #E4F1EF;
+    --accent-soft-border: #BFE0DB;
+    --good: #2E8B57;
+    --good-soft: #E7F4EC;
+    --warn: #9C6B0B;
+    --warn-soft: #FBF1DD;
+    --crit: #B23A2E;
+    --crit-soft: #FBEAE7;
+    --shadow: 0 1px 2px rgba(18,22,28,0.04), 0 4px 14px rgba(18,22,28,0.06);
+    --radius: 6px;
+    --serif: ui-serif, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0A0E13;
+      --surface: #121821;
+      --surface-2: #0E141C;
+      --ink: #E8EDF2;
+      --ink-muted: #98A3B3;
+      --ink-faint: #6B7889;
+      --border: #232C38;
+      --border-strong: #2E3947;
+      --accent: #45C2B4;
+      --accent-ink: #B7ECE3;
+      --accent-soft: #10302C;
+      --accent-soft-border: #1C4941;
+      --good: #4CAF7D;
+      --good-soft: #123322;
+      --warn: #D8A93B;
+      --warn-soft: #362A0E;
+      --crit: #E0776C;
+      --crit-soft: #3A1D19;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 18px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0A0E13;
+    --surface: #121821;
+    --surface-2: #0E141C;
+    --ink: #E8EDF2;
+    --ink-muted: #98A3B3;
+    --ink-faint: #6B7889;
+    --border: #232C38;
+    --border-strong: #2E3947;
+    --accent: #45C2B4;
+    --accent-ink: #B7ECE3;
+    --accent-soft: #10302C;
+    --accent-soft-border: #1C4941;
+    --good: #4CAF7D;
+    --good-soft: #123322;
+    --warn: #D8A93B;
+    --warn-soft: #362A0E;
+    --crit: #E0776C;
+    --crit-soft: #3A1D19;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 18px rgba(0,0,0,0.35);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  a { color: var(--accent); }
+  button { font-family: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .app { display: flex; min-height: 100vh; }
+
+  /* ---- Sidebar ---- */
+  .sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 22px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .brand { display: flex; flex-direction: column; gap: 3px; padding: 0 6px; }
+  .brand-mark {
+    width: 30px; height: 30px; border-radius: 7px;
+    background: var(--accent-ink);
+    background: linear-gradient(155deg, var(--accent), var(--accent-ink));
+    display: flex; align-items: center; justify-content: center;
+    color: var(--surface);
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  .brand-name { font-family: var(--serif); font-size: 17px; font-weight: 600; letter-spacing: 0.01em; }
+  .brand-sub { font-size: 11.5px; color: var(--ink-muted); letter-spacing: 0.03em; text-transform: uppercase; }
+
+  .nav { display: flex; flex-direction: column; gap: 2px; }
+  .nav-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-faint); padding: 10px 10px 4px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: var(--radius);
+    background: none; border: none; text-align: left;
+    color: var(--ink-muted); font-size: 13.5px; cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+  .nav-item:hover { background: var(--surface-2); color: var(--ink); }
+  .nav-item[aria-selected="true"] { background: var(--accent-soft); color: var(--accent-ink); font-weight: 600; }
+  .nav-item .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.55; flex-shrink: 0; }
+
+  .sidebar-foot { margin-top: auto; padding: 10px 10px 0; border-top: 1px solid var(--border); font-size: 11px; color: var(--ink-faint); line-height: 1.5; }
+
+  .theme-toggle {
+    display: flex; gap: 4px; padding: 3px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 7px;
+  }
+  .theme-toggle button {
+    flex: 1; border: none; background: none; padding: 5px 0; border-radius: 5px; font-size: 11px; color: var(--ink-muted); cursor: pointer;
+  }
+  .theme-toggle button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+
+  /* ---- Main ---- */
+  .main { flex: 1; min-width: 0; }
+  .topbar {
+    position: sticky; top: 0; z-index: 5;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 32px; background: var(--paper);
+    border-bottom: 1px solid var(--border);
+  }
+  .crumb { font-size: 12.5px; color: var(--ink-muted); }
+  .crumb b { color: var(--ink); font-weight: 600; }
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11.5px; padding: 4px 10px; border-radius: 100px;
+    background: var(--good-soft); color: var(--good); border: 1px solid var(--good-soft); font-weight: 600;
+  }
+  .status-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  .panel { padding: 30px 32px 70px; max-width: 980px; }
+  .panel[hidden] { display: none; }
+
+  h1.page-title { font-family: var(--serif); font-size: 26px; font-weight: 600; margin: 0 0 6px; letter-spacing: 0.005em; text-wrap: balance; }
+  .page-dek { color: var(--ink-muted); font-size: 14px; margin: 0 0 28px; max-width: 62ch; }
+
+  h2.section-title { font-family: var(--serif); font-size: 17px; font-weight: 600; margin: 0 0 4px; }
+  .section-dek { color: var(--ink-muted); font-size: 13px; margin: 0 0 14px; }
+  section.block { margin-bottom: 34px; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .card-pad { padding: 18px 20px; }
+
+  /* thesis callout */
+  .thesis {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 16px 20px;
+    font-family: var(--serif);
+    font-size: 15.5px;
+    color: var(--accent-ink);
+    line-height: 1.5;
+  }
+
+  .disclaimer {
+    font-size: 11.5px; color: var(--ink-faint); border: 1px dashed var(--border-strong);
+    border-radius: var(--radius); padding: 10px 14px; margin-top: 30px; line-height: 1.6;
+  }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  .kpi { padding: 15px 16px; }
+  .kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); margin-bottom: 6px; }
+  .kpi-value { font-family: var(--mono); font-size: 21px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .kpi-delta { font-size: 11.5px; margin-top: 4px; }
+  .kpi-delta.up { color: var(--good); }
+  .kpi-delta.down { color: var(--good); }
+  .kpi-spark { margin-top: 8px; }
+
+  /* tables */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface); }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  thead th {
+    background: var(--surface-2); color: var(--ink-muted); font-weight: 600; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; user-select: none;
+    position: sticky; top: 0;
+  }
+  thead th:hover { color: var(--ink); }
+  thead th.sorted::after { content: " \25BE"; color: var(--accent); }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--surface-2); }
+  td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  td.wrap { white-space: normal; min-width: 220px; color: var(--ink-muted); }
+
+  .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 100px; }
+  .badge.rice-high { background: var(--good-soft); color: var(--good); }
+  .badge.rice-mid { background: var(--warn-soft); color: var(--warn); }
+  .badge.rice-low { background: var(--crit-soft); color: var(--crit); }
+
+  .callout {
+    margin-top: 14px; padding: 13px 16px; border-radius: var(--radius);
+    background: var(--warn-soft); border: 1px solid var(--warn-soft);
+    font-size: 13px; color: var(--ink);
+  }
+  .callout b { color: var(--warn); }
+
+  /* architecture */
+  .arch-legend { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .arch-legend button {
+    display: flex; align-items: center; gap: 6px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--ink-muted);
+    padding: 6px 12px; border-radius: 100px; font-size: 12px; cursor: pointer;
+    transition: all 0.12s ease;
+  }
+  .arch-legend button .sw { width: 10px; height: 10px; border-radius: 3px; }
+  .arch-legend button[aria-pressed="true"] { background: var(--surface-2); color: var(--ink); border-color: var(--border-strong); font-weight: 600; }
+  #archSvg .flow { transition: opacity 0.15s ease; }
+  #archSvg .flow.dim { opacity: 0.15; }
+  #archSvg text { font-family: var(--sans); }
+
+  /* governance simulator */
+  .sim-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 18px; align-items: start; }
+  @media (max-width: 800px) { .sim-grid { grid-template-columns: 1fr; } }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0 14px; }
+  .chip {
+    border: 1px solid var(--border); background: var(--surface-2); color: var(--ink-muted);
+    padding: 6px 11px; border-radius: 100px; font-size: 12px; cursor: pointer; transition: all 0.12s ease;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--accent-ink); }
+  textarea#simInput {
+    width: 100%; min-height: 92px; resize: vertical;
+    background: var(--surface); color: var(--ink); border: 1px solid var(--border-strong);
+    border-radius: var(--radius); padding: 11px 13px; font-family: var(--sans); font-size: 13.5px; line-height: 1.5;
+  }
+  .btn-primary {
+    background: var(--accent); color: var(--surface); border: none; border-radius: var(--radius);
+    padding: 10px 18px; font-size: 13.5px; font-weight: 600; cursor: pointer; margin-top: 12px;
+    transition: filter 0.12s ease;
+  }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .sim-result { min-height: 260px; }
+  .tier-badge { display: inline-flex; align-items: center; gap: 8px; font-family: var(--serif); font-size: 19px; font-weight: 600; padding: 9px 16px; border-radius: var(--radius); }
+  .tier-badge.t1 { background: var(--good-soft); color: var(--good); }
+  .tier-badge.t2 { background: var(--warn-soft); color: var(--warn); }
+  .tier-badge.t3 { background: var(--crit-soft); color: var(--crit); }
+  .sim-empty { color: var(--ink-faint); font-size: 13px; padding: 40px 10px; text-align: center; }
+  .sim-reason { margin-top: 12px; font-size: 13.5px; color: var(--ink-muted); line-height: 1.6; }
+  .sim-path { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .sim-path-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); margin-bottom: 6px; }
+  .sim-steps { display: flex; flex-direction: column; gap: 6px; }
+  .sim-step { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-muted); }
+  .sim-step .num { width: 17px; height: 17px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; font-size: 10px; font-family: var(--mono); flex-shrink: 0; }
+
+  /* market status */
+  .market-toggle { display: flex; gap: 8px; margin-bottom: 18px; }
+  .market-toggle button {
+    border: 1px solid var(--border); background: var(--surface); padding: 8px 16px; border-radius: var(--radius);
+    font-size: 13px; cursor: pointer; color: var(--ink-muted);
+  }
+  .market-toggle button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-ink); background: var(--accent-soft); font-weight: 600; }
+  .steps { display: flex; flex-direction: column; }
+  .step { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .step:last-child { border-bottom: none; }
+  .step-marker { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; font-size: 12px; }
+  .step-marker.done { background: var(--good); color: var(--surface); }
+  .step-marker.active { background: var(--warn-soft); border: 2px solid var(--warn); color: var(--warn); }
+  .step-marker.pending { background: var(--surface-2); border: 1px solid var(--border-strong); color: var(--ink-faint); }
+  .step-title { font-size: 13.5px; font-weight: 600; }
+  .step-desc { font-size: 12.5px; color: var(--ink-muted); margin-top: 2px; }
+  .step-tag { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); margin-top: 3px; }
+
+  .foot-links { display: flex; gap: 16px; margin-top: 34px; font-size: 12.5px; }
+</style>
+
+<div class="app">
+  <!-- Sidebar -->
+  <nav class="sidebar" aria-label="Console navigation">
+    <div class="brand">
+      <div class="brand-mark">I</div>
+      <div class="brand-name">ICB Trust Platform</div>
+      <div class="brand-sub">Product Console · PoC</div>
+    </div>
+
+    <div class="nav" role="tablist" aria-orientation="vertical">
+      <div class="nav-label">Strategy</div>
+      <button class="nav-item" role="tab" data-tab="overview" aria-selected="true"><span class="dot"></span>Overview</button>
+      <button class="nav-item" role="tab" data-tab="architecture" aria-selected="false"><span class="dot"></span>Architecture</button>
+      <button class="nav-item" role="tab" data-tab="roadmap" aria-selected="false"><span class="dot"></span>Roadmap · RICE</button>
+
+      <div class="nav-label">Operate</div>
+      <button class="nav-item" role="tab" data-tab="governance" aria-selected="false"><span class="dot"></span>Governance Simulator</button>
+      <button class="nav-item" role="tab" data-tab="metrics" aria-selected="false"><span class="dot"></span>Metrics</button>
+      <button class="nav-item" role="tab" data-tab="markets" aria-selected="false"><span class="dot"></span>Market Status</button>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="theme-toggle" role="group" aria-label="Theme">
+        <button type="button" data-theme-choice="light" aria-pressed="false">Light</button>
+        <button type="button" data-theme-choice="dark" aria-pressed="false">Dark</button>
+        <button type="button" data-theme-choice="system" aria-pressed="true">Auto</button>
+      </div>
+      <p style="margin:10px 0 0;">Illustrative PoC built from public sources only. Not a real JPMC system.</p>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <div class="crumb">ICB Trust Platform / <b id="crumbLabel">Overview</b></div>
+      <div class="status-pill"><span class="dot"></span>Prototype — illustrative data</div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <section class="panel" id="panel-overview">
+      <h1 class="page-title">A shared platform for International Consumer Bank</h1>
+      <p class="page-dek">Customer data, communications, and content — one governed layer every ICB market consumes, instead of rebuilding per launch.</p>
+
+      <section class="block">
+        <p class="thesis">ICB's multi-market expansion needs a shared platform for customer data, communications, and content — durable on its own merits, but designed so a governed AI capability is a configuration, not a re-architecture.</p>
+      </section>
+
+      <section class="block">
+        <h2 class="section-title">Platform at a glance</h2>
+        <p class="section-dek">Live figures are illustrative — see the Metrics tab for the full trend.</p>
+        <div class="kpi-grid">
+          <div class="card kpi">
+            <div class="kpi-label">Markets onboarded</div>
+            <div class="kpi-value">1 <span style="font-size:13px;color:var(--ink-faint);font-weight:400;">of 2</span></div>
+            <div class="kpi-delta up">Germany in progress</div>
+          </div>
+          <div class="card kpi">
+            <div class="kpi-label">Reuse rate</div>
+            <div class="kpi-value">68%</div>
+            <div class="kpi-delta up">↑ from 40% at launch</div>
+          </div>
+          <div class="card kpi">
+            <div class="kpi-label">API SLA adherence</div>
+            <div class="kpi-value">99.92%</div>
+            <div class="kpi-delta up">Above 99.9% target</div>
+          </div>
+          <div class="card kpi">
+            <div class="kpi-label">Governance reviews (Tier 1)</div>
+            <div class="kpi-value">4.1<span style="font-size:12px;color:var(--ink-faint);font-weight:400;">hrs avg</span></div>
+            <div class="kpi-delta up">↓ from 3.5 days pre-platform</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2 class="section-title">Why now</h2>
+        <div class="card card-pad" style="font-size:13.5px;color:var(--ink-muted);">
+          On <b style="color:var(--ink)">April&nbsp;17,&nbsp;2026</b>, the Federal Reserve issued <b style="color:var(--ink)">SR&nbsp;26-2</b>, superseding SR&nbsp;11-7, and explicitly excluded generative and agentic AI from formal model-risk scope for banks over $30B in assets. That leaves any AI-adjacent feature added to a digital channel — personalization, next-best-action messaging — without a standard federal governance path. This platform proposes an internal one, exposed as a service any market can call. See the <a href="#" data-goto="governance">Governance Simulator</a> for how a feature gets classified.
+        </div>
+      </section>
+
+      <div class="disclaimer">Grounded entirely in public sources (Federal Reserve, JPMC press coverage, ICB public disclosures). Makes no claim to JPMorgan Chase's actual internal systems, vendors, or roadmap — see the accompanying research notes and strategy document for the full source trail.</div>
+    </section>
+
+    <!-- ARCHITECTURE -->
+    <section class="panel" id="panel-architecture" hidden>
+      <h1 class="page-title">Architecture</h1>
+      <p class="page-dek">Three integration-pattern decisions, at black-box level. Toggle a path below to trace it through the system.</p>
+
+      <div class="arch-legend" role="group" aria-label="Highlight a data path">
+        <button data-path="all" aria-pressed="true"><span class="sw" style="background:var(--ink-faint)"></span>All paths</button>
+        <button data-path="sync" aria-pressed="false"><span class="sw" style="background:#3B5998"></span>Sync reads</button>
+        <button data-path="async" aria-pressed="false"><span class="sw" style="background:#C0392B"></span>Async writes</button>
+        <button data-path="consent" aria-pressed="false"><span class="sw" style="background:#B8860B"></span>Consent exception</button>
+        <button data-path="gov" aria-pressed="false"><span class="sw" style="background:#5B3FA0"></span>Governance call</button>
+      </div>
+
+      <div class="card card-pad">
+        <svg id="archSvg" viewBox="0 0 860 400" style="width:100%;height:auto;">
+          <rect x="10" y="55" width="150" height="46" rx="6" fill="var(--surface-2)" stroke="var(--border-strong)"/>
+          <text x="85" y="82" text-anchor="middle" font-size="12" fill="var(--ink)">Market Team</text>
+
+          <line class="flow" data-group="sync" x1="160" y1="68" x2="290" y2="68" stroke="#3B5998" stroke-width="2" marker-end="url(#a1)"/>
+          <text class="flow" data-group="sync" x="225" y="60" text-anchor="middle" font-size="10" fill="#3B5998">sync read</text>
+
+          <line class="flow" data-group="async" x1="160" y1="90" x2="290" y2="130" stroke="#C0392B" stroke-width="2" marker-end="url(#a2)"/>
+          <text class="flow" data-group="async" x="205" y="122" text-anchor="middle" font-size="10" fill="#C0392B">async write</text>
+
+          <rect x="290" y="45" width="200" height="50" rx="6" fill="var(--ink)" opacity="0.92"/>
+          <text x="390" y="75" text-anchor="middle" font-size="12" font-weight="600" fill="var(--surface)">Platform API (versioned)</text>
+
+          <rect x="290" y="115" width="200" height="42" rx="6" fill="#C0392B" fill-opacity="0.13" stroke="#C0392B"/>
+          <text class="flow" data-group="async" x="390" y="141" text-anchor="middle" font-size="11" fill="#C0392B">Event Bus (fan-out)</text>
+
+          <rect x="560" y="45" width="130" height="40" rx="6" fill="var(--good-soft)" stroke="var(--good)"/>
+          <text x="625" y="69" text-anchor="middle" font-size="11" fill="var(--ink)">CDP</text>
+          <rect x="560" y="112" width="130" height="40" rx="6" fill="var(--good-soft)" stroke="var(--good)"/>
+          <text x="625" y="136" text-anchor="middle" font-size="11" fill="var(--ink)">Communications</text>
+          <rect x="560" y="179" width="130" height="40" rx="6" fill="var(--good-soft)" stroke="var(--good)"/>
+          <text x="625" y="203" text-anchor="middle" font-size="11" fill="var(--ink)">CMS</text>
+
+          <line class="flow" data-group="async" x1="490" y1="136" x2="560" y2="65" stroke="#2E8B57" stroke-width="1.5" marker-end="url(#a3)"/>
+          <line class="flow" data-group="async" x1="490" y1="136" x2="560" y2="132" stroke="#2E8B57" stroke-width="1.5" marker-end="url(#a3)"/>
+          <line class="flow" data-group="async" x1="490" y1="136" x2="560" y2="199" stroke="#2E8B57" stroke-width="1.5" marker-end="url(#a3)"/>
+
+          <rect x="290" y="245" width="200" height="52" rx="6" fill="var(--warn-soft)" stroke="#B8860B" stroke-width="2"/>
+          <text x="390" y="267" text-anchor="middle" font-size="12" font-weight="700" fill="#7a5200">Consent Store</text>
+          <text x="390" y="283" text-anchor="middle" font-size="9.5" fill="#7a5200">sync write · single source of truth</text>
+          <line class="flow" data-group="consent" x1="390" y1="95" x2="390" y2="245" stroke="#B8860B" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#a4)"/>
+          <text class="flow" data-group="consent" x="420" y="180" font-size="10" fill="#7a5200">deliberate exception</text>
+
+          <rect x="290" y="330" width="200" height="52" rx="6" fill="#f0eefc" stroke="#5B3FA0"/>
+          <text x="390" y="352" text-anchor="middle" font-size="12" font-weight="600" fill="#3d2a6b">AI Governance Engine</text>
+          <text x="390" y="368" text-anchor="middle" font-size="9.5" fill="#3d2a6b">called on demand, not inline</text>
+          <line class="flow" data-group="gov" x1="85" y1="101" x2="85" y2="356" stroke="#5B3FA0" stroke-width="2" marker-end="none"/>
+          <line class="flow" data-group="gov" x1="85" y1="356" x2="290" y2="356" stroke="#5B3FA0" stroke-width="2" marker-end="url(#a5)"/>
+          <text class="flow" data-group="gov" x="150" y="345" font-size="10" fill="#5B3FA0">market calls for risk tier</text>
+
+          <defs>
+            <marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0L6,3L0,6Z" fill="#3B5998"/></marker>
+            <marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0L6,3L0,6Z" fill="#C0392B"/></marker>
+            <marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0L6,3L0,6Z" fill="#2E8B57"/></marker>
+            <marker id="a4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0L6,3L0,6Z" fill="#B8860B"/></marker>
+            <marker id="a5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0L6,3L0,6Z" fill="#5B3FA0"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <section class="block" style="margin-top:24px;">
+        <h2 class="section-title">The three decisions</h2>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="card card-pad"><b>1. Sync only where staleness is dangerous.</b> <span style="color:var(--ink-muted)">Consent state is written synchronously to one store before any send — the sole exception to an otherwise async, event-driven design.</span></div>
+          <div class="card card-pad"><b>2. Version the platform's own API, not the vendor's.</b> <span style="color:var(--ink-muted)">A CDP or comms vendor swap happens behind the contract, invisible to market teams.</span></div>
+          <div class="card card-pad"><b>3. Governance is a callable service.</b> <span style="color:var(--ink-muted)">Market teams request a risk tier the same way they'd call any other platform service — not a separate initiative.</span></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ROADMAP -->
+    <section class="panel" id="panel-roadmap" hidden>
+      <h1 class="page-title">Roadmap — RICE prioritized</h1>
+      <p class="page-dek">Reach × Impact × Confidence ÷ Effort. Click a column header to sort.</p>
+
+      <div class="table-wrap">
+        <table id="riceTable">
+          <thead>
+            <tr>
+              <th data-key="name">Initiative</th>
+              <th class="num" data-key="reach">Reach</th>
+              <th class="num" data-key="impact">Impact</th>
+              <th class="num" data-key="confidence">Confidence</th>
+              <th class="num" data-key="effort">Effort (mo)</th>
+              <th class="num sorted" data-key="rice">RICE</th>
+            </tr>
+          </thead>
+          <tbody id="riceBody"></tbody>
+        </table>
+      </div>
+
+      <div class="callout"><b>Trade-off, stated on purpose:</b> pure RICE ranks Germany onboarding last — lowest reach, lowest confidence given external launch dependencies. It ships in parallel with the foundation build anyway, because it's the platform's only real-world validation and its only executive-visible milestone. That's a deliberate override of the model, not an oversight.</div>
+
+      <section class="block" style="margin-top:26px;">
+        <h2 class="section-title">Delivery cadence</h2>
+        <p class="section-dek">Illustrative sequencing, not a claimed timeline.</p>
+        <div class="card card-pad" style="overflow-x:auto;">
+          <svg viewBox="0 0 820 210" style="width:100%;height:auto;min-width:560px;">
+            <text x="90" y="18" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Q1</text>
+            <text x="270" y="18" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Q2</text>
+            <text x="450" y="18" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Q3</text>
+            <text x="630" y="18" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Q4</text>
+            <line x1="180" y1="0" x2="180" y2="200" stroke="var(--border)"/>
+            <line x1="360" y1="0" x2="360" y2="200" stroke="var(--border)"/>
+            <line x1="540" y1="0" x2="540" y2="200" stroke="var(--border)"/>
+            <line x1="720" y1="0" x2="720" y2="200" stroke="var(--border)"/>
+
+            <text x="4" y="42" font-size="11" fill="var(--ink)" font-weight="600">Foundation</text>
+            <rect x="0" y="26" width="360" height="26" rx="4" fill="var(--ink)"/>
+            <text x="180" y="43" text-anchor="middle" font-size="10.5" fill="var(--surface)">API contract · consent store · event bus</text>
+
+            <text x="4" y="92" font-size="11" fill="#5B3FA0" font-weight="600">Governance</text>
+            <rect x="180" y="76" width="270" height="26" rx="4" fill="#5B3FA0"/>
+            <text x="315" y="93" text-anchor="middle" font-size="10.5" fill="#fff">Tier 1 → Tier 2/3, parallel to foundation</text>
+
+            <text x="4" y="142" font-size="11" fill="#7a5200" font-weight="600">Germany</text>
+            <rect x="180" y="126" width="360" height="26" rx="4" fill="#B8860B"/>
+            <text x="360" y="143" text-anchor="middle" font-size="10.5" fill="#fff">Onboarding — parallel by design, not sequenced after</text>
+
+            <text x="4" y="192" font-size="11" fill="var(--good)" font-weight="600">Metrics</text>
+            <rect x="630" y="176" width="180" height="26" rx="4" fill="var(--good)"/>
+            <text x="720" y="193" text-anchor="middle" font-size="10.5" fill="#fff">Reported vs. baseline</text>
+          </svg>
+        </div>
+      </section>
+    </section>
+
+    <!-- GOVERNANCE SIMULATOR -->
+    <section class="panel" id="panel-governance" hidden>
+      <h1 class="page-title">Governance &amp; Policy Engine</h1>
+      <p class="page-dek">Describe a feature. The engine returns a risk tier and the review path it triggers — the same call any market team would make.</p>
+
+      <div class="sim-grid">
+        <div class="card card-pad">
+          <h2 class="section-title" style="font-size:14px;">Describe the feature</h2>
+          <div class="chip-row" id="chipRow">
+            <button class="chip" type="button">Personalized next-best-action messaging</button>
+            <button class="chip" type="button">Marketing copy A/B variants</button>
+            <button class="chip" type="button">AI-assisted credit decision narrative</button>
+            <button class="chip" type="button">Automated translation of support articles</button>
+            <button class="chip" type="button">Chatbot response drafting for support agents</button>
+          </div>
+          <textarea id="simInput" placeholder="e.g. an agent that recommends the next product to offer a customer based on their transaction history..."></textarea>
+          <button class="btn-primary" id="simRun">Classify feature</button>
+        </div>
+
+        <div class="card card-pad sim-result" id="simResult">
+          <div class="sim-empty">Pick an example or describe a feature, then classify it to see the tier, reasoning, and required review path.</div>
+        </div>
+      </div>
+
+      <section class="block" style="margin-top:26px;">
+        <h2 class="section-title">The three tiers</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Tier</th><th>Risk</th><th>Review path</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><span class="badge rice-high">Tier 1</span></td><td class="wrap">Low — no customer-data-driven decisioning</td><td class="wrap">Automated policy check, no human review</td><td class="wrap">Content copy variants, translations</td></tr>
+              <tr><td><span class="badge rice-mid">Tier 2</span></td><td class="wrap">Medium — uses customer data to personalize</td><td class="wrap">Platform policy enforcement + logged spot-check</td><td class="wrap">Next-best-action messaging</td></tr>
+              <tr><td><span class="badge rice-low">Tier 3</span></td><td class="wrap">High — influences credit/account decisions</td><td class="wrap">Full human-in-the-loop, routed to model-risk process</td><td class="wrap">Credit decision narratives</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <!-- METRICS -->
+    <section class="panel" id="panel-metrics" hidden>
+      <h1 class="page-title">Metrics</h1>
+      <p class="page-dek">Platform metrics, not feature metrics — reuse, integration speed, reliability, and cost per market.</p>
+
+      <div class="market-toggle" role="group" aria-label="Filter by market">
+        <button data-market="all" aria-pressed="true">All markets</button>
+        <button data-market="uk" aria-pressed="false">UK</button>
+        <button data-market="de" aria-pressed="false">Germany</button>
+      </div>
+
+      <div class="kpi-grid" id="metricsGrid"></div>
+    </section>
+
+    <!-- MARKETS -->
+    <section class="panel" id="panel-markets" hidden>
+      <h1 class="page-title">Market Status</h1>
+      <p class="page-dek">Onboarding progress per market. Illustrative sequencing against ICB's public multi-country roadmap.</p>
+
+      <div class="card card-pad" style="margin-bottom:14px;">
+        <h2 class="section-title" style="font-size:14px;">United Kingdom <span class="badge rice-high" style="margin-left:6px;">Live</span></h2>
+        <div class="steps">
+          <div class="step"><div class="step-marker done">✓</div><div><div class="step-title">Kickoff &amp; requirements</div><div class="step-desc">Local privacy law review, market GM alignment</div></div></div>
+          <div class="step"><div class="step-marker done">✓</div><div><div class="step-title">Data &amp; comms integration</div><div class="step-desc">Onboarded to platform API, consent store live</div></div></div>
+          <div class="step"><div class="step-marker done">✓</div><div><div class="step-title">Governance review</div><div class="step-desc">Tier 1/2 policies configured for UK</div></div></div>
+          <div class="step"><div class="step-marker done">✓</div><div><div class="step-title">Launch</div><div class="step-desc">Live since 2021 (pre-dates this platform proposal)</div></div></div>
+        </div>
+      </div>
+
+      <div class="card card-pad">
+        <h2 class="section-title" style="font-size:14px;">Germany <span class="badge rice-mid" style="margin-left:6px;">In progress</span></h2>
+        <div class="steps">
+          <div class="step"><div class="step-marker done">✓</div><div><div class="step-title">Kickoff &amp; requirements</div><div class="step-desc">German data-residency requirements scoped with Legal</div></div></div>
+          <div class="step"><div class="step-marker active">●</div><div><div class="step-title">Data &amp; comms integration</div><div class="step-desc">Platform API onboarding underway</div><div class="step-tag">Current stage</div></div></div>
+          <div class="step"><div class="step-marker pending">○</div><div><div class="step-title">Governance review</div><div class="step-desc">Risk &amp; Compliance sign-off pending</div></div></div>
+          <div class="step"><div class="step-marker pending">○</div><div><div class="step-title">Launch</div><div class="step-desc">Publicly targeted for 2026 — not a confirmed date</div></div></div>
+        </div>
+      </div>
+
+      <div class="foot-links">
+        <a href="#" data-goto="overview">← Back to overview</a>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  // ---------- Theme ----------
+  var root = document.documentElement;
+  var stored = null;
+  try { stored = localStorage.getItem('icb-theme'); } catch (e) {}
+  function applyTheme(choice) {
+    if (choice === 'light') root.setAttribute('data-theme', 'light');
+    else if (choice === 'dark') root.setAttribute('data-theme', 'dark');
+    else root.removeAttribute('data-theme');
+    document.querySelectorAll('[data-theme-choice]').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-theme-choice') === choice ? 'true' : 'false');
+    });
+    try { localStorage.setItem('icb-theme', choice); } catch (e) {}
+  }
+  applyTheme(stored || 'system');
+  document.querySelectorAll('[data-theme-choice]').forEach(function (b) {
+    b.addEventListener('click', function () { applyTheme(b.getAttribute('data-theme-choice')); });
+  });
+
+  // ---------- Tabs ----------
+  var tabs = document.querySelectorAll('.nav-item[role="tab"]');
+  var panels = document.querySelectorAll('.panel');
+  var crumb = document.getElementById('crumbLabel');
+  var labels = { overview: 'Overview', architecture: 'Architecture', roadmap: 'Roadmap · RICE', governance: 'Governance Simulator', metrics: 'Metrics', markets: 'Market Status' };
+  function showTab(name) {
+    tabs.forEach(function (t) { t.setAttribute('aria-selected', t.getAttribute('data-tab') === name ? 'true' : 'false'); });
+    panels.forEach(function (p) { p.hidden = p.id !== ('panel-' + name); });
+    crumb.textContent = labels[name] || name;
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+  tabs.forEach(function (t) { t.addEventListener('click', function () { showTab(t.getAttribute('data-tab')); }); });
+  document.querySelectorAll('[data-goto]').forEach(function (l) {
+    l.addEventListener('click', function (e) { e.preventDefault(); showTab(l.getAttribute('data-goto')); });
+  });
+
+  // ---------- Architecture path highlight ----------
+  var pathBtns = document.querySelectorAll('.arch-legend button');
+  pathBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      pathBtns.forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      var target = b.getAttribute('data-path');
+      document.querySelectorAll('#archSvg .flow').forEach(function (el) {
+        var g = el.getAttribute('data-group');
+        el.classList.toggle('dim', target !== 'all' && g !== target);
+      });
+    });
+  });
+
+  // ---------- RICE table ----------
+  var rice = [
+    { name: 'Platform API + consent store + event bus', note: 'Foundation — architectural prerequisite, ships regardless of RICE rank.', reach: 3, impact: 3, confidence: 0.8, effort: 6 },
+    { name: 'Governance tiering, Tier 1 automated', note: 'Highest RICE — fast, high-reach. Ships in parallel with foundation, not after.', reach: 10, impact: 2, confidence: 0.7, effort: 3 },
+    { name: 'Germany market onboarding', note: 'Lowest RICE, but the flagship proof point — see trade-off below.', reach: 1, impact: 3, confidence: 0.6, effort: 4 },
+    { name: 'Tier 2/3 governance + reuse/cost metrics live', note: 'Depends on items 1 and 2 landing first.', reach: 3, impact: 2, confidence: 0.65, effort: 5 }
+  ];
+  rice.forEach(function (r) { r.rice = (r.reach * r.impact * r.confidence) / r.effort; });
+
+  function riceBadge(v) {
+    var cls = v >= 2 ? 'rice-high' : v >= 0.8 ? 'rice-mid' : 'rice-low';
+    return '<span class="badge ' + cls + '">' + v.toFixed(2) + '</span>';
+  }
+  function renderRice(list) {
+    var body = document.getElementById('riceBody');
+    body.innerHTML = list.map(function (r) {
+      return '<tr><td><b>' + r.name + '</b><div class="wrap" style="white-space:normal;font-size:11.5px;">' + r.note + '</div></td>' +
+        '<td class="num">' + r.reach + '</td><td class="num">' + r.impact + '</td>' +
+        '<td class="num">' + Math.round(r.confidence * 100) + '%</td><td class="num">' + r.effort + '</td>' +
+        '<td class="num">' + riceBadge(r.rice) + '</td></tr>';
+    }).join('');
+  }
+  renderRice(rice.slice().sort(function (a, b) { return b.rice - a.rice; }));
+
+  var sortKey = 'rice', sortDir = -1;
+  document.querySelectorAll('#riceTable thead th').forEach(function (th) {
+    th.addEventListener('click', function () {
+      var key = th.getAttribute('data-key');
+      sortDir = (key === sortKey) ? -sortDir : (key === 'name' ? 1 : -1);
+      sortKey = key;
+      document.querySelectorAll('#riceTable thead th').forEach(function (x) { x.classList.remove('sorted'); });
+      th.classList.add('sorted');
+      var sorted = rice.slice().sort(function (a, b) {
+        var av = key === 'rice' ? a.rice : a[key], bv = key === 'rice' ? b.rice : b[key];
+        if (typeof av === 'string') return sortDir * av.localeCompare(bv);
+        return sortDir * (av - bv);
+      });
+      renderRice(sorted);
+    });
+  });
+
+  // ---------- Governance simulator ----------
+  var rules = [
+    { tier: 3, cls: 't3', label: 'Tier 3 — Full human-in-the-loop', keywords: ['credit', 'underwrit', 'loan decision', 'adverse action', 'account clos', 'interest rate', 'risk score'],
+      reason: 'This touches a credit, account, or lending decision — the highest-consequence category. It routes into existing model-risk review rather than the platform inventing new controls for it.',
+      steps: ['Feature submitted with full documentation', 'Routed to Risk & Compliance for model-risk review', 'Human sign-off required before any customer exposure', 'Ongoing monitoring under standard model-risk cadence'] },
+    { tier: 2, cls: 't2', label: 'Tier 2 — Policy enforcement + logged spot-check', keywords: ['personaliz', 'next-best-action', 'recommend', 'nudge', 'chatbot', 'support agent', 'customer history', 'transaction history'],
+      reason: 'This uses customer data to shape what an individual sees or is told, but doesn’t make a credit/account decision. Platform policy enforces guardrails automatically; a human spot-checks a sample on a fixed cadence.',
+      steps: ['Feature checked against platform policy rules automatically', 'Approved to ship with logging enabled', 'Compliance spot-checks a sample of outputs weekly', 'Escalates to Tier 3 review if drift or complaints appear'] },
+    { tier: 1, cls: 't1', label: 'Tier 1 — Automated policy check', keywords: ['copy variant', 'content', 'subject line', 'translat', 'a/b', 'tone', 'wording'],
+      reason: 'This is content generation without customer-data-driven decisioning — lowest risk category. An automated check confirms it meets brand/compliance policy; no human review blocks shipping.',
+      steps: ['Feature checked against automated policy rules', 'Ships immediately if checks pass', 'Sampled in periodic audits, not gated pre-launch'] }
+  ];
+  var fallback = { tier: 2, cls: 't2', label: 'Tier 2 — Policy enforcement + logged spot-check (default)', reason: 'The description didn’t clearly match a known pattern, so the engine defaults to the middle tier rather than guessing. A human reviewer confirms the correct tier before this ships.',
+    steps: ['Feature flagged as unclassified by automated rules', 'Routed to a human reviewer for manual tiering', 'Treated as Tier 2 pending that review, not shipped un-reviewed'] };
+
+  function classify(text) {
+    var t = text.toLowerCase();
+    for (var i = 0; i < rules.length; i++) {
+      for (var j = 0; j < rules[i].keywords.length; j++) {
+        if (t.indexOf(rules[i].keywords[j]) !== -1) return rules[i];
+      }
+    }
+    return fallback;
+  }
+
+  function renderResult(text) {
+    var r = classify(text);
+    var html = '<div class="tier-badge ' + r.cls + '">' + r.label + '</div>' +
+      '<div class="sim-reason">' + r.reason + '</div>' +
+      '<div class="sim-path"><div class="sim-path-label">Review path triggered</div><div class="sim-steps">' +
+      r.steps.map(function (s, i) { return '<div class="sim-step"><span class="num">' + (i + 1) + '</span>' + s + '</div>'; }).join('') +
+      '</div></div>';
+    document.getElementById('simResult').innerHTML = html;
+  }
+
+  document.getElementById('simRun').addEventListener('click', function () {
+    var v = document.getElementById('simInput').value.trim();
+    if (!v) { document.getElementById('simInput').focus(); return; }
+    renderResult(v);
+  });
+  document.querySelectorAll('#chipRow .chip').forEach(function (c) {
+    c.addEventListener('click', function () {
+      document.getElementById('simInput').value = c.textContent;
+      renderResult(c.textContent);
+    });
+  });
+
+  // ---------- Metrics ----------
+  var metricSets = {
+    all: [
+      { label: 'Reuse rate', value: '68%', delta: '↑ from 40% at platform launch', spark: [40, 46, 52, 58, 61, 65, 68] },
+      { label: 'Time-to-integrate a market', value: '3.2 wks', delta: '↓ from an assumed 16-week custom build', spark: [16, 13, 9, 6, 4.5, 3.6, 3.2] },
+      { label: 'API SLA adherence', value: '99.92%', delta: 'Above 99.9% target, 6 months running', spark: [99.7, 99.8, 99.85, 99.9, 99.88, 99.93, 99.92] },
+      { label: 'Cost per market onboarded', value: '$0.62M', delta: '↓ from $1.4M for the first market', spark: [1.4, 1.2, 1.0, 0.85, 0.74, 0.68, 0.62] },
+      { label: 'Governance cycle time (Tier 1)', value: '4.1 hrs', delta: '↓ from 3.5 days pre-platform', spark: [84, 60, 40, 24, 12, 6, 4.1] },
+      { label: 'Consent propagation latency', value: '1.8 sec', delta: 'Governance sub-metric, not headline', spark: [12, 8, 5, 3.5, 2.4, 2.0, 1.8] }
+    ],
+    uk: [
+      { label: 'Reuse rate', value: '81%', delta: 'Mature market, most patterns reused', spark: [55, 62, 68, 73, 76, 79, 81] },
+      { label: 'Time-to-integrate a market', value: '—', delta: 'Live since 2021, pre-dates platform', spark: [] },
+      { label: 'API SLA adherence', value: '99.95%', delta: 'Highest-traffic market', spark: [99.8, 99.85, 99.9, 99.93, 99.94, 99.95, 99.95] },
+      { label: 'Governance cycle time (Tier 1)', value: '3.4 hrs', delta: 'Fastest of any market', spark: [40, 28, 18, 10, 6, 4, 3.4] }
+    ],
+    de: [
+      { label: 'Reuse rate', value: '54%', delta: 'Ramping — first real multi-market test', spark: [0, 12, 24, 36, 44, 50, 54] },
+      { label: 'Time-to-integrate', value: '3.2 wks', delta: 'Projected, integration in progress', spark: [16, 13, 9, 6, 4.5, 3.6, 3.2] },
+      { label: 'Governance cycle time (Tier 1)', value: '5.0 hrs', delta: 'Projected — review not yet at full pace', spark: [90, 70, 50, 30, 15, 8, 5] },
+      { label: 'Launch readiness', value: 'Stage 2 / 4', delta: 'Data & comms integration underway', spark: [] }
+    ]
+  };
+
+  function spark(values, w, h) {
+    if (!values || values.length < 2) return '<div style="height:' + h + 'px;"></div>';
+    var min = Math.min.apply(null, values), max = Math.max.apply(null, values);
+    var range = (max - min) || 1;
+    var pts = values.map(function (v, i) {
+      var x = (i / (values.length - 1)) * w;
+      var y = h - ((v - min) / range) * h;
+      return x.toFixed(1) + ',' + y.toFixed(1);
+    }).join(' ');
+    var lastX = w, lastY = h - ((values[values.length - 1] - min) / range) * h;
+    return '<svg width="100%" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" class="kpi-spark">' +
+      '<polyline points="' + pts + '" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<circle cx="' + lastX + '" cy="' + lastY + '" r="2.5" fill="var(--accent)"/>' +
+      '</svg>';
+  }
+
+  function renderMetrics(key) {
+    var grid = document.getElementById('metricsGrid');
+    grid.innerHTML = metricSets[key].map(function (m) {
+      return '<div class="card kpi"><div class="kpi-label">' + m.label + '</div>' +
+        '<div class="kpi-value">' + m.value + '</div>' +
+        '<div class="kpi-delta up">' + m.delta + '</div>' +
+        spark(m.spark, 160, 30) + '</div>';
+    }).join('');
+  }
+  renderMetrics('all');
+  document.querySelectorAll('.market-toggle button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.market-toggle button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      renderMetrics(b.getAttribute('data-market'));
+    });
+  });
+})();
+</script>
