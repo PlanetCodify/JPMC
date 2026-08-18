@@ -214,8 +214,8 @@
         <h2 class="section-h">Executive Summary</h2>
 
         <div class="kv-list">
-          <div class="kv-item"><div class="kv-key">Problem</div><div class="kv-val">In April 2026 the Federal Reserve excluded generative and agentic AI from formal bank model-risk rules (SR 26-2) &mdash; firmwide, for JPMC as a whole. JPMC already runs a review function with exactly this kind of authority &mdash; Model Risk Governance &amp; Review (MRGR) &mdash; evidenced through a job posting scoped to International Consumer Bank (ICB), but its public scope stops at traditional statistical models. The gap isn't that nobody can govern this. It's that nobody built the way in, in any line of business.</div></div>
-          <div class="kv-item"><div class="kv-key">Proposed solution</div><div class="kv-val">A firmwide automated tiering layer that classifies gen-AI and agentic features by risk, clears low-risk ones on its own, and escalates the rest into MRGR's real queue &mdash; with the reasoning and audit trail already attached. Not a new governance function; the missing entry point into one that already exists. Piloted in ICB first, where the regulatory pressure and the evidence for MRGR's existing scope both happen to be strongest.</div></div>
+          <div class="kv-item"><div class="kv-key">Problem</div><div class="kv-val">In April 2026 the Federal Reserve excluded generative and agentic AI from formal bank model-risk rules (SR 26-2) &mdash; firmwide, for JPMC as a whole. JPMC already runs a review function with exactly this kind of authority &mdash; Model Risk Governance &amp; Review (MRGR). JPMC's own FY2025 10-K names MRGR as the reviewer for approval-gated models, then discusses generative and agentic AI as a separate risk factor entirely, naming no governance owner for it. The gap isn't that nobody can govern this. It's that nobody's built the way in, in any line of business.</div></div>
+          <div class="kv-item"><div class="kv-key">Proposed solution</div><div class="kv-val">A firmwide automated tiering layer that classifies gen-AI and agentic features by risk, clears low-risk ones on its own, and escalates the rest into MRGR's real queue &mdash; with the reasoning and audit trail already attached. Not a new governance function; the missing entry point into one that already exists. Piloted in ICB first, where the regulatory pressure to close this is clearest right now, even though MRGR's own scope is firmwide.</div></div>
           <div class="kv-item"><div class="kv-key">Business impact</div><div class="kv-val">Closes a live, dated regulatory gap firmwide without duplicating MRGR's expertise or regulatory relationships &middot; lets ICB, the pilot line of business, ship gen-AI features at competitive pace against UK peers already live with AI-driven experiences (NatWest's Cora, Lloyds' Envoy) &middot; likely lower build cost than standing up a parallel review function, and reusable by other JPMC lines of business once proven</div></div>
         </div>
 
@@ -224,7 +224,7 @@
           <div class="stat"><div class="stat-val">3</div><div class="stat-label">Independent risk tiers</div></div>
           <div class="stat"><div class="stat-val">Apr 2026</div><div class="stat-label">SR 26-2 &mdash; the gap this closes</div></div>
         </div>
-        <div class="caveat"><b>Every number above is a modelled target from the PRD, not a measured result.</b> This platform hasn't been built or deployed. What's real: the regulation (SR 26-2, verified against federalreserve.gov) and the MRGR job posting. What's modelled: everything with a target attached. See Problem Statement below for the full split.</div>
+        <div class="caveat"><b>Every number above is a modelled target from the PRD, not a measured result.</b> This platform hasn't been built or deployed. What's real: the regulation (SR 26-2, verified against federalreserve.gov) and MRGR's existence and mandate (verified against JPMC's FY2025 10-K, SEC filing). What's modelled: everything with a target attached. See Problem Statement below for the full split.</div>
       </section>
 
       <section class="sec" id="prototype">
@@ -247,7 +247,7 @@
       <section class="sec" id="problem">
         <h2 class="section-h">Problem Statement</h2>
         <p>International Consumer Bank is scaling a branchless, digital-only retail model across markets &mdash; UK live since 2021, Germany publicly targeted for 2026. Every new market ships more gen-AI-adjacent features, right as a real regulatory gap opened underneath all of them.</p>
-        <p>On April 17, 2026, the Federal Reserve issued SR 26-2, superseding SR 11-7, and explicitly excluded generative and agentic AI from formal model-risk scope for banks over $30B in assets &mdash; JPMC clears that threshold many times over. Separately, a live MRGR job posting scoped to ICB lists only traditional quantitative-model skills: financial math, probability theory, numerical methods. No mention of gen-AI, LLMs, or agentic systems anywhere in it.</p>
+        <p>On April 17, 2026, the Federal Reserve issued SR 26-2, superseding SR 11-7, and explicitly excluded generative and agentic AI from formal model-risk scope for banks over $30B in assets &mdash; JPMC clears that threshold many times over. Separately, JPMC's own FY2025 10-K draws the same line from the inside: it names Model Risk Governance &amp; Review (MRGR) as the function that reviews and approves models used for valuation, risk measurement, regulatory capital, stress testing, and credit losses &mdash; then discusses generative and agentic AI in a distinct risk factor of its own, without naming MRGR, CDAO, or any other function as its governance owner.</p>
         <p class="pullquote">Read together, those two facts say the same thing from opposite directions: the expertise to govern this exists. The entry point doesn't.</p>
 
         <div class="kv-list">
@@ -569,7 +569,7 @@
       <section class="sec" id="openq">
         <h2 class="section-h">Open Questions</h2>
         <div class="kv-list">
-          <div class="kv-item"><div class="kv-key">01</div><div class="kv-val">Does MRGR's actual scope for ICB already cover gen-AI, contrary to what one job posting suggests? Checkable, not a guess, for anyone with access to ask &mdash; the single highest-priority question in the whole platform.</div></div>
+          <div class="kv-item"><div class="kv-key">01</div><div class="kv-val">Does MRGR's mandate already extend informally to generative and agentic AI, even though the 10-K's risk-factor language treats them as a separate category with no named owner? Checkable, not a guess, for anyone with access to ask &mdash; the single highest-priority question in the whole platform.</div></div>
           <div class="kv-item"><div class="kv-key">02</div><div class="kv-val">Would MRGR want an automated triage layer feeding into its process, or see it as unnecessary?</div></div>
           <div class="kv-item"><div class="kv-key">03</div><div class="kv-val">Does the existing model-risk process actually have scope to cover gen-AI outputs feeding credit decisions, once Tier 3 routes there?</div></div>
           <div class="kv-item"><div class="kv-key">04</div><div class="kv-val">UK-first or Germany-first sequencing? NatWest's Cora and Lloyds' Envoy are already live in the UK market Chase competes in &mdash; deliberately left unresolved here, not silently decided.</div></div>
@@ -581,7 +581,7 @@
       <section class="sec" id="assumptions">
         <h2 class="section-h">Assumptions Made</h2>
         <div class="kv-list">
-          <div class="kv-item"><div class="kv-key">01</div><div class="kv-val">MRGR's public job posting accurately reflects its current scope &mdash; one source, not a policy document, and could lag reality</div></div>
+          <div class="kv-item"><div class="kv-key">01</div><div class="kv-val">The 10-K's risk-factor structure reflects an actual governance gap, not just conservative legal drafting that understates how gen-AI is already handled operationally inside MRGR</div></div>
           <div class="kv-item"><div class="kv-key">02</div><div class="kv-val">No existing internal JPMC CDP, CMS, or comms vendor was found publicly &mdash; treated as a genuine unknown, not evidence of absence</div></div>
           <div class="kv-item"><div class="kv-key">03</div><div class="kv-val">Germany is the likely first pilot market given the active public launch timeline, though UK-first is left as an explicitly open question</div></div>
           <div class="kv-item"><div class="kv-key">04</div><div class="kv-val">The general 64% platform-bypass adoption statistic is a reasonable prior for JPMC's engineering culture, flagged in Open Questions as possibly not fully transferable</div></div>
@@ -597,7 +597,7 @@
       <a href="https://github.com/PlanetCodify/JPMC" target="_blank" rel="noopener">Full source &amp; research trail ↗</a>
       <a href="#top">Back to top</a>
     </div>
-    Grounded entirely in public sources cited throughout &mdash; the Federal Reserve's SR 26-2, a public MRGR job posting, published consumer and platform-adoption research. Makes no claim to JPMorgan Chase's actual internal systems, vendors, or roadmap. Built as a Platform Product Manager application artifact, August 2026.
+    Grounded entirely in public sources cited throughout &mdash; the Federal Reserve's SR 26-2, JPMC's FY2025 10-K (SEC filing), published consumer and platform-adoption research. Makes no claim to JPMorgan Chase's actual internal systems, vendors, or roadmap. Built as a Platform Product Manager application artifact, August 2026.
   </footer>
 
 <script>

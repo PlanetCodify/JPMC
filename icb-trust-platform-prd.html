@@ -231,7 +231,7 @@
       <h2 class="section-title"><span class="section-num">01</span>Executive Summary</h2>
 
       <h3 class="sub-title">Problem Statement</h3>
-      <p>The Federal Reserve's SR 26-2 guidance (April 17, 2026, superseding SR 11-7) explicitly excludes generative and agentic AI from formal model-risk scope for banks over $30 billion in assets &mdash; a firmwide exclusion, not one scoped to any single JPMC line of business. JPMC already runs a dedicated Model Risk Governance &amp; Review (MRGR) function with the standing and expertise to close that gap, evidenced through a live MRGR job posting scoped to International Consumer Bank (ICB), which suggests current coverage is limited to traditional statistical models, the same boundary SR 26-2 itself draws. The gap this platform addresses is firmwide; ICB is simply where the evidence for it, and the pressure to close it, is clearest right now. ICB itself is scaling a branchless, digital-only retail bank across markets, UK live since 2021, Germany publicly targeted for 2026, which makes it the natural first pilot: every gen-AI-adjacent feature it ships today likely has nowhere clear to go for review.</p>
+      <p>The Federal Reserve's SR 26-2 guidance (April 17, 2026, superseding SR 11-7) explicitly excludes generative and agentic AI from formal model-risk scope for banks over $30 billion in assets &mdash; a firmwide exclusion, not one scoped to any single JPMC line of business. JPMC already runs a dedicated Model Risk Governance &amp; Review (MRGR) function with the standing and expertise to close that gap. JPMC's own FY2025 10-K (SEC filing) draws the same line from the inside: it names MRGR as the function that reviews and approves models used for valuation, risk measurement, regulatory capital, stress testing, and credit losses, then discusses generative and agentic AI in a separate risk factor entirely, without naming MRGR, CDAO, or any other function as its governance owner. The gap this platform addresses is firmwide; ICB is simply where the pressure to close it is clearest right now. ICB itself is scaling a branchless, digital-only retail bank across markets, UK live since 2021, Germany publicly targeted for 2026, which makes it the natural first pilot: every gen-AI-adjacent feature it ships today likely has nowhere clear to go for review.</p>
 
       <h3 class="sub-title">Proposed Solution</h3>
       <p>A firmwide automated tiering layer that classifies gen-AI and agentic features by risk (Tier 1 automated, Tier 2 spot-checked, Tier 3 full review) and routes the highest-risk cases into MRGR's existing review workflow. This isn't a new governance function competing with MRGR. It's the technical layer that extends their existing authority into a category their current scope doesn't appear to cover &mdash; designed and versioned as JPMC-wide infrastructure from day one, with ICB as the Phase 1 pilot line of business, not the platform's boundary.</p>
@@ -653,7 +653,7 @@
     <section class="doc-section" id="openq">
       <h2 class="section-title"><span class="section-num">09</span>Open Questions</h2>
       <ol class="oq-list">
-        <li>Does MRGR's actual scope for ICB already cover gen-AI and agentic AI, contrary to what one job posting suggests? This is checkable, not a guess.</li>
+        <li>Does MRGR's mandate already extend informally to generative and agentic AI, even though the 10-K's risk-factor language treats them as a separate category with no named owner? This is checkable, not a guess.</li>
         <li>Would MRGR want an automated triage layer feeding into their existing process, or see it as unnecessary or intrusive?</li>
         <li>Does the model-risk process Tier 3 escalations route into actually have scope to cover gen-AI outputs feeding credit decisions?</li>
         <li>Does JPMC's engineering culture, given MACH Alliance membership and LLM Suite, mean general platform-adoption research doesn't fully transfer here?</li>
@@ -666,7 +666,7 @@
     <section class="doc-section" id="assumptions">
       <h2 class="section-title"><span class="section-num">10</span>Assumptions Made</h2>
       <ul class="assumptions">
-        <li>Assumed MRGR's public job posting accurately reflects their current scope. It's one source, not a policy document, and could lag reality.</li>
+        <li>Assumed the 10-K's risk-factor structure reflects an actual governance gap, not just conservative legal drafting that understates how gen-AI is already handled operationally inside MRGR.</li>
         <li>Assumed no existing internal JPMC CDP, CMS, or comms vendor was found publicly, and treated this as a genuine unknown rather than evidence of absence.</li>
         <li>Assumed Germany is the likely first pilot market given the active public launch timeline, though UK-first is left as an explicitly open question.</li>
         <li>Cost, budget, and staffing figures in Section 8 are illustrative placeholders, not derived from real JPMC financial or headcount data.</li>
